@@ -8,10 +8,10 @@ namespace Tatum.Net.RestObjects
     {
         [JsonProperty("id")]
         public string Id { get; set; }
-        
+
         [JsonProperty("customerId")]
         public string CustomerId { get; set; }
-        
+
         [JsonProperty("accountCode")]
         public string AccountCode { get; set; }
 
@@ -20,7 +20,7 @@ namespace Tatum.Net.RestObjects
 
         [JsonProperty("frozen")]
         public bool Frozen { get; set; }
-        
+
         [JsonProperty("currency"), JsonConverter(typeof(BlockchainTypeConverter))]
         public BlockchainType CryptoCurrency { get; set; }
 
@@ -28,6 +28,6 @@ namespace Tatum.Net.RestObjects
         public FiatCurrency FiatCurrency { get; set; }
 
         [JsonProperty("balance")]
-        public LedgerAccountBalance Balance { get; set; }
+        public LedgerBalance Balance { get; set; }
     }
 }

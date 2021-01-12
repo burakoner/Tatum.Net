@@ -19,7 +19,7 @@ namespace Tatum.Net.RestObjects
         /// If customer is filled then is created or updated.
         /// </summary>
         [JsonProperty("customer")]
-        public LedgerAccountOptionsCustomer Customer { get; set; }
+        public LedgerCustomerOptions Customer { get; set; }
 
         /// <summary>
         /// Enable compliant checks. 

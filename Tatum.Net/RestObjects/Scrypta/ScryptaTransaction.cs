@@ -9,7 +9,7 @@ namespace Tatum.Net.RestObjects
     {
         [JsonProperty("hash")]
         public string Hash { get; set; }
-        
+
         [JsonProperty("blockhash")]
         public string BlockHash { get; set; }
 

@@ -4,7 +4,7 @@ using Tatum.Net.Enums;
 
 namespace Tatum.Net.RestObjects
 {
-    public class LedgerAccountOptionsCustomer
+    public class LedgerCustomerOptions
     {
         /// <summary>
         /// All transaction will be accounted in this currency for all accounts. 

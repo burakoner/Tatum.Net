@@ -2,7 +2,7 @@
 
 namespace Tatum.Net.RestObjects
 {
-    public class LedgerReference
+    public class TatumReference
     {
         [JsonProperty("reference")]
         public string Reference { get; set; }

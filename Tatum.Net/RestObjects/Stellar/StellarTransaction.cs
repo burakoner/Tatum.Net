@@ -13,7 +13,7 @@ namespace Tatum.Net.RestObjects
 
         [JsonProperty("fee_account")]
         public string FeeAccount { get; set; }
-        
+
         [JsonProperty("fee_charged")]
         public decimal FeeCharged { get; set; }
 

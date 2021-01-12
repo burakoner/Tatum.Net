@@ -6,7 +6,7 @@ namespace Tatum.Net.RestObjects
     {
         [JsonProperty("mnemonic")]
         public string Mnemonics { get; set; }
-        
+
         [JsonProperty("xpub")]
         public string ExtendedPublicKey { get; set; }
     }

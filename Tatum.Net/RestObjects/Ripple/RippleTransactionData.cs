@@ -30,7 +30,7 @@ namespace Tatum.Net.RestObjects
 
         [JsonProperty("OfferSequence")]
         public long OfferSequence { get; set; }
-        
+
         [JsonProperty("LastLedgerSequence")]
         public long LastLedgerSequence { get; set; }
 

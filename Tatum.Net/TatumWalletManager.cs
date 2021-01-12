@@ -1,12 +1,12 @@
 ﻿using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
+using CryptoExchange.Net.RateLimiter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tatum.Net.CoreObjects;
 using Tatum.Net.Enums;
 using Tatum.Net.Helpers;
-using Tatum.Net.RateLimiter;
 using Tatum.Net.RestObjects;
 using Tatum.Net.WalletObjects;
 
@@ -56,7 +56,7 @@ namespace Tatum.Net
 
             if (assetOptions.BlockchainManager == BlockchainManager.Tatum)
             {
-                var resp = TatumApi.Ledger_CreateAccount(assetOptions.BlockchainType, accountOptions);
+                var resp = TatumApi.LedgerAccount_Create(assetOptions.BlockchainType, accountOptions);
                 if (resp.Success) new WalletResponse<LedgerAccount>(resp.Data);
                 else new WalletResponse<LedgerAccount>(new WalletError(resp.Error));
             }

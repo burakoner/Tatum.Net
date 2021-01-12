@@ -2,5 +2,6 @@
 {
     public interface ITatumClient
     {
+        void SetApiCredentials(string apiKey);
     }
 }

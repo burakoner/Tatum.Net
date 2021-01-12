@@ -1,0 +1,12 @@
+﻿namespace Tatum.Net.Enums
+{
+    public enum LedgerSubscriptionType
+    {
+        ACCOUNT_BALANCE_LIMIT,
+        TRANSACTION_HISTORY_REPORT,
+        OFFCHAIN_WITHDRAWAL,
+        COMPLETE_BLOCKCHAIN_TRANSACTION,
+        ACCOUNT_INCOMING_BLOCKCHAIN_TRANSACTION,
+        ACCOUNT_PENDING_BLOCKCHAIN_TRANSACTION,
+    }
+}

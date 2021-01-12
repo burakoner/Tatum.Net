@@ -22,7 +22,7 @@ namespace Tatum.Net.RestObjects
 
         [JsonProperty("name")]
         public string Name { get; set; }
-        
+
         [JsonProperty("parameters")]
         public IEnumerable<string> Parameters { get; set; }
 

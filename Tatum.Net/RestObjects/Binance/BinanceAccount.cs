@@ -10,13 +10,13 @@ namespace Tatum.Net.RestObjects
 
         [JsonProperty("address")]
         public string Address { get; set; }
-        
+
         [JsonProperty("balances")]
-        public IEnumerable< BinanceAccountBalance> Balances { get; set; }
+        public IEnumerable<BinanceAccountBalance> Balances { get; set; }
 
         [JsonProperty("flags")]
         public long Flags { get; set; }
-        
+
         [JsonProperty("sequence")]
         public long Sequence { get; set; }
     }

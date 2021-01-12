@@ -10,7 +10,7 @@ namespace Tatum.Net.RestObjects
 
         [JsonProperty("msg")]
         public IEnumerable<BinanceTransactionMessage> Messages { get; set; }
-        
+
         [JsonProperty("signatures")]
         public IEnumerable<BinanceTransactionSignature> Signatures { get; set; }
 

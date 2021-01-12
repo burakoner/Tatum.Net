@@ -1,6 +1,5 @@
 ﻿using CryptoExchange.Net;
 using CryptoExchange.Net.Interfaces;
-using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -17,12 +16,38 @@ using Tatum.Net.CoreObjects;
 using Tatum.Net.Enums;
 using Tatum.Net.Helpers;
 using Tatum.Net.Interfaces;
-using Tatum.Net.RateLimiter;
 using Tatum.Net.RestObjects;
 
 namespace Tatum.Net
 {
-    public class TatumClient : RestClient, IRestClient, ITatumClient
+    public class TatumClient : RestClient,
+        IRestClient,
+        ITatumClient,
+        ITatumLedgerAccountClient,
+        ITatumLedgerTransactionClient,
+        ITatumLedgerCustomerClient,
+        ITatumLedgerVirtualCurrencyClient,
+        ITatumLedgerSubscriptionClient,
+        ITatumLedgerOrderBookClient,
+        ITatumSecurityKMSClient,
+        ITatumSecurityAddressClient,
+        ITatumOffchainAccountClient,
+        ITatumOffchainBlockchainClient,
+        ITatumOffchainWithdrawalClient,
+        ITatumBlockchainBitcoinClient,
+        ITatumBlockchainEthereumClient,
+        ITatumBlockchainBitcoinCashClient,
+        ITatumBlockchainLitecoinClient,
+        ITatumBlockchainRippleClient,
+        ITatumBlockchainStellarClient,
+        ITatumBlockchainRecordsClient,
+        ITatumBlockchainBinanceClient,
+        ITatumBlockchainVeChainClient,
+        ITatumBlockchainNeoClient,
+        ITatumBlockchainLibraClient,
+        ITatumBlockchainTronClient,
+        ITatumBlockchainScryptaClient,
+        ITatumServiceClient
     {
         #region Core Fields
         private static TatumClientOptions defaultOptions = new TatumClientOptions();
@@ -30,29 +55,123 @@ namespace Tatum.Net
         #endregion
 
         #region API Endpoints
-        /* Version */
+
+        #region Version
         private const int Endpoints_Version = 3;
+        #endregion
 
-        /* Ledger */
-        private const string Endpoints_Ledger_Account = "ledger/account";
-        private const string Endpoints_Ledger_AccountBatch = "ledger/accountcredits";
-        private const string Endpoints_Ledger_AccountOfId = "ledger/account/{0}";
-        private const string Endpoints_Ledger_AccountBalance = "ledger/account/{0}/balance";
-        private const string Endpoints_Ledger_AccountOfCustomer = "ledger/account/customer/{0}";
-        private const string Endpoints_Ledger_BlockAmount = "ledger/account/block/{0}";
-        private const string Endpoints_Ledger_UnlockAmountAndTransfer = "ledger/account/block/{0}";
-        private const string Endpoints_Ledger_BlockAccount = "ledger/account/block/account/{0}";
-        private const string Endpoints_Ledger_ActivateLedgerAccount = "ledger/account/{0}/activate";
-        private const string Endpoints_Ledger_DeactivateLedgerAccount = "ledger/account/{0}/deactivate";
-        private const string Endpoints_Ledger_FreezeLedgerAccount = "ledger/account/{0}/freeze";
-        private const string Endpoints_Ledger_UnfreezeLedgerAccount = "ledger/account/{0}/unfreeze";
+        #region Ledger Account
+        private const string Endpoints_Ledger_Account_Create = "ledger/account";
+        private const string Endpoints_Ledger_Account_List = "ledger/account";
+        private const string Endpoints_Ledger_Account_CreateBatch = "ledger/account/batch";
+        private const string Endpoints_Ledger_Account_ListByCustomer = "ledger/account/customer/{0}";
+        private const string Endpoints_Ledger_Account_GetById = "ledger/account/{0}";
+        private const string Endpoints_Ledger_Account_Update = "ledger/account/{0}";
+        private const string Endpoints_Ledger_Account_Balance = "ledger/account/{0}/balance";
+        private const string Endpoints_Ledger_Account_BlockAmount = "ledger/account/block/{0}";
+        private const string Endpoints_Ledger_Account_UnlockAmountAndTransfer = "ledger/account/block/{0}";
+        private const string Endpoints_Ledger_Account_UnblockAmount = "ledger/account/block/{0}";
+        private const string Endpoints_Ledger_Account_GetBlockedAmounts = "ledger/account/block/{0}";
+        private const string Endpoints_Ledger_Account_UnblockAllBlockedAmounts = "ledger/account/block/account/{0}";
+        private const string Endpoints_Ledger_Account_ActivateLedgerAccount = "ledger/account/{0}/activate";
+        private const string Endpoints_Ledger_Account_DeactivateLedgerAccount = "ledger/account/{0}/deactivate";
+        private const string Endpoints_Ledger_Account_FreezeLedgerAccount = "ledger/account/{0}/freeze";
+        private const string Endpoints_Ledger_Account_UnfreezeLedgerAccount = "ledger/account/{0}/unfreeze";
+        #endregion
 
-        /* Blockchain - Shared*/
+        #region Ledger Transaction
+        private const string Endpoints_Ledger_Transaction_SendPayment = "ledger/transaction";
+        private const string Endpoints_Ledger_Transaction_GetTransactionsByAccount = "ledger/transaction/account";
+        private const string Endpoints_Ledger_Transaction_GetTransactionsByCustomer = "ledger/transaction/customer";
+        private const string Endpoints_Ledger_Transaction_GetTransactionsByLedger = "ledger/transaction/ledger";
+        private const string Endpoints_Ledger_Transaction_GetTransactionsByReference = "ledger/transaction/reference/{0}";
+        #endregion
+
+        #region Ledger Customer
+        private const string Endpoints_Ledger_Customer_List = "ledger/customer";
+        private const string Endpoints_Ledger_Customer_Get = "ledger/customer/{0}";
+        private const string Endpoints_Ledger_Customer_Update = "ledger/customer/{0}";
+        private const string Endpoints_Ledger_Customer_Activate = "ledger/customer/{0}/activate";
+        private const string Endpoints_Ledger_Customer_Deactivate = "ledger/customer/{0}/deactivate";
+        private const string Endpoints_Ledger_Customer_Enable = "ledger/customer/{0}/enable";
+        private const string Endpoints_Ledger_Customer_Disable = "ledger/customer/{0}/disable";
+        #endregion
+
+        #region Ledger Virtual Currency
+        private const string Endpoints_Ledger_VirtualCurrency_Create = "ledger/virtualCurrency";
+        private const string Endpoints_Ledger_VirtualCurrency_Update = "ledger/virtualCurrency";
+        private const string Endpoints_Ledger_VirtualCurrency_Get = "ledger/virtualCurrency/{0}";
+        private const string Endpoints_Ledger_VirtualCurrency_Mint = "ledger/virtualCurrency/mint";
+        private const string Endpoints_Ledger_VirtualCurrency_Destroy = "ledger/virtualCurrency/revoke";
+        #endregion
+
+        #region Ledger Subscription
+        private const string Endpoints_Ledger_Subscription_Create = "subscription";
+        private const string Endpoints_Ledger_Subscription_List = "subscription";
+        private const string Endpoints_Ledger_Subscription_Cancel = "subscription/{0}";
+        private const string Endpoints_Ledger_Subscription_Report = "subscription/report/{0}";
+        #endregion
+
+        #region Ledger Order Book
+        private const string Endpoints_Ledger_OrderBook_ListHistory = "trade/history";
+        private const string Endpoints_Ledger_OrderBook_ListBuys = "trade/buy";
+        private const string Endpoints_Ledger_OrderBook_ListSells = "trade/sell";
+        private const string Endpoints_Ledger_OrderBook_Place = "trade";
+        private const string Endpoints_Ledger_OrderBook_Get = "trade/{0}";
+        private const string Endpoints_Ledger_OrderBook_Cancel = "trade/{0}";
+        private const string Endpoints_Ledger_OrderBook_CancelAll = "trade/account/{0}";
+        #endregion
+
+        #region Security Key Management System
+        private const string Endpoints_KMS_GetPendingTransactions = "kms/pending/{0}";
+        private const string Endpoints_KMS_CompletePendingTransaction = "kms/{0}/{1}";
+        private const string Endpoints_KMS_Transaction = "kms/{0}";
+        #endregion
+
+        #region Security Address
+        private const string Endpoints_Security_CheckMalicousAddress = "security/address/{0}";
+        #endregion
+
+        #region Off-chain Account
+        private const string Endpoints_Offchain_Account_DepositAddress = "offchain/account/{0}/address";
+        private const string Endpoints_Offchain_Account_DepositAddressBatch = "offchain/account/address/batch";
+        private const string Endpoints_Offchain_Account_CheckAddress = "offchain/account/address/{0}/{1}";
+        private const string Endpoints_Offchain_Account_RemoveAddress = "offchain/account/{0}/address/{1}";
+        private const string Endpoints_Offchain_Account_AssignAddress = "offchain/account/{0}/address/{1}";
+        #endregion
+
+        #region Off-chain Blockchain
+        private const string Endpoints_Offchain_Blockchain_Transfer = "offchain/{0}/transfer";
+        private const string Endpoints_Offchain_Blockchain_BitcoinTransfer = "offchain/bitcoin/transfer";
+        private const string Endpoints_Offchain_Blockchain_BitcoinCashTransfer = "offchain/bcash/transfer";
+        private const string Endpoints_Offchain_Blockchain_LitecoinTransfer = "offchain/litecoin/transfer";
+        private const string Endpoints_Offchain_Blockchain_EthereumTransfer = "offchain/ethereum/transfer";
+        private const string Endpoints_Offchain_Blockchain_CreateERC20Token = "offchain/ethereum/erc20";
+        private const string Endpoints_Offchain_Blockchain_DeployERC20Token = "offchain/ethereum/erc20/deploy";
+        private const string Endpoints_Offchain_Blockchain_SetERC20TokenContractAddress = "offchain/ethereum/erc20/{0}/{1}";
+        private const string Endpoints_Offchain_Blockchain_TransferERC20Token = "offchain/ethereum/erc20/transfer";
+        private const string Endpoints_Offchain_Blockchain_StellarTransfer = "offchain/xlm/transfer";
+        private const string Endpoints_Offchain_Blockchain_CreateXLMAsset = "offchain/xlm/asset";
+        private const string Endpoints_Offchain_Blockchain_RippleTransfer = "offchain/xrp/transfer";
+        private const string Endpoints_Offchain_Blockchain_CreateXRPAsset = "offchain/xrp/asset";
+        private const string Endpoints_Offchain_Blockchain_BinanceTransfer = "offchain/bnb/transfer";
+        private const string Endpoints_Offchain_Blockchain_CreateBNBAsset = "offchain/bnb/asset";
+        #endregion
+
+        #region Off-chain Withdrawal
+        private const string Endpoints_Offchain_Withdrawal_Store = "offchain/withdrawal";
+        private const string Endpoints_Offchain_Withdrawal_Complete = "offchain/withdrawal/{0}/{1}";
+        private const string Endpoints_Offchain_Withdrawal_Cancel = "offchain/withdrawal/{0";
+        private const string Endpoints_Offchain_Withdrawal_Broadcast = "offchain/withdrawal/broadcast";
+        #endregion
+
+        #region Blockchain - Shared
         private const string Endpoints_Blockchain_GenerateWallet = "{0}/wallet";
         private const string Endpoints_Blockchain_GenerateDepositAddress = "{0}/address/{1}/{2}";
         private const string Endpoints_Blockchain_GenerateWalletPrivateKey = "{0}/wallet/priv";
+        #endregion
 
-        /* Bitcoin */
+        #region Blockchain - Bitcoin
         private const string Endpoints_Bitcoin_BlockchainInformation = "bitcoin/info";
         private const string Endpoints_Bitcoin_GetBlockHash = "bitcoin/block/hash/{0}";
         private const string Endpoints_Bitcoin_GetBlockByHash = "bitcoin/block/{0}";
@@ -62,17 +181,9 @@ namespace Tatum.Net
         private const string Endpoints_Bitcoin_GetTransactionUTXO = "bitcoin/utxo/{0}/{1}";
         private const string Endpoints_Bitcoin_Transaction = "bitcoin/transaction";
         private const string Endpoints_Bitcoin_Broadcast = "bitcoin/broadcast";
+        #endregion
 
-        /* BitcoinCash */
-        private const string Endpoints_BitcoinCash_BlockchainInformation = "bcash/info";
-        private const string Endpoints_BitcoinCash_GetBlockHash = "bcash/block/hash/{0}";
-        private const string Endpoints_BitcoinCash_GetBlockByHash = "bcash/block/{0}";
-        private const string Endpoints_BitcoinCash_GetTransactionByHash = "bcash/transaction/{0}";
-        private const string Endpoints_BitcoinCash_GetTransactionsByAddress = "bcash/transaction/address/{0}";
-        private const string Endpoints_BitcoinCash_Transaction = "bcash/transaction";
-        private const string Endpoints_BitcoinCash_Broadcast = "bcash/broadcast";
-
-        /* Ethereum */
+        #region Blockchain - Ethereum
         private const string Endpoints_Ethereum_Web3HttpDriver = "ethereum/web3/{0}";
         private const string Endpoints_Ethereum_CurrentBlockNumber = "ethereum/block/current";
         private const string Endpoints_Ethereum_GetBlockByHash = "ethereum/block/{0}";
@@ -95,8 +206,19 @@ namespace Tatum.Net
         private const string Endpoints_Ethereum_ERC721Token = "ethereum/erc721/token/{0}/{1}/{2}";
         private const string Endpoints_Ethereum_ERC721TokenMetadata = "ethereum/erc721/metadata/{0}/{1}";
         private const string Endpoints_Ethereum_ERC721TokenOwner = "ethereum/erc721/owner/{0}/{1}";
+        #endregion
 
-        /* Litecoin */
+        #region Blockchain - BitcoinCash
+        private const string Endpoints_BitcoinCash_BlockchainInformation = "bcash/info";
+        private const string Endpoints_BitcoinCash_GetBlockHash = "bcash/block/hash/{0}";
+        private const string Endpoints_BitcoinCash_GetBlockByHash = "bcash/block/{0}";
+        private const string Endpoints_BitcoinCash_GetTransactionByHash = "bcash/transaction/{0}";
+        private const string Endpoints_BitcoinCash_GetTransactionsByAddress = "bcash/transaction/address/{0}";
+        private const string Endpoints_BitcoinCash_Transaction = "bcash/transaction";
+        private const string Endpoints_BitcoinCash_Broadcast = "bcash/broadcast";
+        #endregion
+
+        #region Blockchain - Litecoin
         private const string Endpoints_Litecoin_BlockchainInformation = "litecoin/info";
         private const string Endpoints_Litecoin_GetBlockHash = "litecoin/block/hash/{0}";
         private const string Endpoints_Litecoin_GetBlockByHash = "litecoin/block/{0}";
@@ -106,8 +228,9 @@ namespace Tatum.Net
         private const string Endpoints_Litecoin_GetTransactionUTXO = "litecoin/utxo/{0}/{1}";
         private const string Endpoints_Litecoin_Transaction = "litecoin/transaction";
         private const string Endpoints_Litecoin_Broadcast = "litecoin/broadcast";
+        #endregion
 
-        /* Ripple */
+        #region Blockchain - Ripple
         private const string Endpoints_Ripple_GenerateAccount = "xrp/account";
         private const string Endpoints_Ripple_BlockchainInformation = "xrp/info";
         private const string Endpoints_Ripple_BlockchainFee = "xrp/fee";
@@ -120,8 +243,9 @@ namespace Tatum.Net
         private const string Endpoints_Ripple_Trust = "xrp/trust";
         private const string Endpoints_Ripple_AccountSettings = "xrp/account/settings";
         private const string Endpoints_Ripple_Broadcast = "xrp/broadcast";
+        #endregion
 
-        /* Stellar */
+        #region Blockchain - Stellar
         private const string Endpoints_Stellar_GenerateAccount = "xlm/account";
         private const string Endpoints_Stellar_BlockchainInformation = "xlm/info";
         private const string Endpoints_Stellar_BlockchainFee = "xlm/fee";
@@ -133,11 +257,13 @@ namespace Tatum.Net
         private const string Endpoints_Stellar_Send = "xlm/transaction";
         private const string Endpoints_Stellar_Trust = "xlm/trust";
         private const string Endpoints_Stellar_Broadcast = "xlm/broadcast";
+        #endregion
 
-        /* Records */
+        #region Blockchain - Records
         private const string Endpoints_Records_Log = "record";
+        #endregion
 
-        /* Binance */
+        #region Blockchain - Binance
         private const string Endpoints_Binance_GenerateAccount = "bnb/account";
         private const string Endpoints_Binance_CurrentBlock = "bnb/block/current";
         private const string Endpoints_Binance_GetTransactionsInBlock = "bnb/block/{0}";
@@ -145,8 +271,9 @@ namespace Tatum.Net
         private const string Endpoints_Binance_GetTransaction = "bnb/transaction/{0}";
         private const string Endpoints_Binance_Send = "bnb/transaction";
         private const string Endpoints_Binance_Broadcast = "bnb/broadcast";
+        #endregion
 
-        /* VeChain */
+        #region Blockchain - VeChain
         private const string Endpoints_VeChain_CurrentBlock = "vet/block/current";
         private const string Endpoints_VeChain_GetBlockByHash = "vet/block/{0}";
         private const string Endpoints_VeChain_GetBalance = "vet/account/balance/{0}";
@@ -156,8 +283,9 @@ namespace Tatum.Net
         private const string Endpoints_VeChain_Transaction = "vet/transaction";
         private const string Endpoints_VeChain_Gas = "vet/transaction/gas";
         private const string Endpoints_VeChain_Broadcast = "vet/broadcast";
+        #endregion
 
-        /* NEO */
+        #region Blockchain - NEO
         private const string Endpoints_NEO_GenerateAccount = "neo/wallet";
         private const string Endpoints_NEO_CurrentBlock = "neo/block/current";
         private const string Endpoints_NEO_GetBlock = "neo/block/{0}";
@@ -171,14 +299,26 @@ namespace Tatum.Net
         private const string Endpoints_NEO_ClaimGAS = "neo/claim";
         private const string Endpoints_NEO_Invoke = "neo/invoke";
         private const string Endpoints_NEO_Broadcast = "neo/broadcast";
+        #endregion
 
-        /* Libra */
+        #region Blockchain - Libra
         private const string Endpoints_Libra_BlockchainInformation = "libra/info";
         private const string Endpoints_Libra_GetTransactionsByAccount = "libra/account/transaction/{0}";
         private const string Endpoints_Libra_AccountInfo = "libra/account/{0}";
         private const string Endpoints_Libra_GetTransactions = "libra/transaction/{0}/{0}";
+        #endregion
 
-        /* Scrypta */
+        #region Blockchain - TRON
+        private const string Endpoints_TRON_GenerateAccount = "tron/account";
+        private const string Endpoints_TRON_CurrentBlock = "tron/info";
+        private const string Endpoints_TRON_GetBlock = "tron/block/{0}";
+        private const string Endpoints_TRON_GetTransactionsByAccount = "tron/transaction/account/{0}";
+        private const string Endpoints_TRON_GetTransactionByHash = "tron/transaction/{0}";
+        private const string Endpoints_TRON_Send = "tron/transaction";
+        private const string Endpoints_TRON_Broadcast = "tron/broadcast";
+        #endregion
+
+        #region Blockchain - Scrypta
         private const string Endpoints_Scrypta_BlockchainInformation = "scrypta/info";
         private const string Endpoints_Scrypta_GetBlockHash = "scrypta/block/hash/{0}";
         private const string Endpoints_Scrypta_GetBlockByHash = "scrypta/block/{0}";
@@ -188,11 +328,14 @@ namespace Tatum.Net
         private const string Endpoints_Scrypta_GetTransactionUTXO = "scrypta/utxo/{0}/{1}";
         private const string Endpoints_Scrypta_Transaction = "scrypta/transaction";
         private const string Endpoints_Scrypta_Broadcast = "scrypta/broadcast";
+        #endregion
 
-        /* Service */
+        #region Tatum Service
         private const string Endpoints_Service_Consumption = "tatum/usage";
         private const string Endpoints_Service_ExchangeRates = "tatum/rate/{0}";
         private const string Endpoints_Service_Version = "tatum/version";
+        #endregion
+
         #endregion
 
         #region Constructor / Destructor
@@ -264,7 +407,7 @@ namespace Tatum.Net
         /// <param name="options">Ledger Account Options</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<LedgerAccount> Ledger_CreateAccount(BlockchainType chain, LedgerAccountOptions options = null, CancellationToken ct = default) => Ledger_CreateAccount_Async(chain, options, ct).Result;
+        public WebCallResult<LedgerAccount> LedgerAccount_Create(BlockchainType chain, LedgerAccountOptions options = null, CancellationToken ct = default) => LedgerAccount_Create_Async(chain, options, ct).Result;
         /// <summary>
         /// <b>Title:</b> Create new account<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -288,7 +431,7 @@ namespace Tatum.Net
         /// <param name="options">Ledger Account Options</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<LedgerAccount>> Ledger_CreateAccount_Async(BlockchainType chain, LedgerAccountOptions options = null, CancellationToken ct = default)
+        public async Task<WebCallResult<LedgerAccount>> LedgerAccount_Create_Async(BlockchainType chain, LedgerAccountOptions options = null, CancellationToken ct = default)
         {
             var ops = chain.GetBlockchainOptions();
             var parameters = new Dictionary<string, object> {
@@ -305,7 +448,7 @@ namespace Tatum.Net
             }
 
             var credits = 2;
-            var url = GetUrl(string.Format(Endpoints_Ledger_Account));
+            var url = GetUrl(string.Format(Endpoints_Ledger_Account_Create));
             return await SendTatumRequest<LedgerAccount>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
         }
 
@@ -319,7 +462,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<LedgerAccount>> Ledger_GetAccounts(int pageSize = 50, int offset = 0, CancellationToken ct = default) => Ledger_GetAccounts_Async(pageSize, offset, ct).Result;
+        public WebCallResult<IEnumerable<LedgerAccount>> LedgerAccount_GetAccounts(int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerAccount_GetAccounts_Async(pageSize, offset, ct).Result;
         /// <summary>
         /// <b>Title:</b> List all accounts<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -330,7 +473,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<LedgerAccount>>> Ledger_GetAccounts_Async(int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        public async Task<WebCallResult<IEnumerable<LedgerAccount>>> LedgerAccount_GetAccounts_Async(int pageSize = 50, int offset = 0, CancellationToken ct = default)
         {
             pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
 
@@ -340,7 +483,7 @@ namespace Tatum.Net
             };
 
             var credits = 1;
-            var url = GetUrl(string.Format(Endpoints_Ledger_Account));
+            var url = GetUrl(string.Format(Endpoints_Ledger_Account_List));
             var result = await SendTatumRequest<IEnumerable<LedgerAccount>>(url, HttpMethod.Get, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
             if (!result.Success) return WebCallResult<IEnumerable<LedgerAccount>>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
 
@@ -356,7 +499,7 @@ namespace Tatum.Net
         /// <param name="accounts">Ledger Accounts List</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<LedgerAccount>> Ledger_CreateBatchAccounts(IEnumerable<LedgerAccountOptions> accounts, CancellationToken ct = default) => Ledger_CreateBatchAccounts_Async(accounts, ct).Result;
+        public WebCallResult<IEnumerable<LedgerAccount>> LedgerAccount_CreateBatch(IEnumerable<LedgerAccountOptions> accounts, CancellationToken ct = default) => LedgerAccount_CreateBatch_Async(accounts, ct).Result;
         /// <summary>
         /// <b>Title:</b> Create multiple accounts in a batch call<br />
         /// <b>Credits:</b> 2 credits per API call + 1 credit for every created account.<br />
@@ -366,7 +509,7 @@ namespace Tatum.Net
         /// <param name="accounts">Ledger Accounts List</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<LedgerAccount>>> Ledger_CreateBatchAccounts_Async(IEnumerable<LedgerAccountOptions> accounts, CancellationToken ct = default)
+        public async Task<WebCallResult<IEnumerable<LedgerAccount>>> LedgerAccount_CreateBatch_Async(IEnumerable<LedgerAccountOptions> accounts, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "accounts", accounts },
@@ -374,7 +517,7 @@ namespace Tatum.Net
 
             var credits = 2;
             foreach (var account in accounts) if (!string.IsNullOrEmpty(account.ExtendedPublicKey)) credits++;
-            var url = GetUrl(string.Format(Endpoints_Ledger_AccountBatch));
+            var url = GetUrl(string.Format(Endpoints_Ledger_Account_CreateBatch));
             return await SendTatumRequest<IEnumerable<LedgerAccount>>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
         }
 
@@ -389,7 +532,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<LedgerAccount>> Ledger_GetAccountsByCustomerId(string customer_id, int pageSize = 50, int offset = 0, CancellationToken ct = default) => Ledger_GetAccountsByCustomerId_Async(customer_id, pageSize, offset, ct).Result;
+        public WebCallResult<IEnumerable<LedgerAccount>> LedgerAccount_GetByCustomerId(string customer_id, int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerAccount_GetByCustomerId_Async(customer_id, pageSize, offset, ct).Result;
         /// <summary>
         /// <b>Title:</b> List all customer accounts<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -401,12 +544,12 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<LedgerAccount>>> Ledger_GetAccountsByCustomerId_Async(string customer_id, int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        public async Task<WebCallResult<IEnumerable<LedgerAccount>>> LedgerAccount_GetByCustomerId_Async(string customer_id, int pageSize = 50, int offset = 0, CancellationToken ct = default)
         {
             pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
 
             var credits = 1;
-            var url = GetUrl(string.Format(Endpoints_Ledger_AccountOfCustomer, customer_id));
+            var url = GetUrl(string.Format(Endpoints_Ledger_Account_ListByCustomer, customer_id));
             return await SendTatumRequest<IEnumerable<LedgerAccount>>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
         }
 
@@ -421,7 +564,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<LedgerAccount> Ledger_GetAccountByAccountId(string account_id, int pageSize = 50, int offset = 0, CancellationToken ct = default) => Ledger_GetAccountByAccountId_Async(account_id, pageSize, offset, ct).Result;
+        public WebCallResult<LedgerAccount> LedgerAccount_GetById(string account_id, int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerAccount_GetById_Async(account_id, pageSize, offset, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get account by ID<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -433,7 +576,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<LedgerAccount>> Ledger_GetAccountByAccountId_Async(string account_id, int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        public async Task<WebCallResult<LedgerAccount>> LedgerAccount_GetById_Async(string account_id, int pageSize = 50, int offset = 0, CancellationToken ct = default)
         {
             pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
 
@@ -443,7 +586,7 @@ namespace Tatum.Net
             };
 
             var credits = 1;
-            var url = GetUrl(string.Format(Endpoints_Ledger_AccountOfId, account_id));
+            var url = GetUrl(string.Format(Endpoints_Ledger_Account_GetById, account_id));
             return await SendTatumRequest<LedgerAccount>(url, HttpMethod.Get, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
         }
 
@@ -458,7 +601,7 @@ namespace Tatum.Net
         /// <param name="accountNumber">Account number from external system.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> Ledger_UpdateAccount(string account_id, string accountCode, string accountNumber, CancellationToken ct = default) => Ledger_UpdateAccount_Async(account_id, accountCode, accountNumber, ct).Result;
+        public WebCallResult<bool> LedgerAccount_Update(string account_id, string accountCode, string accountNumber, CancellationToken ct = default) => LedgerAccount_Update_Async(account_id, accountCode, accountNumber, ct).Result;
         /// <summary>
         /// <b>Title:</b> Update account<br />
         /// <b>Credits:</b> 2 credit per API call.<br />
@@ -470,7 +613,7 @@ namespace Tatum.Net
         /// <param name="accountNumber">Account number from external system.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> Ledger_UpdateAccount_Async(string account_id, string accountCode, string accountNumber, CancellationToken ct = default)
+        public async Task<WebCallResult<bool>> LedgerAccount_Update_Async(string account_id, string accountCode, string accountNumber, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "accountCode", accountCode },
@@ -478,7 +621,7 @@ namespace Tatum.Net
             };
 
             var credits = 2;
-            var url = GetUrl(string.Format(Endpoints_Ledger_AccountOfId, account_id));
+            var url = GetUrl(string.Format(Endpoints_Ledger_Account_Update, account_id));
             var result = await SendTatumRequest<string>(url, HttpMethod.Put, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
             if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
 
@@ -494,7 +637,7 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<LedgerAccountBalance> Ledger_GetAccountBalance(string account_id, CancellationToken ct = default) => Ledger_GetAccountBalance_Async(account_id, ct).Result;
+        public WebCallResult<LedgerBalance> LedgerAccount_GetBalance(string account_id, CancellationToken ct = default) => LedgerAccount_GetBalance_Async(account_id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get account balance<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -504,11 +647,11 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<LedgerAccountBalance>> Ledger_GetAccountBalance_Async(string account_id, CancellationToken ct = default)
+        public async Task<WebCallResult<LedgerBalance>> LedgerAccount_GetBalance_Async(string account_id, CancellationToken ct = default)
         {
             var credits = 1;
-            var url = GetUrl(string.Format(Endpoints_Ledger_AccountBalance, account_id));
-            return await SendTatumRequest<LedgerAccountBalance>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+            var url = GetUrl(string.Format(Endpoints_Ledger_Account_Balance, account_id));
+            return await SendTatumRequest<LedgerBalance>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -529,7 +672,7 @@ namespace Tatum.Net
         /// <param name="description">Description of blockage.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<LedgerId> Ledger_BlockAmount(string account_id, decimal amount, string type, string description, CancellationToken ct = default) => Ledger_BlockAmount_Async(account_id, amount, type, description, ct).Result;
+        public WebCallResult<TatumId> LedgerAccount_BlockAmount(string account_id, decimal amount, string type, string description, CancellationToken ct = default) => LedgerAccount_BlockAmount_Async(account_id, amount, type, description, ct).Result;
         /// <summary>
         /// <b>Title:</b> Block amount on account<br />
         /// <b>Credits:</b> 2 credit per API call.<br />
@@ -548,7 +691,7 @@ namespace Tatum.Net
         /// <param name="description">Description of blockage.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<LedgerId>> Ledger_BlockAmount_Async(string account_id, decimal amount, string type, string description, CancellationToken ct = default)
+        public async Task<WebCallResult<TatumId>> LedgerAccount_BlockAmount_Async(string account_id, decimal amount, string type, string description, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "amount", amount.ToString() },
@@ -557,8 +700,8 @@ namespace Tatum.Net
             parameters.AddOptionalParameter("description", description);
 
             var credits = 2;
-            var url = GetUrl(string.Format(Endpoints_Ledger_BlockAmount, account_id));
-            return await SendTatumRequest<LedgerId>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            var url = GetUrl(string.Format(Endpoints_Ledger_Account_BlockAmount, account_id));
+            return await SendTatumRequest<TatumId>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -580,7 +723,7 @@ namespace Tatum.Net
         /// <param name="baseRate">Exchange rate of the base pair. Only applicable for Tatum's Virtual currencies Ledger transactions. Override default exchange rate for the Virtual Currency. Default: 1</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<LedgerReference> Ledger_UnlockAmountAndPerformTransaction(
+        public WebCallResult<TatumReference> LedgerAccount_UnlockAmountAndPerformTransaction(
             string blockage_id,
             string recipientAccountId,
             decimal amount,
@@ -592,7 +735,7 @@ namespace Tatum.Net
             string senderNote,
             decimal baseRate = 1,
             CancellationToken ct = default)
-            => Ledger_UnlockAmountAndPerformTransaction_Async(blockage_id, recipientAccountId, amount, anonymous, compliant, transactionCode, paymentId, recipientNote, senderNote, baseRate, ct).Result;
+            => LedgerAccount_UnlockAmountAndPerformTransaction_Async(blockage_id, recipientAccountId, amount, anonymous, compliant, transactionCode, paymentId, recipientNote, senderNote, baseRate, ct).Result;
         /// <summary>
         /// <b>Title:</b> Unlock amount on account and perform transaction<br />
         /// <b>Credits:</b> 2 credit per API call.<br />
@@ -612,7 +755,7 @@ namespace Tatum.Net
         /// <param name="baseRate">Exchange rate of the base pair. Only applicable for Tatum's Virtual currencies Ledger transactions. Override default exchange rate for the Virtual Currency. Default: 1</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<LedgerReference>> Ledger_UnlockAmountAndPerformTransaction_Async(
+        public async Task<WebCallResult<TatumReference>> LedgerAccount_UnlockAmountAndPerformTransaction_Async(
             string blockage_id,
             string recipientAccountId,
             decimal amount,
@@ -638,8 +781,8 @@ namespace Tatum.Net
             };
 
             var credits = 2;
-            var url = GetUrl(string.Format(Endpoints_Ledger_UnlockAmountAndTransfer, blockage_id));
-            return await SendTatumRequest<LedgerReference>(url, HttpMethod.Put, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            var url = GetUrl(string.Format(Endpoints_Ledger_Account_UnlockAmountAndTransfer, blockage_id));
+            return await SendTatumRequest<TatumReference>(url, HttpMethod.Put, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -651,7 +794,7 @@ namespace Tatum.Net
         /// <param name="blockage_id">Blockage ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> Ledger_UnblockAmount(string blockage_id, CancellationToken ct = default) => Ledger_UnblockAmount_Async(blockage_id, ct).Result;
+        public WebCallResult<bool> LedgerAccount_UnblockAmount(string blockage_id, CancellationToken ct = default) => LedgerAccount_UnblockAmount_Async(blockage_id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Unblock blocked amount on account<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -661,10 +804,10 @@ namespace Tatum.Net
         /// <param name="blockage_id">Blockage ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> Ledger_UnblockAmount_Async(string blockage_id, CancellationToken ct = default)
+        public async Task<WebCallResult<bool>> LedgerAccount_UnblockAmount_Async(string blockage_id, CancellationToken ct = default)
         {
             var credits = 1;
-            var url = GetUrl(string.Format(Endpoints_Ledger_BlockAmount, blockage_id));
+            var url = GetUrl(string.Format(Endpoints_Ledger_Account_UnblockAmount, blockage_id));
             var result = await SendTatumRequest<string>(url, HttpMethod.Delete, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
             if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
 
@@ -682,7 +825,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<LedgerBlockedAmount>> Ledger_GetBlockedAmounts(string account_id, int pageSize = 50, int offset = 0, CancellationToken ct = default) => Ledger_GetBlockedAmounts_Async(account_id, pageSize, offset, ct).Result;
+        public WebCallResult<IEnumerable<LedgerBlockedAmount>> LedgerAccount_GetBlockedAmounts(string account_id, int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerAccount_GetBlockedAmounts_Async(account_id, pageSize, offset, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get blocked amounts on account<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -694,7 +837,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<LedgerBlockedAmount>>> Ledger_GetBlockedAmounts_Async(string account_id, int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        public async Task<WebCallResult<IEnumerable<LedgerBlockedAmount>>> LedgerAccount_GetBlockedAmounts_Async(string account_id, int pageSize = 50, int offset = 0, CancellationToken ct = default)
         {
             pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
 
@@ -704,7 +847,7 @@ namespace Tatum.Net
             };
 
             var credits = 1;
-            var url = GetUrl(string.Format(Endpoints_Ledger_BlockAmount, account_id));
+            var url = GetUrl(string.Format(Endpoints_Ledger_Account_GetBlockedAmounts, account_id));
             return await SendTatumRequest<IEnumerable<LedgerBlockedAmount>>(url, HttpMethod.Get, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
         }
 
@@ -717,7 +860,7 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> Ledger_UnblockAllBlockedAmounts(string account_id, CancellationToken ct = default) => Ledger_UnblockAllBlockedAmounts_Async(account_id, ct).Result;
+        public WebCallResult<bool> LedgerAccount_UnblockAllBlockedAmounts(string account_id, CancellationToken ct = default) => LedgerAccount_UnblockAllBlockedAmounts_Async(account_id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Unblock all blocked amounts on account<br />
         /// <b>Credits:</b>  credit per API call, 1 credits for each deleted blockage. 1 API call + 2 blockages = 3 credits.<br />
@@ -727,10 +870,10 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> Ledger_UnblockAllBlockedAmounts_Async(string account_id, CancellationToken ct = default)
+        public async Task<WebCallResult<bool>> LedgerAccount_UnblockAllBlockedAmounts_Async(string account_id, CancellationToken ct = default)
         {
             var credits = 1; // 1 credit per API call, 1 credits for each deleted blockage. 1 API call + 2 blockages = 3 credits.
-            var url = GetUrl(string.Format(Endpoints_Ledger_BlockAccount, account_id));
+            var url = GetUrl(string.Format(Endpoints_Ledger_Account_UnblockAllBlockedAmounts, account_id));
             var result = await SendTatumRequest<string>(url, HttpMethod.Delete, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
             if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
 
@@ -746,7 +889,7 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> Ledger_ActivateAccount(string account_id, CancellationToken ct = default) => Ledger_ActivateAccount_Async(account_id, ct).Result;
+        public WebCallResult<bool> LedgerAccount_Activate(string account_id, CancellationToken ct = default) => LedgerAccount_Activate_Async(account_id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Activate account<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -756,10 +899,10 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> Ledger_ActivateAccount_Async(string account_id, CancellationToken ct = default)
+        public async Task<WebCallResult<bool>> LedgerAccount_Activate_Async(string account_id, CancellationToken ct = default)
         {
             var credits = 2;
-            var url = GetUrl(string.Format(Endpoints_Ledger_ActivateLedgerAccount, account_id));
+            var url = GetUrl(string.Format(Endpoints_Ledger_Account_ActivateLedgerAccount, account_id));
             var result = await SendTatumRequest<string>(url, HttpMethod.Put, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
             if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
 
@@ -777,7 +920,7 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> Ledger_DeactivateAccount(string account_id, CancellationToken ct = default) => Ledger_DeactivateAccount_Async(account_id, ct).Result;
+        public WebCallResult<bool> LedgerAccount_Deactivate(string account_id, CancellationToken ct = default) => LedgerAccount_Deactivate_Async(account_id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Deactivate account<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -789,10 +932,10 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> Ledger_DeactivateAccount_Async(string account_id, CancellationToken ct = default)
+        public async Task<WebCallResult<bool>> LedgerAccount_Deactivate_Async(string account_id, CancellationToken ct = default)
         {
             var credits = 2;
-            var url = GetUrl(string.Format(Endpoints_Ledger_DeactivateLedgerAccount, account_id));
+            var url = GetUrl(string.Format(Endpoints_Ledger_Account_DeactivateLedgerAccount, account_id));
             var result = await SendTatumRequest<string>(url, HttpMethod.Put, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
             if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
 
@@ -811,7 +954,7 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> Ledger_FreezeLedgerAccount(string account_id, CancellationToken ct = default) => Ledger_FreezeLedgerAccount_Async(account_id, ct).Result;
+        public WebCallResult<bool> LedgerAccount_Freeze(string account_id, CancellationToken ct = default) => LedgerAccount_Freeze_Async(account_id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Freeze account<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -824,10 +967,10 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> Ledger_FreezeLedgerAccount_Async(string account_id, CancellationToken ct = default)
+        public async Task<WebCallResult<bool>> LedgerAccount_Freeze_Async(string account_id, CancellationToken ct = default)
         {
             var credits = 2;
-            var url = GetUrl(string.Format(Endpoints_Ledger_FreezeLedgerAccount, account_id));
+            var url = GetUrl(string.Format(Endpoints_Ledger_Account_FreezeLedgerAccount, account_id));
             var result = await SendTatumRequest<string>(url, HttpMethod.Put, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
             if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
 
@@ -843,7 +986,7 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> Ledger_UnfreezeLedgerAccount(string account_id, CancellationToken ct = default) => Ledger_UnfreezeLedgerAccount_Async(account_id, ct).Result;
+        public WebCallResult<bool> LedgerAccount_Unfreeze(string account_id, CancellationToken ct = default) => LedgerAccount_Unfreeze_Async(account_id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Unfreeze account<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -853,10 +996,10 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> Ledger_UnfreezeLedgerAccount_Async(string account_id, CancellationToken ct = default)
+        public async Task<WebCallResult<bool>> LedgerAccount_Unfreeze_Async(string account_id, CancellationToken ct = default)
         {
             var credits = 2;
-            var url = GetUrl(string.Format(Endpoints_Ledger_UnfreezeLedgerAccount, account_id));
+            var url = GetUrl(string.Format(Endpoints_Ledger_Account_UnfreezeLedgerAccount, account_id));
             var result = await SendTatumRequest<string>(url, HttpMethod.Put, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
             if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
 
@@ -865,87 +1008,3066 @@ namespace Tatum.Net
         #endregion
 
         #region Ledger / Transaction
-        // TODO: Ledger / Transaction -> Send payment
-        // TODO: Ledger / Transaction -> Find transactions for account.
-        // TODO: Ledger / Transaction -> Find transactions for customer across all accounts of customer.
-        // TODO: Ledger / Transaction -> Find transactions for ledger.
-        // TODO: Ledger / Transaction -> Find transactions with given reference across all accounts.
+        /// <summary>
+        /// <b>Title:</b> Send payment<br />
+        /// <b>Credits:</b> 4 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send payment within the Tatum's ledger. All assets are settled instantly.
+        /// When transaction is settled, 2 transaction records are created, 1 for each of the participants.These 2 records are connected together via transaction reference, which is the same for both of them.
+        /// This method is used only for transferring assets between Tatum's accounts and will not send any funds to blockchain addresses.
+        /// If there is insufficient balance on sender account, no transactions are stored.
+        /// It is possible to perform an anonymous transaction - sender account is not visible for the recipient.
+        /// Every transaction has it's value in the FIAT currency calculated automatically. FIAT value is based on the accountingCurrency of the account connected to the transaction and is available in the marketValue parameter of the transaction.
+        /// </summary>
+        /// <param name="senderAccountId">Internal sender account ID within Tatum platform</param>
+        /// <param name="recipientAccountId">Internal recipient account ID within Tatum platform</param>
+        /// <param name="amount">Amount to be sent.</param>
+        /// <param name="anonymous">Anonymous transaction does not show sender account to recipient, default is false</param>
+        /// <param name="compliant">Enable compliant checks. Transaction will not be processed, if compliant check fails.</param>
+        /// <param name="transactionCode">For bookkeeping to distinct transaction purpose.</param>
+        /// <param name="paymentId">Payment ID, External identifier of the payment, which can be used to pair transactions within Tatum accounts.</param>
+        /// <param name="recipientNote">Note visible to both, sender and recipient</param>
+        /// <param name="baseRate">Exchange rate of the base pair. Only applicable for Tatum's Virtual currencies Ledger transactions. Override default exchange rate for the Virtual Currency.</param>
+        /// <param name="senderNote">Note visible to sender</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<TatumReference> LedgerTransaction_SendPayment(
+            string senderAccountId,
+            string recipientAccountId,
+            decimal amount,
+            bool anonymous = false,
+            bool? compliant = null,
+            string transactionCode = null,
+            string paymentId = null,
+            string recipientNote = null,
+            decimal baseRate = 1.0m,
+            string senderNote = null,
+            CancellationToken ct = default)
+            => LedgerTransaction_SendPayment_Async(senderAccountId, recipientAccountId, amount, anonymous, compliant, transactionCode, paymentId, recipientNote, baseRate, senderNote, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Send payment<br />
+        /// <b>Credits:</b> 4 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send payment within the Tatum's ledger. All assets are settled instantly.
+        /// When transaction is settled, 2 transaction records are created, 1 for each of the participants.These 2 records are connected together via transaction reference, which is the same for both of them.
+        /// This method is used only for transferring assets between Tatum's accounts and will not send any funds to blockchain addresses.
+        /// If there is insufficient balance on sender account, no transactions are stored.
+        /// It is possible to perform an anonymous transaction - sender account is not visible for the recipient.
+        /// Every transaction has it's value in the FIAT currency calculated automatically. FIAT value is based on the accountingCurrency of the account connected to the transaction and is available in the marketValue parameter of the transaction.
+        /// </summary>
+        /// <param name="senderAccountId">Internal sender account ID within Tatum platform</param>
+        /// <param name="recipientAccountId">Internal recipient account ID within Tatum platform</param>
+        /// <param name="amount">Amount to be sent.</param>
+        /// <param name="anonymous">Anonymous transaction does not show sender account to recipient, default is false</param>
+        /// <param name="compliant">Enable compliant checks. Transaction will not be processed, if compliant check fails.</param>
+        /// <param name="transactionCode">For bookkeeping to distinct transaction purpose.</param>
+        /// <param name="paymentId">Payment ID, External identifier of the payment, which can be used to pair transactions within Tatum accounts.</param>
+        /// <param name="recipientNote">Note visible to both, sender and recipient</param>
+        /// <param name="baseRate">Exchange rate of the base pair. Only applicable for Tatum's Virtual currencies Ledger transactions. Override default exchange rate for the Virtual Currency.</param>
+        /// <param name="senderNote">Note visible to sender</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<TatumReference>> LedgerTransaction_SendPayment_Async(
+            string senderAccountId,
+            string recipientAccountId,
+            decimal amount,
+            bool anonymous = false,
+            bool? compliant = null,
+            string transactionCode = null,
+            string paymentId = null,
+            string recipientNote = null,
+            decimal baseRate = 1.0m,
+            string senderNote = null,
+            CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "senderAccountId", senderAccountId },
+                { "recipientAccountId", recipientAccountId },
+                { "amount", amount.ToString(CultureInfo.InvariantCulture) },
+                { "anonymous", anonymous },
+                { "baseRate", baseRate },
+            };
+            parameters.AddOptionalParameter("compliant", compliant);
+            parameters.AddOptionalParameter("transactionCode", transactionCode);
+            parameters.AddOptionalParameter("paymentId", paymentId);
+            parameters.AddOptionalParameter("recipientNote", recipientNote);
+            parameters.AddOptionalParameter("senderNote", senderNote);
+
+            var credits = 4;
+            var url = GetUrl(string.Format(Endpoints_Ledger_Transaction_SendPayment));
+            return await SendTatumRequest<TatumReference>(url, HttpMethod.Post, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Find transactions for account.<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Find transactions for account identified by given account id.
+        /// </summary>
+        /// <param name="id">Account ID - source of transaction(s).</param>
+        /// <param name="counterAccount">Counter account - transaction(s) destination account.</param>
+        /// <param name="from">Starting date to search for transactions from in UTC millis. If not present, search all history.</param>
+        /// <param name="to">Date until to search for transactions in UTC millis. If not present, search up till now.</param>
+        /// <param name="currency">Currency of the transactions.</param>
+        /// <param name="transactionType">Type of payment</param>
+        /// <param name="opType">Type of operation</param>
+        /// <param name="transactionCode">For bookkeeping to distinct transaction purpose.</param>
+        /// <param name="paymentId">Payment ID defined in payment order by sender.</param>
+        /// <param name="recipientNote">Recipient note defined in payment order by sender.</param>
+        /// <param name="senderNote">Sender note defined in payment order by sender.</param>
+        /// <param name="pageSize">Max number of items per page is 50. Either count, or pageSize is accepted.</param>
+        /// <param name="offset">Offset to obtain next page of the data.</param>
+        /// <param name="count">Get total count of transactions based on the filter. Either count, or pageSize is accepted.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<IEnumerable<LedgerTransaction>> LedgerTransaction_GetTransactionsByAccount(
+            string id,
+            string counterAccount = null,
+            DateTime? from = null,
+            DateTime? to = null,
+            string currency = null,
+            LedgerTransactionType? transactionType = null,
+            LedgerOperationType? opType = null,
+            string transactionCode = null,
+            string paymentId = null,
+            string recipientNote = null,
+            string senderNote = null,
+            int pageSize = 50,
+            int offset = 0,
+            bool? count = null,
+            CancellationToken ct = default)
+            => LedgerTransaction_GetTransactionsByAccount_Async(id, counterAccount, from, to, currency, transactionType, opType, transactionCode, paymentId, recipientNote, senderNote, pageSize, offset, count, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Find transactions for account.<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Find transactions for account identified by given account id.
+        /// </summary>
+        /// <param name="id">Account ID - source of transaction(s).</param>
+        /// <param name="counterAccount">Counter account - transaction(s) destination account.</param>
+        /// <param name="from">Starting date to search for transactions from in UTC millis. If not present, search all history.</param>
+        /// <param name="to">Date until to search for transactions in UTC millis. If not present, search up till now.</param>
+        /// <param name="currency">Currency of the transactions.</param>
+        /// <param name="transactionType">Type of payment</param>
+        /// <param name="opType">Type of operation</param>
+        /// <param name="transactionCode">For bookkeeping to distinct transaction purpose.</param>
+        /// <param name="paymentId">Payment ID defined in payment order by sender.</param>
+        /// <param name="recipientNote">Recipient note defined in payment order by sender.</param>
+        /// <param name="senderNote">Sender note defined in payment order by sender.</param>
+        /// <param name="pageSize">Max number of items per page is 50. Either count, or pageSize is accepted.</param>
+        /// <param name="offset">Offset to obtain next page of the data.</param>
+        /// <param name="count">Get total count of transactions based on the filter. Either count, or pageSize is accepted.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<IEnumerable<LedgerTransaction>>> LedgerTransaction_GetTransactionsByAccount_Async(
+            string id,
+            string counterAccount = null,
+            DateTime? from = null,
+            DateTime? to = null,
+            string currency = null,
+            LedgerTransactionType? transactionType = null,
+            LedgerOperationType? opType = null,
+            string transactionCode = null,
+            string paymentId = null,
+            string recipientNote = null,
+            string senderNote = null,
+            int pageSize = 50,
+            int offset = 0,
+            bool? count = null,
+            CancellationToken ct = default)
+        {
+            pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
+
+            var parameters = new Dictionary<string, object>
+            {
+                { "id", id },
+            };
+            parameters.AddOptionalParameter("counterAccount", counterAccount);
+            parameters.AddOptionalParameter("from", from?.ToUnixTimeMilliseconds());
+            parameters.AddOptionalParameter("to", to?.ToUnixTimeMilliseconds());
+            parameters.AddOptionalParameter("currency", currency);
+            if (transactionType.HasValue)
+                parameters.AddOptionalParameter("transactionType", JsonConvert.SerializeObject(transactionType, new LedgerTransactionTypeConverter(false)));
+            if (opType.HasValue)
+                parameters.AddOptionalParameter("opType", JsonConvert.SerializeObject(opType, new LedgerOperationTypeConverter(false)));
+            parameters.AddOptionalParameter("transactionCode", transactionCode);
+            parameters.AddOptionalParameter("paymentId", paymentId);
+            parameters.AddOptionalParameter("recipientNote", recipientNote);
+            parameters.AddOptionalParameter("senderNote", senderNote);
+
+            var credits = 1;
+            var qs = $"?pageSize={pageSize}&offset{offset}";
+            if (count.HasValue) qs += $"&count={(count.Value ? "true" : "false")}";
+            var url = GetUrl(string.Format(Endpoints_Ledger_Transaction_GetTransactionsByAccount + qs));
+            return await SendTatumRequest<IEnumerable<LedgerTransaction>>(url, HttpMethod.Post, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Find transactions for customer across all accounts of customer.<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Find transactions for all accounts of customer identified by given customer internal ID.
+        /// </summary>
+        /// <param name="id">Customer internal ID to search for.</param>
+        /// <param name="account">Source account - source of transaction(s).</param>
+        /// <param name="counterAccount">Counter account - transaction(s) destination account.</param>
+        /// <param name="from">Starting date to search for transactions from in UTC millis. If not present, search all history.</param>
+        /// <param name="to">Date until to search for transactions in UTC millis. If not present, search up till now.</param>
+        /// <param name="currency">Currency of the transactions.</param>
+        /// <param name="transactionType">Type of payment.</param>
+        /// <param name="opType">Type of operation.</param>
+        /// <param name="transactionCode">For bookkeeping to distinct transaction purpose.</param>
+        /// <param name="paymentId">Payment ID defined in payment order by sender.</param>
+        /// <param name="recipientNote">Recipient note defined in payment order by sender.</param>
+        /// <param name="senderNote">Sender note defined in payment order by sender.</param>
+        /// <param name="pageSize">Max number of items per page is 50. Either count, or pageSize is accepted.</param>
+        /// <param name="offset">Offset to obtain next page of the data.</param>
+        /// <param name="count">Get total count of transactions based on the filter. Either count, or pageSize is accepted.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<IEnumerable<LedgerTransaction>> LedgerTransaction_GetTransactionsByCustomer(
+            string id,
+            string account = null,
+            string counterAccount = null,
+            DateTime? from = null,
+            DateTime? to = null,
+            string currency = null,
+            LedgerTransactionType? transactionType = null,
+            LedgerOperationType? opType = null,
+            string transactionCode = null,
+            string paymentId = null,
+            string recipientNote = null,
+            string senderNote = null,
+            int pageSize = 50,
+            int offset = 0,
+            bool? count = null,
+            CancellationToken ct = default)
+            => LedgerTransaction_GetTransactionsByCustomer_Async(id, account, counterAccount, from, to, currency, transactionType, opType, transactionCode, paymentId, recipientNote, senderNote, pageSize, offset, count, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Find transactions for customer across all accounts of customer.<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Find transactions for all accounts of customer identified by given customer internal ID.
+        /// </summary>
+        /// <param name="id">Customer internal ID to search for.</param>
+        /// <param name="account">Source account - source of transaction(s).</param>
+        /// <param name="counterAccount">Counter account - transaction(s) destination account.</param>
+        /// <param name="from">Starting date to search for transactions from in UTC millis. If not present, search all history.</param>
+        /// <param name="to">Date until to search for transactions in UTC millis. If not present, search up till now.</param>
+        /// <param name="currency">Currency of the transactions.</param>
+        /// <param name="transactionType">Type of payment.</param>
+        /// <param name="opType">Type of operation.</param>
+        /// <param name="transactionCode">For bookkeeping to distinct transaction purpose.</param>
+        /// <param name="paymentId">Payment ID defined in payment order by sender.</param>
+        /// <param name="recipientNote">Recipient note defined in payment order by sender.</param>
+        /// <param name="senderNote">Sender note defined in payment order by sender.</param>
+        /// <param name="pageSize">Max number of items per page is 50. Either count, or pageSize is accepted.</param>
+        /// <param name="offset">Offset to obtain next page of the data.</param>
+        /// <param name="count">Get total count of transactions based on the filter. Either count, or pageSize is accepted.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<IEnumerable<LedgerTransaction>>> LedgerTransaction_GetTransactionsByCustomer_Async(
+            string id,
+            string account = null,
+            string counterAccount = null,
+            DateTime? from = null,
+            DateTime? to = null,
+            string currency = null,
+            LedgerTransactionType? transactionType = null,
+            LedgerOperationType? opType = null,
+            string transactionCode = null,
+            string paymentId = null,
+            string recipientNote = null,
+            string senderNote = null,
+            int pageSize = 50,
+            int offset = 0,
+            bool? count = null,
+            CancellationToken ct = default)
+        {
+            pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
+
+            var parameters = new Dictionary<string, object>
+            {
+                { "id", id },
+            };
+            parameters.AddOptionalParameter("account", account);
+            parameters.AddOptionalParameter("counterAccount", counterAccount);
+            parameters.AddOptionalParameter("from", from?.ToUnixTimeMilliseconds());
+            parameters.AddOptionalParameter("to", to?.ToUnixTimeMilliseconds());
+            parameters.AddOptionalParameter("currency", currency);
+            if (transactionType.HasValue)
+                parameters.AddOptionalParameter("transactionType", JsonConvert.SerializeObject(transactionType, new LedgerTransactionTypeConverter(false)));
+            if (opType.HasValue)
+                parameters.AddOptionalParameter("opType", JsonConvert.SerializeObject(opType, new LedgerOperationTypeConverter(false)));
+            parameters.AddOptionalParameter("transactionCode", transactionCode);
+            parameters.AddOptionalParameter("paymentId", paymentId);
+            parameters.AddOptionalParameter("recipientNote", recipientNote);
+            parameters.AddOptionalParameter("senderNote", senderNote);
+
+            var credits = 1;
+            var qs = $"?pageSize={pageSize}&offset{offset}";
+            if (count.HasValue) qs += $"&count={(count.Value ? "true" : "false")}";
+            var url = GetUrl(string.Format(Endpoints_Ledger_Transaction_GetTransactionsByCustomer + qs));
+            return await SendTatumRequest<IEnumerable<LedgerTransaction>>(url, HttpMethod.Post, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Find transactions for ledger.<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Find transactions across whole ledger.
+        /// </summary>
+        /// <param name="account">Source account - source of transaction(s).</param>
+        /// <param name="counterAccount">Counter account - transaction(s) destination account.</param>
+        /// <param name="from">Starting date to search for transactions from in UTC millis. If not present, search all history.</param>
+        /// <param name="to">Date until to search for transactions in UTC millis. If not present, search up till now.</param>
+        /// <param name="currency">Currency of the transactions.</param>
+        /// <param name="transactionType">Type of payment.</param>
+        /// <param name="opType">Type of operation.</param>
+        /// <param name="transactionCode">For bookkeeping to distinct transaction purpose.</param>
+        /// <param name="paymentId">Payment ID defined in payment order by sender.</param>
+        /// <param name="recipientNote">Recipient note defined in payment order by sender.</param>
+        /// <param name="senderNote">Sender note defined in payment order by sender.</param>
+        /// <param name="pageSize">Max number of items per page is 50. Either count, or pageSize is accepted.</param>
+        /// <param name="offset">Offset to obtain next page of the data.</param>
+        /// <param name="count">Get total count of transactions based on the filter. Either count, or pageSize is accepted.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<IEnumerable<LedgerTransaction>> LedgerTransaction_GetTransactionsByLedger(
+            string account = null,
+            string counterAccount = null,
+            DateTime? from = null,
+            DateTime? to = null,
+            string currency = null,
+            LedgerTransactionType? transactionType = null,
+            LedgerOperationType? opType = null,
+            string transactionCode = null,
+            string paymentId = null,
+            string recipientNote = null,
+            string senderNote = null,
+            int pageSize = 50,
+            int offset = 0,
+            bool? count = null,
+            CancellationToken ct = default)
+            => LedgerTransaction_GetTransactionsByLedger_Async(account, counterAccount, from, to, currency, transactionType, opType, transactionCode, paymentId, recipientNote, senderNote, pageSize, offset, count, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Find transactions for ledger.<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Find transactions across whole ledger.
+        /// </summary>
+        /// <param name="account">Source account - source of transaction(s).</param>
+        /// <param name="counterAccount">Counter account - transaction(s) destination account.</param>
+        /// <param name="from">Starting date to search for transactions from in UTC millis. If not present, search all history.</param>
+        /// <param name="to">Date until to search for transactions in UTC millis. If not present, search up till now.</param>
+        /// <param name="currency">Currency of the transactions.</param>
+        /// <param name="transactionType">Type of payment.</param>
+        /// <param name="opType">Type of operation.</param>
+        /// <param name="transactionCode">For bookkeeping to distinct transaction purpose.</param>
+        /// <param name="paymentId">Payment ID defined in payment order by sender.</param>
+        /// <param name="recipientNote">Recipient note defined in payment order by sender.</param>
+        /// <param name="senderNote">Sender note defined in payment order by sender.</param>
+        /// <param name="pageSize">Max number of items per page is 50. Either count, or pageSize is accepted.</param>
+        /// <param name="offset">Offset to obtain next page of the data.</param>
+        /// <param name="count">Get total count of transactions based on the filter. Either count, or pageSize is accepted.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<IEnumerable<LedgerTransaction>>> LedgerTransaction_GetTransactionsByLedger_Async(
+            string account = null,
+            string counterAccount = null,
+            DateTime? from = null,
+            DateTime? to = null,
+            string currency = null,
+            LedgerTransactionType? transactionType = null,
+            LedgerOperationType? opType = null,
+            string transactionCode = null,
+            string paymentId = null,
+            string recipientNote = null,
+            string senderNote = null,
+            int pageSize = 50,
+            int offset = 0,
+            bool? count = null,
+            CancellationToken ct = default)
+        {
+            pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
+
+            var parameters = new Dictionary<string, object>();
+            parameters.AddOptionalParameter("account", account);
+            parameters.AddOptionalParameter("counterAccount", counterAccount);
+            parameters.AddOptionalParameter("from", from?.ToUnixTimeMilliseconds());
+            parameters.AddOptionalParameter("to", to?.ToUnixTimeMilliseconds());
+            parameters.AddOptionalParameter("currency", currency);
+            if (transactionType.HasValue)
+                parameters.AddOptionalParameter("transactionType", JsonConvert.SerializeObject(transactionType, new LedgerTransactionTypeConverter(false)));
+            if (opType.HasValue)
+                parameters.AddOptionalParameter("opType", JsonConvert.SerializeObject(opType, new LedgerOperationTypeConverter(false)));
+            parameters.AddOptionalParameter("transactionCode", transactionCode);
+            parameters.AddOptionalParameter("paymentId", paymentId);
+            parameters.AddOptionalParameter("recipientNote", recipientNote);
+            parameters.AddOptionalParameter("senderNote", senderNote);
+
+            var credits = 1;
+            var qs = $"?pageSize={pageSize}&offset{offset}";
+            if (count.HasValue) qs += $"&count={(count.Value ? "true" : "false")}";
+            var url = GetUrl(string.Format(Endpoints_Ledger_Transaction_GetTransactionsByLedger + qs));
+            return await SendTatumRequest<IEnumerable<LedgerTransaction>>(url, HttpMethod.Post, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Find transactions with given reference across all accounts.<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Find transactions for all accounts with given reference.
+        /// </summary>
+        /// <param name="reference">reference</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<IEnumerable<LedgerTransaction>> LedgerTransaction_GetTransactionsByReference(string reference, CancellationToken ct = default) => LedgerTransaction_GetTransactionsByReference_Async(reference, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Find transactions with given reference across all accounts.<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Find transactions for all accounts with given reference.
+        /// </summary>
+        /// <param name="reference">reference</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<IEnumerable<LedgerTransaction>>> LedgerTransaction_GetTransactionsByReference_Async(string reference, CancellationToken ct = default)
+        {
+            var credits = 1;
+            var url = GetUrl(string.Format(Endpoints_Ledger_Transaction_GetTransactionsByReference, reference));
+            return await SendTatumRequest<IEnumerable<LedgerTransaction>>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
         #endregion
 
         #region Ledger / Customer
-        // TODO: Ledger / Customer -> List all customers
-        // TODO: Ledger / Customer -> Get customer details
-        // TODO: Ledger / Customer -> Update customer
-        // TODO: Ledger / Customer -> Activate customer
-        // TODO: Ledger / Customer -> Deactivate customer
-        // TODO: Ledger / Customer -> Enable customer
-        // TODO: Ledger / Customer -> Disable customer
+        /// <summary>
+        /// <b>Title:</b> List all customers<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// List of all customers. Also inactive an disabled customers are present.
+        /// </summary>
+        /// <param name="pageSize">Max number of items per page is 50.</param>
+        /// <param name="offset">Offset to obtain next page of the data.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<IEnumerable<LedgerCustomer>> LedgerCustomer_ListAll(int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerCustomer_ListAll_Async(pageSize, offset, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> List all customers<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// List of all customers. Also inactive an disabled customers are present.
+        /// </summary>
+        /// <param name="pageSize">Max number of items per page is 50.</param>
+        /// <param name="offset">Offset to obtain next page of the data.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<IEnumerable<LedgerCustomer>>> LedgerCustomer_ListAll_Async(int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        {
+            pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
+            var parameters = new Dictionary<string, object> {
+                { "pageSize", pageSize },
+                { "offset", offset },
+            };
+
+            var credits = 1;
+            var url = GetUrl(string.Format(Endpoints_Ledger_Customer_List));
+            return await SendTatumRequest<IEnumerable<LedgerCustomer>>(url, HttpMethod.Get, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Get customer details<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Using anonymized external ID or internal customer ID you can access customer detail information. Internal ID is needed to call other customer related methods.
+        /// </summary>
+        /// <param name="id">Customer external or internal ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<LedgerCustomer> LedgerCustomer_Get(string id, CancellationToken ct = default) => LedgerCustomer_Get_Async(id, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Get customer details<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Using anonymized external ID or internal customer ID you can access customer detail information. Internal ID is needed to call other customer related methods.
+        /// </summary>
+        /// <param name="id">Customer external or internal ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<LedgerCustomer>> LedgerCustomer_Get_Async(string id, CancellationToken ct = default)
+        {
+            var credits = 1;
+            var url = GetUrl(string.Format(Endpoints_Ledger_Customer_Get, id));
+            return await SendTatumRequest<LedgerCustomer>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Update customer<br />
+        /// <b>Credits:</b> 2 credit per API call.<br />
+        /// <b>Description:</b>
+        /// This method is helpful in case your primary system will change ID's or customer will change the country he/she is supposed to be in compliance with.
+        /// </summary>
+        /// <param name="id">Customer internal ID</param>
+        /// <param name="externalId">External customer ID. If not set, it will not be updated.</param>
+        /// <param name="accountingCurrency">All transaction will be accounted in this currency for all accounts. Currency can be overridden per account level. If not set, it will not be updated. ISO-4217</param>
+        /// <param name="customerCountry">Country customer has to be compliant with. If not set, it will not be updated. ISO-3166-1.</param>
+        /// <param name="providerCountry">Country service provider has to be compliant with. If not set, it will not be updated. ISO-3166-1</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<LedgerCustomer> LedgerCustomer_Update(string id, string externalId, string accountingCurrency = null, string customerCountry = null, string providerCountry = null, CancellationToken ct = default) => LedgerCustomer_Update_Async(id, externalId, accountingCurrency, customerCountry, providerCountry, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Update customer<br />
+        /// <b>Credits:</b> 2 credit per API call.<br />
+        /// <b>Description:</b>
+        /// This method is helpful in case your primary system will change ID's or customer will change the country he/she is supposed to be in compliance with.
+        /// </summary>
+        /// <param name="id">Customer internal ID</param>
+        /// <param name="externalId">External customer ID. If not set, it will not be updated.</param>
+        /// <param name="accountingCurrency">All transaction will be accounted in this currency for all accounts. Currency can be overridden per account level. If not set, it will not be updated. ISO-4217</param>
+        /// <param name="customerCountry">Country customer has to be compliant with. If not set, it will not be updated. ISO-3166-1.</param>
+        /// <param name="providerCountry">Country service provider has to be compliant with. If not set, it will not be updated. ISO-3166-1</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<LedgerCustomer>> LedgerCustomer_Update_Async(string id, string externalId, string accountingCurrency = null, string customerCountry = null, string providerCountry = null, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object> {
+                { "externalId", externalId },
+            };
+            parameters.AddOptionalParameter("accountingCurrency", accountingCurrency);
+            parameters.AddOptionalParameter("customerCountry", customerCountry);
+            parameters.AddOptionalParameter("providerCountry", providerCountry);
+
+            var credits = 2;
+            var url = GetUrl(string.Format(Endpoints_Ledger_Customer_Update, id));
+            return await SendTatumRequest<LedgerCustomer>(url, HttpMethod.Put, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Activate customer<br />
+        /// <b>Credits:</b> 2 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Activated customer is able to do any operation.
+        /// </summary>
+        /// <param name="id">Customer internal ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<bool> LedgerCustomer_Activate(string id, CancellationToken ct = default) => LedgerCustomer_Activate_Async(id, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Activate customer<br />
+        /// <b>Credits:</b> 2 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Activated customer is able to do any operation.
+        /// </summary>
+        /// <param name="id">Customer internal ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<bool>> LedgerCustomer_Activate_Async(string id, CancellationToken ct = default)
+        {
+            var credits = 2;
+            var url = GetUrl(string.Format(Endpoints_Ledger_Customer_Activate, id));
+            var result = await SendTatumRequest<string>(url, HttpMethod.Put, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+            if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<bool>(result.ResponseStatusCode, result.ResponseHeaders, true, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Deactivate customer<br />
+        /// <b>Credits:</b> 2 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Deactivate customer is not able to do any operation. Customer can be deactivated only when all their accounts are already deactivated.
+        /// </summary>
+        /// <param name="id">Customer internal ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<bool> LedgerCustomer_Deactivate(string id, CancellationToken ct = default) => LedgerCustomer_Deactivate_Async(id, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Deactivate customer<br />
+        /// <b>Credits:</b> 2 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Deactivate customer is not able to do any operation. Customer can be deactivated only when all their accounts are already deactivated.
+        /// </summary>
+        /// <param name="id">Customer internal ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<bool>> LedgerCustomer_Deactivate_Async(string id, CancellationToken ct = default)
+        {
+            var credits = 2;
+            var url = GetUrl(string.Format(Endpoints_Ledger_Customer_Deactivate, id));
+            var result = await SendTatumRequest<string>(url, HttpMethod.Put, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+            if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<bool>(result.ResponseStatusCode, result.ResponseHeaders, true, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Enable customer<br />
+        /// <b>Credits:</b> 2 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Enabled customer can perform all operations. By default all customers are enabled. All previously blocked account balances will be unblocked.
+        /// </summary>
+        /// <param name="id">Customer internal ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<bool> LedgerCustomer_Enable(string id, CancellationToken ct = default) => LedgerCustomer_Enable_Async(id, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Enable customer<br />
+        /// <b>Credits:</b> 2 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Enabled customer can perform all operations. By default all customers are enabled. All previously blocked account balances will be unblocked.
+        /// </summary>
+        /// <param name="id">Customer internal ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<bool>> LedgerCustomer_Enable_Async(string id, CancellationToken ct = default)
+        {
+            var credits = 2;
+            var url = GetUrl(string.Format(Endpoints_Ledger_Customer_Enable, id));
+            var result = await SendTatumRequest<string>(url, HttpMethod.Put, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+            if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<bool>(result.ResponseStatusCode, result.ResponseHeaders, true, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Disable customer<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Disabled customer cannot perform end-user operations, such as create new accounts or send transactions. Available balance on all accounts is set to 0. Account balance will stay untouched.
+        /// </summary>
+        /// <param name="id">Customer internal ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<bool> LedgerCustomer_Disable(string id, CancellationToken ct = default) => LedgerCustomer_Disable_Async(id, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Disable customer<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Disabled customer cannot perform end-user operations, such as create new accounts or send transactions. Available balance on all accounts is set to 0. Account balance will stay untouched.
+        /// </summary>
+        /// <param name="id">Customer internal ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<bool>> LedgerCustomer_Disable_Async(string id, CancellationToken ct = default)
+        {
+            var credits = 2;
+            var url = GetUrl(string.Format(Endpoints_Ledger_Customer_Disable, id));
+            var result = await SendTatumRequest<string>(url, HttpMethod.Put, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+            if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<bool>(result.ResponseStatusCode, result.ResponseHeaders, true, null);
+        }
         #endregion
 
         #region Ledger / Virtual Currency
-        // TODO: Ledger / Virtual Currency -> Create new virtual currency
-        // TODO: Ledger / Virtual Currency -> Update virtual currency
-        // TODO: Ledger / Virtual Currency -> Get virtual currency
-        // TODO: Ledger / Virtual Currency -> Create new supply of virtual currency
-        // TODO: Ledger / Virtual Currency -> Destroy supply of virtual currency
+        /// <summary>
+        /// <b>Title:</b> Create new virtual currency<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Create new virtual currency with given supply stored in account. This will create Tatum internal virtual currency. Every virtual currency must be prefixed with VC_.
+        /// Every virtual currency must be pegged to existing FIAT or supported cryptocurrency. 1 unit of virtual currency has then the same amount as 1 unit of the base currency it is pegged to.It is possible to set a custom base rate for the virtual currency. (baseRate = 2 => 1 VC unit = 2 basePair units)
+        /// Tatum virtual currency acts as any other asset within Tatum.For creation of ERC20 token, see ERC20.
+        /// This operation returns the newly created Tatum Ledger account with an initial balance set to the virtual currency's total supply. Total supply can be changed in the future.
+        /// </summary>
+        /// <param name="name">Virtual currency name. Must be prefixed with 'VC_'.</param>
+        /// <param name="supply">Supply of virtual currency.</param>
+        /// <param name="basePair">Base pair for virtual currency. Transaction value will be calculated according to this base pair. e.g. 1 VC_VIRTUAL is equal to 1 BTC, if basePair is set to BTC.</param>
+        /// <param name="baseRate">Exchange rate of the base pair. Each unit of the created curency will represent value of baseRate*1 basePair.</param>
+        /// <param name="customer">If customer is filled then is created or updated.</param>
+        /// <param name="description">Used as a description within Tatum system.</param>
+        /// <param name="accountCode">For bookkeeping to distinct account purpose.</param>
+        /// <param name="accountNumber">Account number from external system.</param>
+        /// <param name="accountingCurrency">All transaction will be billed in this currency for created account associated with this currency. If not set, EUR is used. ISO-4217</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<LedgerReport> LedgerVirtualCurrency_Create(
+            string name,
+            string supply,
+            string basePair,
+            decimal baseRate = 1.0m,
+            LedgerCustomerOptions customer = null,
+            string description = null,
+            string accountCode = null,
+            string accountNumber = null,
+            string accountingCurrency = null,
+            CancellationToken ct = default)
+            => LedgerVirtualCurrency_Create_Async(name, supply, basePair, baseRate, customer, description, accountCode, accountNumber, accountingCurrency, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Create new virtual currency<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Create new virtual currency with given supply stored in account. This will create Tatum internal virtual currency. Every virtual currency must be prefixed with VC_.
+        /// Every virtual currency must be pegged to existing FIAT or supported cryptocurrency. 1 unit of virtual currency has then the same amount as 1 unit of the base currency it is pegged to.It is possible to set a custom base rate for the virtual currency. (baseRate = 2 => 1 VC unit = 2 basePair units)
+        /// Tatum virtual currency acts as any other asset within Tatum.For creation of ERC20 token, see ERC20.
+        /// This operation returns the newly created Tatum Ledger account with an initial balance set to the virtual currency's total supply. Total supply can be changed in the future.
+        /// </summary>
+        /// <param name="name">Virtual currency name. Must be prefixed with 'VC_'.</param>
+        /// <param name="supply">Supply of virtual currency.</param>
+        /// <param name="basePair">Base pair for virtual currency. Transaction value will be calculated according to this base pair. e.g. 1 VC_VIRTUAL is equal to 1 BTC, if basePair is set to BTC.</param>
+        /// <param name="baseRate">Exchange rate of the base pair. Each unit of the created curency will represent value of baseRate*1 basePair.</param>
+        /// <param name="customer">If customer is filled then is created or updated.</param>
+        /// <param name="description">Used as a description within Tatum system.</param>
+        /// <param name="accountCode">For bookkeeping to distinct account purpose.</param>
+        /// <param name="accountNumber">Account number from external system.</param>
+        /// <param name="accountingCurrency">All transaction will be billed in this currency for created account associated with this currency. If not set, EUR is used. ISO-4217</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<LedgerReport>> LedgerVirtualCurrency_Create_Async(
+            string name,
+            string supply,
+            string basePair,
+            decimal baseRate = 1.0m,
+            LedgerCustomerOptions customer = null,
+            string description = null,
+            string accountCode = null,
+            string accountNumber = null,
+            string accountingCurrency = null,
+            CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object> {
+                { "name", name },
+                { "supply", supply },
+                { "basePair", basePair },
+                { "baseRate", baseRate },
+            };
+            parameters.AddOptionalParameter("customer", customer);
+            parameters.AddOptionalParameter("description", description);
+            parameters.AddOptionalParameter("accountCode", accountCode);
+            parameters.AddOptionalParameter("accountNumber", accountNumber);
+            parameters.AddOptionalParameter("accountingCurrency", accountingCurrency);
+
+            var credits = 2;
+            var url = GetUrl(string.Format(Endpoints_Ledger_VirtualCurrency_Create));
+            return await SendTatumRequest<LedgerReport>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Update virtual currency<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Change base pair and/or base rate of existing virtual currency.
+        /// </summary>
+        /// <param name="name">Virtual currency name, which will be updated. It is not possible to update the name of the virtual currency.</param>
+        /// <param name="basePair">Exchange rate of the base pair. Each unit of the created curency will represent value of baseRate*1 basePair.</param>
+        /// <param name="baseRate">Base pair for virtual currency. Transaction value will be calculated according to this base pair. e.g. 1 VC_VIRTUAL is equal to 1 BTC, if basePair is set to BTC.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<bool> LedgerVirtualCurrency_Update(string name, string basePair = null, decimal? baseRate = null, CancellationToken ct = default) => LedgerVirtualCurrency_Update_Async(name, basePair, baseRate, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Update virtual currency<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Change base pair and/or base rate of existing virtual currency.
+        /// </summary>
+        /// <param name="name">Virtual currency name, which will be updated. It is not possible to update the name of the virtual currency.</param>
+        /// <param name="basePair">Exchange rate of the base pair. Each unit of the created curency will represent value of baseRate*1 basePair.</param>
+        /// <param name="baseRate">Base pair for virtual currency. Transaction value will be calculated according to this base pair. e.g. 1 VC_VIRTUAL is equal to 1 BTC, if basePair is set to BTC.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<bool>> LedgerVirtualCurrency_Update_Async(string name, string basePair = null, decimal? baseRate = null, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object> {
+                { "name", name },
+            };
+            parameters.AddOptionalParameter("basePair", basePair);
+            parameters.AddOptionalParameter("baseRate", baseRate);
+
+            var credits = 2;
+            var url = GetUrl(string.Format(Endpoints_Ledger_VirtualCurrency_Update));
+            var result = await SendTatumRequest<string>(url, HttpMethod.Put, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<bool>(result.ResponseStatusCode, result.ResponseHeaders, true, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Get virtual currency<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Get detail of virtual currency.
+        /// </summary>
+        /// <param name="name">name</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<LedgerReport> LedgerVirtualCurrency_Get(string name, CancellationToken ct = default) => LedgerVirtualCurrency_Get_Async(name, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Get virtual currency<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Get detail of virtual currency.
+        /// </summary>
+        /// <param name="name">name</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<LedgerReport>> LedgerVirtualCurrency_Get_Async(string name, CancellationToken ct = default)
+        {
+            var credits = 1;
+            var url = GetUrl(string.Format(Endpoints_Ledger_VirtualCurrency_Get, name));
+            return await SendTatumRequest<LedgerReport>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Create new supply of virtual currency<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Create new supply of virtual currency linked on the given accountId. Method increases the total supply of the currency.
+        /// This method creates Ledger transaction with operationType MINT with undefined counterAccountId.
+        /// </summary>
+        /// <param name="accountId">Ledger account with currency of the virtual currency, on which the operation will be performed.</param>
+        /// <param name="amount">Amount of virtual currency to operate within this operation.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="reference">Reference of the payment.</param>
+        /// <param name="transactionCode">For bookkeeping to distinct transaction purpose.</param>
+        /// <param name="recipientNote">Note visible to both, sender and recipient. Available for both Mint and Revoke operations</param>
+        /// <param name="counterAccount">External account identifier. By default, there is no counterAccount present in the transaction.</param>
+        /// <param name="senderNote">Note visible to sender. Available in Revoke operation.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<TatumReference> LedgerVirtualCurrency_Mint(
+            string accountId,
+            decimal amount,
+            string paymentId = null,
+            string reference = null,
+            string transactionCode = null,
+            string recipientNote = null,
+            string counterAccount = null,
+            string senderNote = null,
+            CancellationToken ct = default)
+            => LedgerVirtualCurrency_Mint_Async(accountId, amount, paymentId, reference, transactionCode, recipientNote, counterAccount, senderNote, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Create new supply of virtual currency<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Create new supply of virtual currency linked on the given accountId. Method increases the total supply of the currency.
+        /// This method creates Ledger transaction with operationType MINT with undefined counterAccountId.
+        /// </summary>
+        /// <param name="accountId">Ledger account with currency of the virtual currency, on which the operation will be performed.</param>
+        /// <param name="amount">Amount of virtual currency to operate within this operation.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="reference">Reference of the payment.</param>
+        /// <param name="transactionCode">For bookkeeping to distinct transaction purpose.</param>
+        /// <param name="recipientNote">Note visible to both, sender and recipient. Available for both Mint and Revoke operations</param>
+        /// <param name="counterAccount">External account identifier. By default, there is no counterAccount present in the transaction.</param>
+        /// <param name="senderNote">Note visible to sender. Available in Revoke operation.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<TatumReference>> LedgerVirtualCurrency_Mint_Async(
+            string accountId,
+            decimal amount,
+            string paymentId = null,
+            string reference = null,
+            string transactionCode = null,
+            string recipientNote = null,
+            string counterAccount = null,
+            string senderNote = null,
+            CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object> {
+                { "accountId", accountId },
+                { "amount", amount.ToString(CultureInfo.InvariantCulture) },
+            };
+            parameters.AddOptionalParameter("paymentId", paymentId);
+            parameters.AddOptionalParameter("reference", reference);
+            parameters.AddOptionalParameter("transactionCode", transactionCode);
+            parameters.AddOptionalParameter("recipientNote", recipientNote);
+            parameters.AddOptionalParameter("counterAccount", counterAccount);
+            parameters.AddOptionalParameter("senderNote", senderNote);
+
+            var credits = 2;
+            var url = GetUrl(string.Format(Endpoints_Ledger_VirtualCurrency_Mint));
+            return await SendTatumRequest<TatumReference>(url, HttpMethod.Put, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Destroy supply of virtual currency<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Destroy supply of virtual currency linked on the given accountId. Method decreases the total supply of the currency.
+        /// This method creates Ledger transaction with operationType REVOKE with undefined counterAccountId.
+        /// </summary>
+        /// <param name="accountId">Ledger account with currency of the virtual currency, on which the operation will be performed.</param>
+        /// <param name="amount">Amount of virtual currency to operate within this operation.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="reference">Reference of the payment.</param>
+        /// <param name="transactionCode">For bookkeeping to distinct transaction purpose.</param>
+        /// <param name="recipientNote">Note visible to both, sender and recipient. Available for both Mint and Revoke operations</param>
+        /// <param name="counterAccount">External account identifier. By default, there is no counterAccount present in the transaction.</param>
+        /// <param name="senderNote">Note visible to sender. Available in Revoke operation.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<TatumReference> LedgerVirtualCurrency_Destroy(
+            string accountId,
+            decimal amount,
+            string paymentId = null,
+            string reference = null,
+            string transactionCode = null,
+            string recipientNote = null,
+            string counterAccount = null,
+            string senderNote = null,
+            CancellationToken ct = default)
+            => LedgerVirtualCurrency_Destroy_Async(accountId, amount, paymentId, reference, transactionCode, recipientNote, counterAccount, senderNote, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Destroy supply of virtual currency<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Destroy supply of virtual currency linked on the given accountId. Method decreases the total supply of the currency.
+        /// This method creates Ledger transaction with operationType REVOKE with undefined counterAccountId.
+        /// </summary>
+        /// <param name="accountId">Ledger account with currency of the virtual currency, on which the operation will be performed.</param>
+        /// <param name="amount">Amount of virtual currency to operate within this operation.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="reference">Reference of the payment.</param>
+        /// <param name="transactionCode">For bookkeeping to distinct transaction purpose.</param>
+        /// <param name="recipientNote">Note visible to both, sender and recipient. Available for both Mint and Revoke operations</param>
+        /// <param name="counterAccount">External account identifier. By default, there is no counterAccount present in the transaction.</param>
+        /// <param name="senderNote">Note visible to sender. Available in Revoke operation.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<TatumReference>> LedgerVirtualCurrency_Destroy_Async(
+            string accountId,
+            decimal amount,
+            string paymentId = null,
+            string reference = null,
+            string transactionCode = null,
+            string recipientNote = null,
+            string counterAccount = null,
+            string senderNote = null,
+            CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object> {
+                { "accountId", accountId },
+                { "amount", amount.ToString(CultureInfo.InvariantCulture) },
+            };
+            parameters.AddOptionalParameter("paymentId", paymentId);
+            parameters.AddOptionalParameter("reference", reference);
+            parameters.AddOptionalParameter("transactionCode", transactionCode);
+            parameters.AddOptionalParameter("recipientNote", recipientNote);
+            parameters.AddOptionalParameter("counterAccount", counterAccount);
+            parameters.AddOptionalParameter("senderNote", senderNote);
+
+            var credits = 2;
+            var url = GetUrl(string.Format(Endpoints_Ledger_VirtualCurrency_Destroy));
+            return await SendTatumRequest<TatumReference>(url, HttpMethod.Put, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+        }
         #endregion
 
         #region Ledger / Subscription
-        // TODO: Ledger / Subscription -> Create new subscription
-        // TODO: Ledger / Subscription -> List all active subscriptions
-        // TODO: Ledger / Subscription -> Cancel existing subscription
-        // TODO: Ledger / Subscription -> Obtain report for subscription
+        /// <summary>
+        /// <b>Title:</b> Create new subscription<br />
+        /// <b>Credits:</b> 2 credits for API call. Every type of subscription has different credit pricing.<br />
+        /// <b>Description:</b>
+        /// Create new subscription. Currently Tatum support multiple subscription types:
+        /// <b>OFFCHAIN_WITHDRAWAL</b> - Off-chain scanning of outgoing transactions for BTC, BCH, LTC and ETH blockchains - by default addresses in registered for off-chain scanning are synchronized only against incoming transactions.By enabling this feature, off-chain accounts with connected blockchain addresses will be scanned also for outgoing transactions. 5 credits will be debited for every address registered for scanning every day.
+        /// <b>ACCOUNT_BALANCE_LIMIT</b> - Report with all account balances above desired limit.
+        /// <b>TRANSACTION_HISTORY_REPORT</b> - Report with all ledger transactions for last X hours, where X is set by the subscription attribute as interval.Maximum number of transactions returned by this report is 20000. Transactions are obtained from the time of the invocation of the GET method to obtain report - X hours.
+        /// <b>ACCOUNT_INCOMING_BLOCKCHAIN_TRANSACTION</b> - Enable HTTP POST JSON notifications on incoming blockchain transactions on off-chain accounts. This web hook will be invoked, when the transaction is credited to the ledger account.Transaction is credited, when it has sufficient amount of blockchain confirmations. For BTC, LTC, BCH - 2 confirmations, ETH, ERC20 tokens, XLM, XRP, BNB - 1 confirmation.Request body of the POST request will be JSON object with attributes:
+        /// - id (account id)
+        /// - currency (account currency)
+        /// - amount
+        /// - date
+        /// - txId (hash of the blockchain transaction).
+        /// 1 credit will be debited for every monitored account every day.
+        /// <b>ACCOUNT_PENDING_BLOCKCHAIN_TRANSACTION</b> - Enable HTTP POST JSON notifications on incoming blockchain transactions on off-chain accounts.This web hook will be invoked, when the transaction appears for the first time in the block, but is stil not credited to the ledger account, because it does not have enough confirmations.This web hook is invoked only for BTC, LTC and BCH accounts. Request body of the POST request will be JSON object with attributes:
+        /// - id (account id)
+        /// - currency (account currency)
+        /// - amount
+        /// - date
+        /// - txId (hash of the blockchain transaction).
+        /// 1 credit will be debited for every monitored account every day.
+        /// <b>COMPLETE_BLOCKCHAIN_TRANSACTION</b> - Enable HTTP POST JSON notifications when blockchain transactions are included in the block.Request body of the POST request will be JSON object with attributes:
+        /// - currency (blockchain)
+        /// - withdrawalId (present, if transactin was connected to the offchain withdrawal transaction)
+        /// - txId(hash of the blockchain transaction).
+        /// 20 credit will be debited for every monitored transaction.
+        /// Result of the operation is subscription ID, which can be used to cancel subscription or obtain additional data connected to it like reports.
+        /// </summary>
+        /// <param name="type">Type of the subscription.</param>
+        /// <param name="account_id">ID of the account, on which the webhook will be applied, when new incoming blockchain transaction will be credited.</param>
+        /// <param name="url">URL of the endpoint, where HTTP POST request will be sent, when new incoming blockchain transaction will be credited.</param>
+        /// <param name="currency">Currency of the accounts, on which outgoing off-chain scanning will be enabled. BTC, LTC, BCH, ETH and ERC20 tokens are allowed.</param>
+        /// <param name="interval">Number of hours to obtain transactions for.</param>
+        /// <param name="limit">Limit to filter accounts with balance above it.</param>
+        /// <param name="typeOfBalance">Type of balance to filter.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<TatumId> LedgerSubscription_Create(
+            LedgerSubscriptionType type,
+            string account_id = null,
+            string url = null,
+            string currency = null,
+            int? interval = null,
+            decimal? limit = null,
+            LedgerBalanceType? typeOfBalance = null,
+            CancellationToken ct = default)
+            => LedgerSubscription_Create_Async(type, account_id, url, currency, interval, limit, typeOfBalance, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Create new subscription<br />
+        /// <b>Credits:</b> 2 credits for API call. Every type of subscription has different credit pricing.<br />
+        /// <b>Description:</b>
+        /// Create new subscription. Currently Tatum support multiple subscription types:
+        /// <b>OFFCHAIN_WITHDRAWAL</b> - Off-chain scanning of outgoing transactions for BTC, BCH, LTC and ETH blockchains - by default addresses in registered for off-chain scanning are synchronized only against incoming transactions.By enabling this feature, off-chain accounts with connected blockchain addresses will be scanned also for outgoing transactions. 5 credits will be debited for every address registered for scanning every day.
+        /// <b>ACCOUNT_BALANCE_LIMIT</b> - Report with all account balances above desired limit.
+        /// <b>TRANSACTION_HISTORY_REPORT</b> - Report with all ledger transactions for last X hours, where X is set by the subscription attribute as interval.Maximum number of transactions returned by this report is 20000. Transactions are obtained from the time of the invocation of the GET method to obtain report - X hours.
+        /// <b>ACCOUNT_INCOMING_BLOCKCHAIN_TRANSACTION</b> - Enable HTTP POST JSON notifications on incoming blockchain transactions on off-chain accounts. This web hook will be invoked, when the transaction is credited to the ledger account.Transaction is credited, when it has sufficient amount of blockchain confirmations. For BTC, LTC, BCH - 2 confirmations, ETH, ERC20 tokens, XLM, XRP, BNB - 1 confirmation.Request body of the POST request will be JSON object with attributes:
+        /// - id (account id)
+        /// - currency (account currency)
+        /// - amount
+        /// - date
+        /// - txId (hash of the blockchain transaction).
+        /// 1 credit will be debited for every monitored account every day.
+        /// <b>ACCOUNT_PENDING_BLOCKCHAIN_TRANSACTION</b> - Enable HTTP POST JSON notifications on incoming blockchain transactions on off-chain accounts.This web hook will be invoked, when the transaction appears for the first time in the block, but is stil not credited to the ledger account, because it does not have enough confirmations.This web hook is invoked only for BTC, LTC and BCH accounts. Request body of the POST request will be JSON object with attributes:
+        /// - id (account id)
+        /// - currency (account currency)
+        /// - amount
+        /// - date
+        /// - txId (hash of the blockchain transaction).
+        /// 1 credit will be debited for every monitored account every day.
+        /// <b>COMPLETE_BLOCKCHAIN_TRANSACTION</b> - Enable HTTP POST JSON notifications when blockchain transactions are included in the block.Request body of the POST request will be JSON object with attributes:
+        /// - currency (blockchain)
+        /// - withdrawalId (present, if transactin was connected to the offchain withdrawal transaction)
+        /// - txId(hash of the blockchain transaction).
+        /// 20 credit will be debited for every monitored transaction.
+        /// Result of the operation is subscription ID, which can be used to cancel subscription or obtain additional data connected to it like reports.
+        /// </summary>
+        /// <param name="type">Type of the subscription.</param>
+        /// <param name="account_id">ID of the account, on which the webhook will be applied, when new incoming blockchain transaction will be credited.</param>
+        /// <param name="url">URL of the endpoint, where HTTP POST request will be sent, when new incoming blockchain transaction will be credited.</param>
+        /// <param name="currency">Currency of the accounts, on which outgoing off-chain scanning will be enabled. BTC, LTC, BCH, ETH and ERC20 tokens are allowed.</param>
+        /// <param name="interval">Number of hours to obtain transactions for.</param>
+        /// <param name="limit">Limit to filter accounts with balance above it.</param>
+        /// <param name="typeOfBalance">Type of balance to filter.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<TatumId>> LedgerSubscription_Create_Async(
+            LedgerSubscriptionType type,
+            string account_id = null,
+            string url = null,
+            string currency = null,
+            int? interval = null,
+            decimal? limit = null,
+            LedgerBalanceType? typeOfBalance = null,
+            CancellationToken ct = default)
+        {
+            var lsa = new LedgerSubscriptionAttributes();
+            if (type == LedgerSubscriptionType.ACCOUNT_BALANCE_LIMIT)
+            {
+                if (limit == null || typeOfBalance == null)
+                    throw new ArgumentException("limit and typeOfBalance parameters are mandatory for ACCOUNT_BALANCE_LIMIT subscription type");
+
+                lsa.Limit = limit?.ToString(CultureInfo.InvariantCulture);
+                lsa.TypeOfBalance = typeOfBalance;
+            }
+            else if (type == LedgerSubscriptionType.TRANSACTION_HISTORY_REPORT)
+            {
+                if (interval == null)
+                    throw new ArgumentException("linterval parameter is mandatory for TRANSACTION_HISTORY_REPORT subscription type");
+
+                lsa.Interval = interval;
+            }
+            else if (type == LedgerSubscriptionType.OFFCHAIN_WITHDRAWAL)
+            {
+                if (string.IsNullOrEmpty(currency))
+                    throw new ArgumentException("currency parameter is mandatory for OFFCHAIN_WITHDRAWAL subscription type");
+
+                lsa.Currency = currency;
+            }
+            else if (type == LedgerSubscriptionType.COMPLETE_BLOCKCHAIN_TRANSACTION)
+            {
+                if (string.IsNullOrEmpty(currency))
+                    throw new ArgumentException("currency parameter is mandatory for COMPLETE_BLOCKCHAIN_TRANSACTION subscription type");
+
+                lsa.Currency = currency;
+            }
+            else if (type == LedgerSubscriptionType.ACCOUNT_INCOMING_BLOCKCHAIN_TRANSACTION)
+            {
+                if (string.IsNullOrEmpty(account_id) || string.IsNullOrEmpty(url))
+                    throw new ArgumentException("account_id and url parameters are mandatory for ACCOUNT_INCOMING_BLOCKCHAIN_TRANSACTION subscription type");
+
+                lsa.AccountId = account_id;
+                lsa.Url = url;
+            }
+            else if (type == LedgerSubscriptionType.ACCOUNT_PENDING_BLOCKCHAIN_TRANSACTION)
+            {
+                if (string.IsNullOrEmpty(account_id) || string.IsNullOrEmpty(url))
+                    throw new ArgumentException("account_id and url parameters are mandatory for ACCOUNT_INCOMING_BLOCKCHAIN_TRANSACTION subscription type");
+
+                lsa.AccountId = account_id;
+                lsa.Url = url;
+            }
+
+            var parameters = new Dictionary<string, object> {
+                { "type", JsonConvert.SerializeObject(type, new LedgerSubscriptionTypeConverter(false)) },
+                { "attr", lsa },
+            };
+
+            var credits = 2;
+            var url_ = GetUrl(string.Format(Endpoints_Ledger_Subscription_Create));
+            return await SendTatumRequest<TatumId>(url_, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> List all active subscriptions<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// List all active subscriptions.
+        /// </summary>
+        /// <param name="pageSize">Max number of items per page is 50.</param>
+        /// <param name="offset">Offset to obtain next page of the data.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<IEnumerable<LedgerSubscription>> LedgerSubscription_List(int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerSubscription_List_Async(pageSize, offset, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> List all active subscriptions<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// List all active subscriptions.
+        /// </summary>
+        /// <param name="pageSize">Max number of items per page is 50.</param>
+        /// <param name="offset">Offset to obtain next page of the data.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<IEnumerable<LedgerSubscription>>> LedgerSubscription_List_Async(int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        {
+            pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
+
+            var parameters = new Dictionary<string, object> {
+                { "pageSize", pageSize },
+                { "offset", offset },
+            };
+
+            var credits = 1;
+            var url = GetUrl(string.Format(Endpoints_Ledger_Subscription_List));
+            return await SendTatumRequest<IEnumerable<LedgerSubscription>>(url, HttpMethod.Get, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Cancel existing subscription<br />
+        /// <b>Credits:</b> 1 credit for API call<br />
+        /// <b>Description:</b>
+        /// Cancel existing subscription.
+        /// </summary>
+        /// <param name="id">Subscription ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<bool> LedgerSubscription_Cancel(string id, CancellationToken ct = default) => LedgerSubscription_Cancel_Async(id, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Cancel existing subscription<br />
+        /// <b>Credits:</b> 1 credit for API call<br />
+        /// <b>Description:</b>
+        /// Cancel existing subscription.
+        /// </summary>
+        /// <param name="id">Subscription ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<bool>> LedgerSubscription_Cancel_Async(string id, CancellationToken ct = default)
+        {
+            var credits = 1;
+            var url = GetUrl(string.Format(Endpoints_Ledger_Subscription_Cancel, id));
+            var result = await SendTatumRequest<string>(url, HttpMethod.Delete, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+            if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<bool>(result.ResponseStatusCode, result.ResponseHeaders, true, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Obtain report for subscription<br />
+        /// <b>Credits:</b> 1 credit for API call. Based on the required report type, additional credits may be charged.<br />
+        /// <b>Description:</b>
+        /// Obtain report from subscription based on its type. Following reports are supported:
+        /// - ACCOUNT_BALANCE_LIMIT - obtain list of all ledger accounts with account balance above the limit. 1 credit per 50 returned records is charged.
+        /// - TRANSACTION_HISTORY_REPORT - obtain list of all ledger transaction for last X hours from the time of invocation. 1 credit per 50 returned records is charged.
+        /// </summary>
+        /// <param name="id">Subscription ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<IEnumerable<LedgerReport>> LedgerSubscription_GetReport(string id, CancellationToken ct = default) => LedgerSubscription_GetReport_Async(id, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Obtain report for subscription<br />
+        /// <b>Credits:</b> 1 credit for API call. Based on the required report type, additional credits may be charged.<br />
+        /// <b>Description:</b>
+        /// Obtain report from subscription based on its type. Following reports are supported:
+        /// - ACCOUNT_BALANCE_LIMIT - obtain list of all ledger accounts with account balance above the limit. 1 credit per 50 returned records is charged.
+        /// - TRANSACTION_HISTORY_REPORT - obtain list of all ledger transaction for last X hours from the time of invocation. 1 credit per 50 returned records is charged.
+        /// </summary>
+        /// <param name="id">Subscription ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<IEnumerable<LedgerReport>>> LedgerSubscription_GetReport_Async(string id, CancellationToken ct = default)
+        {
+            var credits = 1;
+            var url = GetUrl(string.Format(Endpoints_Ledger_Subscription_Report, id));
+            return await SendTatumRequest<IEnumerable<LedgerReport>>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
         #endregion
 
         #region Ledger / Order Book
-        // TODO: Ledger / Order Book -> List all historical trades
-        // TODO: Ledger / Order Book -> List all active buy trades
-        // TODO: Ledger / Order Book -> List all active sell trades
-        // TODO: Ledger / Order Book -> Store buy / sell trade
-        // TODO: Ledger / Order Book -> Get existing trade
-        // TODO: Ledger / Order Book -> Cancel existing trade
-        // TODO: Ledger / Order Book -> Cancel all existing trades for account
+        /// <summary>
+        /// <b>Title:</b> List all historical trades<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// List all historical trades. It is possible to list all trades, trades for specific trading pair and/or account.
+        /// </summary>
+        /// <param name="id">Account ID. If present, only closed trades for given account will be present.</param>
+        /// <param name="pair">Trade pair. If present, only closed trades on given trade pair will be present.</param>
+        /// <param name="pageSize">Max number of items per page is 50.</param>
+        /// <param name="offset">Offset to obtain next page of the data.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<IEnumerable<LedgerTrade>> LedgerOrderBook_GetHistoricalTrades(string id, string pair, int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerOrderBook_GetHistoricalTrades_Async(id, pair, pageSize, offset, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> List all historical trades<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// List all historical trades. It is possible to list all trades, trades for specific trading pair and/or account.
+        /// </summary>
+        /// <param name="id">Account ID. If present, only closed trades for given account will be present.</param>
+        /// <param name="pair">Trade pair. If present, only closed trades on given trade pair will be present.</param>
+        /// <param name="pageSize">Max number of items per page is 50.</param>
+        /// <param name="offset">Offset to obtain next page of the data.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<IEnumerable<LedgerTrade>>> LedgerOrderBook_GetHistoricalTrades_Async(string id, string pair, int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        {
+            pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
+            var parameters = new Dictionary<string, object> {
+                { "pageSize", pageSize },
+                { "offset", offset },
+            };
+            parameters.AddOptionalParameter("id", id);
+            parameters.AddOptionalParameter("pair", pair);
+
+            var credits = 1;
+            var url = GetUrl(string.Format(Endpoints_Ledger_OrderBook_ListHistory));
+            return await SendTatumRequest<IEnumerable<LedgerTrade>>(url, HttpMethod.Get, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> List all active buy trades<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// List all active buy trades.
+        /// </summary>
+        /// <param name="id">Account ID. If present, list current active buy trades for that account.</param>
+        /// <param name="pageSize">Max number of items per page is 50.</param>
+        /// <param name="offset">Offset to obtain next page of the data.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<IEnumerable<LedgerTrade>> LedgerOrderBook_GetBuyTrades(string id, int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerOrderBook_GetBuyTrades_Async(id, pageSize, offset, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> List all active buy trades<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// List all active buy trades.
+        /// </summary>
+        /// <param name="id">Account ID. If present, list current active buy trades for that account.</param>
+        /// <param name="pageSize">Max number of items per page is 50.</param>
+        /// <param name="offset">Offset to obtain next page of the data.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<IEnumerable<LedgerTrade>>> LedgerOrderBook_GetBuyTrades_Async(string id, int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        {
+            pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
+            var parameters = new Dictionary<string, object> {
+                { "pageSize", pageSize },
+                { "offset", offset },
+            };
+            parameters.AddOptionalParameter("id", id);
+
+            var credits = 1;
+            var url = GetUrl(string.Format(Endpoints_Ledger_OrderBook_ListBuys));
+            return await SendTatumRequest<IEnumerable<LedgerTrade>>(url, HttpMethod.Get, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> List all active sell trades<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// List all active sell trades.
+        /// </summary>
+        /// <param name="id">Account ID. If present, list current active sell trades for that account.</param>
+        /// <param name="pageSize">Max number of items per page is 50.</param>
+        /// <param name="offset">Offset to obtain next page of the data.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<IEnumerable<LedgerTrade>> LedgerOrderBook_GetSellTrades(string id, int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerOrderBook_GetSellTrades_Async(id, pageSize, offset, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> List all active sell trades<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// List all active sell trades.
+        /// </summary>
+        /// <param name="id">Account ID. If present, list current active sell trades for that account.</param>
+        /// <param name="pageSize">Max number of items per page is 50.</param>
+        /// <param name="offset">Offset to obtain next page of the data.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<IEnumerable<LedgerTrade>>> LedgerOrderBook_GetSellTrades_Async(string id, int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        {
+            pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
+            var parameters = new Dictionary<string, object> {
+                { "pageSize", pageSize },
+                { "offset", offset },
+            };
+            parameters.AddOptionalParameter("id", id);
+
+            var credits = 1;
+            var url = GetUrl(string.Format(Endpoints_Ledger_OrderBook_ListSells));
+            return await SendTatumRequest<IEnumerable<LedgerTrade>>(url, HttpMethod.Get, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Store buy / sell trade<br />
+        /// <b>Credits:</b> 2 credits for API call, 2 credits for each fill of the counter trade. 1 API call + 2 fills = 6 credits.<br />
+        /// <b>Description:</b>
+        /// Store new buy / sell trade. If there is trade already available to fill, fill as much trades as possible.
+        /// It is possible to charge fees for the trades.Fees are an extra amount on top of the trade amount and are paid in the currency of the 1st pair to the separate fee account, e.g. for BTC/ETH pair fees will be paid in BTC.
+        /// </summary>
+        /// <param name="type">Type of the trade, BUY or SELL</param>
+        /// <param name="price">Price to buy / sell</param>
+        /// <param name="amount">Amount of the trade to be bought / sold</param>
+        /// <param name="pair">Trading pair</param>
+        /// <param name="currency1AccountId">ID of the account of the currency 1 trade currency</param>
+        /// <param name="currency2AccountId">ID of the account of the currency 2 trade currency</param>
+        /// <param name="feeAccountId">ID of the account where fee will be paid, if any. Fee will be paid from the currency 1 account.</param>
+        /// <param name="fee">Percentage of the trade amount to be paid as a fee.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<TatumId> LedgerOrderBook_PlaceOrder(
+            LedgerTradeType type,
+            decimal price,
+            decimal amount,
+            string pair,
+            string currency1AccountId,
+            string currency2AccountId,
+            string feeAccountId = null,
+            decimal? fee = null,
+            CancellationToken ct = default) => LedgerOrderBook_PlaceOrder_Async(type, price, amount, pair, currency1AccountId, currency2AccountId, feeAccountId, fee, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Store buy / sell trade<br />
+        /// <b>Credits:</b> 2 credits for API call, 2 credits for each fill of the counter trade. 1 API call + 2 fills = 6 credits.<br />
+        /// <b>Description:</b>
+        /// Store new buy / sell trade. If there is trade already available to fill, fill as much trades as possible.
+        /// It is possible to charge fees for the trades.Fees are an extra amount on top of the trade amount and are paid in the currency of the 1st pair to the separate fee account, e.g. for BTC/ETH pair fees will be paid in BTC.
+        /// </summary>
+        /// <param name="type">Type of the trade, BUY or SELL</param>
+        /// <param name="price">Price to buy / sell</param>
+        /// <param name="amount">Amount of the trade to be bought / sold</param>
+        /// <param name="pair">Trading pair</param>
+        /// <param name="currency1AccountId">ID of the account of the currency 1 trade currency</param>
+        /// <param name="currency2AccountId">ID of the account of the currency 2 trade currency</param>
+        /// <param name="feeAccountId">ID of the account where fee will be paid, if any. Fee will be paid from the currency 1 account.</param>
+        /// <param name="fee">Percentage of the trade amount to be paid as a fee.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<TatumId>> LedgerOrderBook_PlaceOrder_Async(
+            LedgerTradeType type,
+            decimal price,
+            decimal amount,
+            string pair,
+            string currency1AccountId,
+            string currency2AccountId,
+            string feeAccountId = null,
+            decimal? fee = null,
+            CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object> {
+                { "type", JsonConvert.SerializeObject(type, new LedgerTradeTypeConverter(false)) },
+                { "price", price.ToString(CultureInfo.InvariantCulture) },
+                { "amount", amount.ToString(CultureInfo.InvariantCulture) },
+                { "pair", pair },
+                { "currency1AccountId", currency1AccountId },
+                { "currency2AccountId", currency2AccountId },
+            };
+            parameters.AddOptionalParameter("feeAccountId", feeAccountId);
+            parameters.AddOptionalParameter("fee", fee?.ToString(CultureInfo.InvariantCulture));
+
+            var credits = 2;
+            var url = GetUrl(string.Format(Endpoints_Ledger_OrderBook_Place));
+            return await SendTatumRequest<TatumId>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Get existing trade<br />
+        /// <b>Credits:</b> 1 credit for API call<br />
+        /// <b>Description:</b>
+        /// Get existing opened trade.
+        /// </summary>
+        /// <param name="id">Trade ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<LedgerTrade> LedgerOrderBook_GetTrade(string id, CancellationToken ct = default) => LedgerOrderBook_GetTrade_Async(id, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Get existing trade<br />
+        /// <b>Credits:</b> 1 credit for API call<br />
+        /// <b>Description:</b>
+        /// Get existing opened trade.
+        /// </summary>
+        /// <param name="id">Trade ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<LedgerTrade>> LedgerOrderBook_GetTrade_Async(string id, CancellationToken ct = default)
+        {
+            var credits = 1;
+            var url = GetUrl(string.Format(Endpoints_Ledger_OrderBook_Get, id));
+            return await SendTatumRequest<LedgerTrade>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Cancel existing trade<br />
+        /// <b>Credits:</b> 1 credit for API call<br />
+        /// <b>Description:</b>
+        /// Cancel existing trade.
+        /// </summary>
+        /// <param name="id">Trade ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<bool> LedgerOrderBook_CancelOrder(string id, CancellationToken ct = default) => LedgerOrderBook_CancelOrder_Async(id, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Cancel existing trade<br />
+        /// <b>Credits:</b> 1 credit for API call<br />
+        /// <b>Description:</b>
+        /// Cancel existing trade.
+        /// </summary>
+        /// <param name="id">Trade ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<bool>> LedgerOrderBook_CancelOrder_Async(string id, CancellationToken ct = default)
+        {
+            var credits = 1;
+            var url = GetUrl(string.Format(Endpoints_Ledger_OrderBook_Cancel, id));
+            var result = await SendTatumRequest<string>(url, HttpMethod.Delete, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+            if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<bool>(result.ResponseStatusCode, result.ResponseHeaders, true, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Cancel all existing trades for account<br />
+        /// <b>Credits:</b> 1 credit for API call, 1 credit for each cancelled trade. 1 API call + 2 cancellations = 3 credits.<br />
+        /// <b>Description:</b>
+        /// Cancel all trades for account.
+        /// </summary>
+        /// <param name="id">Account ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<bool> LedgerOrderBook_CancelAllOrders(string id, CancellationToken ct = default) => LedgerOrderBook_CancelAllOrders_Async(id, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Cancel all existing trades for account<br />
+        /// <b>Credits:</b> 1 credit for API call, 1 credit for each cancelled trade. 1 API call + 2 cancellations = 3 credits.<br />
+        /// <b>Description:</b>
+        /// Cancel all trades for account.
+        /// </summary>
+        /// <param name="id">Account ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<bool>> LedgerOrderBook_CancelAllOrders_Async(string id, CancellationToken ct = default)
+        {
+            var credits = 1;
+            var url = GetUrl(string.Format(Endpoints_Ledger_OrderBook_CancelAll, id));
+            var result = await SendTatumRequest<string>(url, HttpMethod.Delete, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+            if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<bool>(result.ResponseStatusCode, result.ResponseHeaders, true, null);
+        }
         #endregion
 
         #region Security / Key Management System
-        // TODO: Security / Key Management System -> Get pending transactions to sign
-        // TODO: Security / Key Management System -> Complete pending transaction to sign
-        // TODO: Security / Key Management System -> Get transaction details
-        // TODO: Security / Key Management System -> Delete transaction
-        // TODO: Security / Address -> Check malicous address
+        /// <summary>
+        /// <b>Title:</b> Get pending transactions to sign<br />
+        /// <b>Credits:</b> 1 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get list of pending transaction to be signed and broadcast using Tatum KMS.
+        /// </summary>
+        /// <param name="chain">Blockchain to get pending transactions for.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<IEnumerable<KMSPendingTransaction>> KMS_GetPendingTransactions(BlockchainType chain, CancellationToken ct = default) => KMS_GetPendingTransactions_Async(chain, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Get pending transactions to sign<br />
+        /// <b>Credits:</b> 1 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get list of pending transaction to be signed and broadcast using Tatum KMS.
+        /// </summary>
+        /// <param name="chain">Blockchain to get pending transactions for.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<IEnumerable<KMSPendingTransaction>>> KMS_GetPendingTransactions_Async(BlockchainType chain, CancellationToken ct = default)
+        {
+            var credits = 1;
+            var url = GetUrl(string.Format(Endpoints_KMS_GetPendingTransactions, JsonConvert.SerializeObject(chain, new BlockchainTypeConverter(false))));
+            return await SendTatumRequest<IEnumerable<KMSPendingTransaction>>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Complete pending transaction to sign<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Mark pending transaction to sign as a complete and update it with a transactionID from the blockchain.
+        /// </summary>
+        /// <param name="id">ID of pending transaction</param>
+        /// <param name="txId">transaction ID of blockchain transaction</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<bool> KMS_CompletePendingTransaction(string id, string txId, CancellationToken ct = default) => KMS_CompletePendingTransaction_Async(id, txId, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Complete pending transaction to sign<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Mark pending transaction to sign as a complete and update it with a transactionID from the blockchain.
+        /// </summary>
+        /// <param name="id">ID of pending transaction</param>
+        /// <param name="txId">transaction ID of blockchain transaction</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<bool>> KMS_CompletePendingTransaction_Async(string id, string txId, CancellationToken ct = default)
+        {
+            var credits = 2;
+            var url = GetUrl(string.Format(Endpoints_KMS_CompletePendingTransaction, id, txId));
+            var result = await SendTatumRequest<string>(url, HttpMethod.Delete, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+            if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<bool>(result.ResponseStatusCode, result.ResponseHeaders, true, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Get transaction details<br />
+        /// <b>Credits:</b> 1 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get detail of transaction to be signed / that was already signed and contains transactionId.
+        /// </summary>
+        /// <param name="id">ID of transaction</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<KMSPendingTransaction> KMS_GetTransaction(string id, CancellationToken ct = default) => KMS_GetTransaction_Async(id, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Get transaction details<br />
+        /// <b>Credits:</b> 1 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get detail of transaction to be signed / that was already signed and contains transactionId.
+        /// </summary>
+        /// <param name="id">ID of transaction</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<KMSPendingTransaction>> KMS_GetTransaction_Async(string id, CancellationToken ct = default)
+        {
+            var credits = 1;
+            var url = GetUrl(string.Format(Endpoints_KMS_Transaction, id));
+            return await SendTatumRequest<KMSPendingTransaction>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Delete transaction<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Delete transaction to be signed. When deleting offchain transaction, linked withdrawal will be cancelled automatically.
+        /// </summary>
+        /// <param name="id">ID of transaction,</param>
+        /// <param name="revert">Defines whether fee should be reverted to account balance as well as amount. Defaults to true. Revert true would be typically used when withdrawal was not broadcast to blockchain. False is used usually for Ethereum ERC20 based currencies.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<bool> KMS_DeleteTransaction(string id, bool revert = true, CancellationToken ct = default) => KMS_DeleteTransaction_Async(id, revert, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Delete transaction<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Delete transaction to be signed. When deleting offchain transaction, linked withdrawal will be cancelled automatically.
+        /// </summary>
+        /// <param name="id">ID of transaction,</param>
+        /// <param name="revert">Defines whether fee should be reverted to account balance as well as amount. Defaults to true. Revert true would be typically used when withdrawal was not broadcast to blockchain. False is used usually for Ethereum ERC20 based currencies.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<bool>> KMS_DeleteTransaction_Async(string id, bool revert = true, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "revert", revert }
+            };
+
+            var credits = 2;
+            var url = GetUrl(string.Format(Endpoints_KMS_Transaction, id));
+            var result = await SendTatumRequest<string>(url, HttpMethod.Delete, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<bool>(result.ResponseStatusCode, result.ResponseHeaders, true, null);
+        }
+        #endregion
+
+        #region Security / Address
+        /// <summary>
+        /// <b>Title:</b> Check malicous address<br />
+        /// <b>Credits:</b> 1 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Endpoint to check, if the blockchain address is safe to work with or not.
+        /// </summary>
+        /// <param name="address">Check, if the blockchain address is malicous. Malicous address can contain assets from the DarkWeb, is connected to the scam projects or contains stolen funds.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<SecurityStatus> Security_CheckMalicousAddress(string address, CancellationToken ct = default) => Security_CheckMalicousAddress_Async(address, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Check malicous address<br />
+        /// <b>Credits:</b> 1 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Endpoint to check, if the blockchain address is safe to work with or not.
+        /// </summary>
+        /// <param name="address">Check, if the blockchain address is malicous. Malicous address can contain assets from the DarkWeb, is connected to the scam projects or contains stolen funds.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<SecurityStatus>> Security_CheckMalicousAddress_Async(string address, CancellationToken ct = default)
+        {
+            var credits = 1;
+            var url = GetUrl(string.Format(Endpoints_Security_CheckMalicousAddress, address));
+            return await SendTatumRequest<SecurityStatus>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
         #endregion
 
         #region Off-chain / Account
-        // TODO: Off-chain / Account -> Create new deposit address
-        // TODO: Off-chain / Account -> Get all deposit addresses for account
-        // TODO: Off-chain / Account -> Create new deposit addresses in a batch call
-        // TODO: Off-chain / Account -> Check, if deposit address is assigned
-        // TODO: Off-chain / Account -> Remove address for account
-        // TODO: Off-chain / Account -> Assign address for account
+        /// <summary>
+        /// <b>Title:</b> Create new deposit address<br />
+        /// <b>Credits:</b> 2 credits per API call and 5 credits for each address registered for scanning every day.<br />
+        /// <b>Description:</b>
+        /// Create a new deposit address for the account. This method associates public blockchain's ledger address with the account on Tatum's private ledger.
+        /// It is possible to generate multiple blockchain addresses for the same ledger account.By this, it is possible to aggregate various blockchain transactions from different addresses into the same account.Depending on the currency of an account, this method will either generate a public address for Bitcoin, Bitcoin Cash, Litecoin or Ethereum, DestinationTag in case of XRP or message in case of XLM.More information about supported blockchains and address types can be found here.
+        /// Addresses are generated in the natural order of the Extended public key provided in the account.Derivation index is the representation of that order - starts from 0 and ends at 2^31. When a new address is generated, the last not used index is used to generate an address.It is possible to skip some of the addresses to the different index, which means all the skipped addresses will no longer be used.
+        /// </summary>
+        /// <param name="account">Account ID</param>
+        /// <param name="index">Derivation path index for specific address. If not present, last used index for given xpub of account + 1 is used. We recommend not to pass this value manually, since when some of the indexes are skipped, it is not possible to use them lately to generate address from it.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<OffchainDepositAddress> OffchainAccount_GenerateDepositAddress(string account, int? index = null, CancellationToken ct = default) => OffchainAccount_GenerateDepositAddress_Async(account, index, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Create new deposit address<br />
+        /// <b>Credits:</b> 2 credits per API call and 5 credits for each address registered for scanning every day.<br />
+        /// <b>Description:</b>
+        /// Create a new deposit address for the account. This method associates public blockchain's ledger address with the account on Tatum's private ledger.
+        /// It is possible to generate multiple blockchain addresses for the same ledger account.By this, it is possible to aggregate various blockchain transactions from different addresses into the same account.Depending on the currency of an account, this method will either generate a public address for Bitcoin, Bitcoin Cash, Litecoin or Ethereum, DestinationTag in case of XRP or message in case of XLM.More information about supported blockchains and address types can be found here.
+        /// Addresses are generated in the natural order of the Extended public key provided in the account.Derivation index is the representation of that order - starts from 0 and ends at 2^31. When a new address is generated, the last not used index is used to generate an address.It is possible to skip some of the addresses to the different index, which means all the skipped addresses will no longer be used.
+        /// </summary>
+        /// <param name="account">Account ID</param>
+        /// <param name="index">Derivation path index for specific address. If not present, last used index for given xpub of account + 1 is used. We recommend not to pass this value manually, since when some of the indexes are skipped, it is not possible to use them lately to generate address from it.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<OffchainDepositAddress>> OffchainAccount_GenerateDepositAddress_Async(string account, int? index = null, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>();
+            parameters.AddOptionalParameter("index", index);
+
+            var credits = 2;
+            var url = GetUrl(string.Format(Endpoints_Offchain_Account_DepositAddress, account));
+            return await SendTatumRequest<OffchainDepositAddress>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Get all deposit addresses for account<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Get all deposit addresses generated for account. It is possible to deposit funds from another blockchain address to any of associated addresses and they will be credited on the Tatum Ledger account connected to the address.
+        /// </summary>
+        /// <param name="account">Account ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<IEnumerable<OffchainDepositAddress>> OffchainAccount_GetAllDepositAddresses(string account, CancellationToken ct = default) => OffchainAccount_GetAllDepositAddresses_Async(account, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Get all deposit addresses for account<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Get all deposit addresses generated for account. It is possible to deposit funds from another blockchain address to any of associated addresses and they will be credited on the Tatum Ledger account connected to the address.
+        /// </summary>
+        /// <param name="account">Account ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<IEnumerable<OffchainDepositAddress>>> OffchainAccount_GetAllDepositAddresses_Async(string account, CancellationToken ct = default)
+        {
+            var credits = 2;
+            var url = GetUrl(string.Format(Endpoints_Offchain_Account_DepositAddress, account));
+            return await SendTatumRequest<IEnumerable<OffchainDepositAddress>>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Create new deposit addresses in a batch call<br />
+        /// <b>Credits:</b> 2 credits per API call, 1 credit for every address created and 5 credits for each address registered for scanning every day.<br />
+        /// <b>Description:</b>
+        /// Create new deposit addressess for the account. This method associates public blockchain's ledger address with the account on Tatum's private ledger.
+        /// It is possible to generate multiple blockchain addresses for the same ledger account.By this, it is possible to aggregate various blockchain transactions from different addresses into the same account.Depending on the currency of an account, this method will either generate a public address for Bitcoin, Bitcoin Cash, Litecoin or Ethereum, DestinationTag in case of XRP or message in case of XLM.More information about supported blockchains and address types can be found here.
+        /// Addresses are generated in the natural order of the Extended public key provided in the account.Derivation index is the representation of that order - starts from 0 and ends at 2^31. When a new address is generated, the last not used index is used to generate an address.It is possible to skip some of the addresses to the different index, which means all the skipped addresses will no longer be used.
+        /// </summary>
+        /// <param name="addresses"></param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<IEnumerable<OffchainDepositAddress>> OffchainAccount_GenerateMultipleDepositAddresses(IEnumerable<OffchainDepositAddressRequest> addresses, CancellationToken ct = default) => OffchainAccount_GenerateMultipleDepositAddresses_Async(addresses, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Create new deposit addresses in a batch call<br />
+        /// <b>Credits:</b> 2 credits per API call, 1 credit for every address created and 5 credits for each address registered for scanning every day.<br />
+        /// <b>Description:</b>
+        /// Create new deposit addressess for the account. This method associates public blockchain's ledger address with the account on Tatum's private ledger.
+        /// It is possible to generate multiple blockchain addresses for the same ledger account.By this, it is possible to aggregate various blockchain transactions from different addresses into the same account.Depending on the currency of an account, this method will either generate a public address for Bitcoin, Bitcoin Cash, Litecoin or Ethereum, DestinationTag in case of XRP or message in case of XLM.More information about supported blockchains and address types can be found here.
+        /// Addresses are generated in the natural order of the Extended public key provided in the account.Derivation index is the representation of that order - starts from 0 and ends at 2^31. When a new address is generated, the last not used index is used to generate an address.It is possible to skip some of the addresses to the different index, which means all the skipped addresses will no longer be used.
+        /// </summary>
+        /// <param name="addresses"></param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<IEnumerable<OffchainDepositAddress>>> OffchainAccount_GenerateMultipleDepositAddresses_Async(IEnumerable<OffchainDepositAddressRequest> addresses, CancellationToken ct = default)
+        {
+            if (addresses == null || addresses.Count() == 0)
+                throw new ArgumentException("addresses parameter must contain one element at least");
+
+            var parameters = new Dictionary<string, object>
+            {
+                { "addresses", addresses }
+            };
+
+            var credits = 2;
+            var url = GetUrl(string.Format(Endpoints_Offchain_Account_DepositAddressBatch, addresses));
+            return await SendTatumRequest<IEnumerable<OffchainDepositAddress>>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Check, if deposit address is assigned<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Check, whether blockchain address for given currency is registered within Tatum and assigned to Tatum Account. Returns account this address belongs to, otherwise throws an error.
+        /// </summary>
+        /// <param name="chain">Blockchain Type</param>
+        /// <param name="address">Blockchain Address to check</param>
+        /// <param name="index">In case of XLM or XRP, this is a memo or DestinationTag to search for.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<OffchainDepositAddressState> OffchainAccount_CheckAddress(BlockchainType chain, string address, int? index = null, CancellationToken ct = default) => OffchainAccount_CheckAddress_Async(chain, address, index, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Check, if deposit address is assigned<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Check, whether blockchain address for given currency is registered within Tatum and assigned to Tatum Account. Returns account this address belongs to, otherwise throws an error.
+        /// </summary>
+        /// <param name="chain">Blockchain Type</param>
+        /// <param name="address">Blockchain Address to check</param>
+        /// <param name="index">In case of XLM or XRP, this is a memo or DestinationTag to search for.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<OffchainDepositAddressState>> OffchainAccount_CheckAddress_Async(BlockchainType chain, string address, int? index = null, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>();
+            parameters.AddOptionalParameter("index", index);
+
+            var credits = 1;
+            var ops = chain.GetBlockchainOptions();
+            var url = GetUrl(string.Format(Endpoints_Offchain_Account_CheckAddress, address, ops.Code));
+            return await SendTatumRequest<OffchainDepositAddressState>(url, HttpMethod.Get, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Remove address for account<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Remove blockchain address from the Ledger account. Tatum will not check for any incoming deposits on this address for this account. It will not be possible to generate the address in the future anymore.
+        /// </summary>
+        /// <param name="account">Account ID</param>
+        /// <param name="address">Blockchain address</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<bool> OffchainAccount_RemoveAddressFromAccount(string account, string address, CancellationToken ct = default) => OffchainAccount_RemoveAddressFromAccount_Async(account, address, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Remove address for account<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Remove blockchain address from the Ledger account. Tatum will not check for any incoming deposits on this address for this account. It will not be possible to generate the address in the future anymore.
+        /// </summary>
+        /// <param name="account">Account ID</param>
+        /// <param name="address">Blockchain address</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<bool>> OffchainAccount_RemoveAddressFromAccount_Async(string account, string address, CancellationToken ct = default)
+        {
+            var credits = 1;
+            var url = GetUrl(string.Format(Endpoints_Offchain_Account_RemoveAddress, account, address));
+            var result = await SendTatumRequest<string>(url, HttpMethod.Delete, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+            if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<bool>(result.ResponseStatusCode, result.ResponseHeaders, true, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Assign address for account<br />
+        /// <b>Credits:</b> 2 credits for API call and 5 credits for each address registered for scanning every day.<br />
+        /// <b>Description:</b>
+        /// This method is used when the account has no default xpub assigned, and addresses are handled manually. It is possible to pair any number of blockchain address to the account.
+        /// </summary>
+        /// <param name="account">Account ID</param>
+        /// <param name="address">Blockchain address</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<IEnumerable<OffchainDepositAddress>> OffchainAccount_AssignAddressToAccount(string account, string address, CancellationToken ct = default) => OffchainAccount_AssignAddressToAccount_Async(account, address, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Assign address for account<br />
+        /// <b>Credits:</b> 2 credits for API call and 5 credits for each address registered for scanning every day.<br />
+        /// <b>Description:</b>
+        /// This method is used when the account has no default xpub assigned, and addresses are handled manually. It is possible to pair any number of blockchain address to the account.
+        /// </summary>
+        /// <param name="account">Account ID</param>
+        /// <param name="address">Blockchain address</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<IEnumerable<OffchainDepositAddress>>> OffchainAccount_AssignAddressToAccount_Async(string account, string address, CancellationToken ct = default)
+        {
+            var credits = 1;
+            var url = GetUrl(string.Format(Endpoints_Offchain_Account_AssignAddress, account, address));
+            return await SendTatumRequest<IEnumerable<OffchainDepositAddress>>(url, HttpMethod.Post, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
         #endregion
 
         #region Off-chain / Blockchain
-        // TODO: Off-chain / Blockchain -> Send Bitcoin from Tatum account to address
-        // TODO: Off-chain / Blockchain -> Send Bitcoin Cash from Tatum account to address
-        // TODO: Off-chain / Blockchain -> Send Litecoin from Tatum account to address
-        // TODO: Off-chain / Blockchain -> Send Ethereum from Tatum ledger to blockchain
-        // TODO: Off-chain / Blockchain -> Create new ERC20 token
-        // TODO: Off-chain / Blockchain -> Deploy Ethereum ERC20 Smart Contract Off-chain
-        // TODO: Off-chain / Blockchain -> Set ERC20 token contract address
-        // TODO: Off-chain / Blockchain -> Transfer Ethereum ERC20 from Tatum ledger to blockchain
-        // TODO: Off-chain / Blockchain -> Send XLM / Asset from Tatum ledger to blockchain
-        // TODO: Off-chain / Blockchain -> Create XLM based Asset
-        // TODO: Off-chain / Blockchain -> Send XRP from Tatum ledger to blockchain
-        // TODO: Off-chain / Blockchain -> Create XRP based Asset
-        // TODO: Off-chain / Blockchain -> Send BNB from Tatum ledger to blockchain
-        // TODO: Off-chain / Blockchain -> Create BNB based Asset
+        internal async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_Send_Async(
+            BlockchainType chain,
+            string senderAccountId, string to_address, decimal amount, bool? compliant = null, decimal? fee = null,
+            IEnumerable<decimal> multipleAmounts = null,
+            IEnumerable<OffchainAddressPrivateKeyPair> keyPairs = null,
+            string attr = null, string mnemonic = null, string signatureId = null,
+            string xpub = null, string paymentId = null, string senderNote = null,
+            CancellationToken ct = default)
+        {
+            if (!chain.IsOneOf(
+                BlockchainType.Bitcoin,
+                BlockchainType.BitcoinCash,
+                BlockchainType.Litecoin))
+                throw new ArgumentException("Wrong BlockchainType");
+
+            var credict = new Dictionary<BlockchainType, int>
+            {
+                { BlockchainType.Bitcoin, 2 },
+                { BlockchainType.BitcoinCash, 10 },
+                { BlockchainType.Litecoin, 10 },
+            };
+
+            var ci = CultureInfo.InvariantCulture;
+            var credits = credict[chain];
+            var parameters = new Dictionary<string, object>
+            {
+                { "senderAccountId", senderAccountId },
+                { "address", to_address },
+                { "amount", amount.ToString(ci) },
+            };
+            parameters.AddOptionalParameter("compliant", compliant);
+            parameters.AddOptionalParameter("fee", fee?.ToString(ci));
+            if (multipleAmounts != null)
+            {
+                var lst = new List<string>();
+                foreach (var ma in multipleAmounts) lst.Add(ma.ToString(ci));
+                parameters.AddOptionalParameter("multipleAmounts", lst);
+            }
+            parameters.AddOptionalParameter("keyPair", keyPairs);
+            parameters.AddOptionalParameter("attr", attr);
+            parameters.AddOptionalParameter("mnemonic", mnemonic);
+            parameters.AddOptionalParameter("signatureId", signatureId);
+            parameters.AddOptionalParameter("xpub", xpub);
+            parameters.AddOptionalParameter("paymentId", paymentId);
+            parameters.AddOptionalParameter("senderNote", senderNote);
+
+            var ops = chain.GetBlockchainOptions();
+            var url = GetUrl(string.Format(Endpoints_Offchain_Blockchain_Transfer, ops.ChainSlug));
+            var result = await SendTatumRequest<OffchainTransferResponse>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success/* || !result.Data.Completed*/) return WebCallResult<OffchainTransferResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<OffchainTransferResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Send Bitcoin from Tatum account to address<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send Bitcoin from Tatum account to address. This will create Tatum internal withdrawal request with ID. If every system works as expected, withdrawal request is marked as complete and transaction id is assigned to it.
+        /// - If Bitcoin server connection is unavailable, withdrawal request is cancelled.
+        /// - If blockchain transfer is successful, but is it not possible to reach Tatum, transaction id of blockchain transaction is returned and withdrawal request must be completed manually, otherwise all other withdrawals will be pending.
+        /// There are two possibilites how the transaction on the blockchain can be created:
+        /// - Using mnemonic - all of the addresses, that are generated from the mnemonic are scanned for the incoming deposits which are used as a source of the transaction.Assets, which are not used in a transaction are moved to the system address wih the derivation index 0. Address with index 0 cannot be assigned automatically to any account and is used for custodial wallet use cases. For non-custodial wallets, field attr should be present and it should be address with the index 1 of the connected wallet.
+        /// - Using keyPair - addresses which are used as a source of the transaction are entered manually
+        /// It is possible to perform offchain to blockchain transaction for ledger accounts without blockchain address assigned to them.
+        /// This method is a helper method, which internally wraps these steps:
+        /// 1. Store withdrawal - create a ledger transaction, which debits the assets on the sender account.
+        /// 2. Perform blockchain transaction -
+        /// 3. Complete withdrawal - move the withdrawal to the completed state, when all of the previous steps were successful.
+        /// When some of the steps fails, Cancel withdrawal operation is used, which cancels withdrawal and creates refund transaction to the sender account.This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and losing funds. In this method, it is possible to enter privateKey or signatureId. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request. Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
+        /// </summary>
+        /// <param name="senderAccountId">Sender account ID</param>
+        /// <param name="to_address">Blockchain address to send assets to. For BTC, LTC and BCH, it is possible to enter list of multiple recipient blockchain addresses as a comma separated string.</param>
+        /// <param name="amount">Amount to be withdrawn to blockchain.</param>
+        /// <param name="compliant">Compliance check, if withdrawal is not compliant, it will not be processed.</param>
+        /// <param name="fee">Fee to be submitted as a transaction fee to blockchain. If none is set, default value of 0.0005 BTC is used.</param>
+        /// <param name="multipleAmounts">For BTC, LTC and BCH, it is possible to enter list of multiple recipient blockchain amounts. List of recipient addresses must be present in the address field and total sum of amounts must be equal to the amount field.</param>
+        /// <param name="keyPairs">Array of assigned blockchain addresses with their private keys. Either mnemonic, keyPair or signature Id must be present - depends on the type of account and xpub. Tatum KMS does not support keyPair type of off-chain transaction, only mnemonic based.</param>
+        /// <param name="attr">Used to parametrize withdrawal as a change address for left coins from transaction. XPub or attr must be used.</param>
+        /// <param name="mnemonic">Mnemonic seed - usually 12-24 words with access to whole wallet. Either mnemonic, keyPair or signature Id must be present - depends on the type of account and xpub. Tatum KMS does not support keyPair type of off-chain transaction, only mnemonic based.</param>
+        /// <param name="signatureId">Signature hash of the mnemonic, which will be used to sign transactions locally. All signature Ids should be present, which might be used to sign transaction. Tatum KMS does not support keyPair type of off-chain transaction, only mnemonic based.</param>
+        /// <param name="xpub">Extended public key (xpub) of the wallet associated with the accounts. Should be present, when mnemonic is used.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="senderNote">Note visible to owner of withdrawing account</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendBitcoin(
+            string senderAccountId, string to_address, decimal amount, bool? compliant = null, decimal? fee = null,
+            IEnumerable<decimal> multipleAmounts = null, IEnumerable<OffchainAddressPrivateKeyPair> keyPairs = null,
+            string attr = null, string mnemonic = null, string signatureId = null,
+            string xpub = null, string paymentId = null, string senderNote = null,
+            CancellationToken ct = default)
+            => OffchainBlockchain_Send_Async(BlockchainType.Bitcoin, senderAccountId, to_address, amount, compliant, fee, multipleAmounts, keyPairs, attr, mnemonic, signatureId, xpub, paymentId, senderNote, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Send Bitcoin from Tatum account to address<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send Bitcoin from Tatum account to address. This will create Tatum internal withdrawal request with ID. If every system works as expected, withdrawal request is marked as complete and transaction id is assigned to it.
+        /// - If Bitcoin server connection is unavailable, withdrawal request is cancelled.
+        /// - If blockchain transfer is successful, but is it not possible to reach Tatum, transaction id of blockchain transaction is returned and withdrawal request must be completed manually, otherwise all other withdrawals will be pending.
+        /// There are two possibilites how the transaction on the blockchain can be created:
+        /// - Using mnemonic - all of the addresses, that are generated from the mnemonic are scanned for the incoming deposits which are used as a source of the transaction.Assets, which are not used in a transaction are moved to the system address wih the derivation index 0. Address with index 0 cannot be assigned automatically to any account and is used for custodial wallet use cases. For non-custodial wallets, field attr should be present and it should be address with the index 1 of the connected wallet.
+        /// - Using keyPair - addresses which are used as a source of the transaction are entered manually
+        /// It is possible to perform offchain to blockchain transaction for ledger accounts without blockchain address assigned to them.
+        /// This method is a helper method, which internally wraps these steps:
+        /// 1. Store withdrawal - create a ledger transaction, which debits the assets on the sender account.
+        /// 2. Perform blockchain transaction -
+        /// 3. Complete withdrawal - move the withdrawal to the completed state, when all of the previous steps were successful.
+        /// When some of the steps fails, Cancel withdrawal operation is used, which cancels withdrawal and creates refund transaction to the sender account.This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and losing funds. In this method, it is possible to enter privateKey or signatureId. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request. Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
+        /// </summary>
+        /// <param name="senderAccountId">Sender account ID</param>
+        /// <param name="to_address">Blockchain address to send assets to. For BTC, LTC and BCH, it is possible to enter list of multiple recipient blockchain addresses as a comma separated string.</param>
+        /// <param name="amount">Amount to be withdrawn to blockchain.</param>
+        /// <param name="compliant">Compliance check, if withdrawal is not compliant, it will not be processed.</param>
+        /// <param name="fee">Fee to be submitted as a transaction fee to blockchain. If none is set, default value of 0.0005 BTC is used.</param>
+        /// <param name="multipleAmounts">For BTC, LTC and BCH, it is possible to enter list of multiple recipient blockchain amounts. List of recipient addresses must be present in the address field and total sum of amounts must be equal to the amount field.</param>
+        /// <param name="keyPairs">Array of assigned blockchain addresses with their private keys. Either mnemonic, keyPair or signature Id must be present - depends on the type of account and xpub. Tatum KMS does not support keyPair type of off-chain transaction, only mnemonic based.</param>
+        /// <param name="attr">Used to parametrize withdrawal as a change address for left coins from transaction. XPub or attr must be used.</param>
+        /// <param name="mnemonic">Mnemonic seed - usually 12-24 words with access to whole wallet. Either mnemonic, keyPair or signature Id must be present - depends on the type of account and xpub. Tatum KMS does not support keyPair type of off-chain transaction, only mnemonic based.</param>
+        /// <param name="signatureId">Signature hash of the mnemonic, which will be used to sign transactions locally. All signature Ids should be present, which might be used to sign transaction. Tatum KMS does not support keyPair type of off-chain transaction, only mnemonic based.</param>
+        /// <param name="xpub">Extended public key (xpub) of the wallet associated with the accounts. Should be present, when mnemonic is used.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="senderNote">Note visible to owner of withdrawing account</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendBitcoin_Async(
+            string senderAccountId, string to_address, decimal amount, bool? compliant = null, decimal? fee = null,
+            IEnumerable<decimal> multipleAmounts = null, IEnumerable<OffchainAddressPrivateKeyPair> keyPairs = null,
+            string attr = null, string mnemonic = null, string signatureId = null,
+            string xpub = null, string paymentId = null, string senderNote = null,
+            CancellationToken ct = default)
+            => await OffchainBlockchain_Send_Async(BlockchainType.Bitcoin, senderAccountId, to_address, amount, compliant, fee, multipleAmounts, keyPairs, attr, mnemonic, signatureId, xpub, paymentId, senderNote, ct);
+
+        /// <summary>
+        /// <b>Title:</b> Send Bitcoin Cash from Tatum account to address<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send Bitcoin Cash from Tatum account to address. This will create Tatum internal withdrawal request with ID. If every system works as expected, withdrawal request is marked as complete and transaction id is assigned to it.
+        /// - If Bitcoin Cash server connection is unavailable, withdrawal request is cancelled.
+        /// - If blockchain transfer is successful, but is it not possible to reach Tatum, transaction id of blockchain transaction is returned and withdrawal request must be completed manually, otherwise all other withdrawals will be pending.
+        /// There are two possibilites how the transaction on the blockchain can be created:
+        /// - Using mnemonic - all of the addresses, that are generated from the mnemonic are scanned for the incoming deposits which are used as a source of the transaction.Assets, which are not used in a transaction are moved to the system address wih the derivation index 0. Address with index 0 cannot be assigned automatically to any account and is used for custodial wallet use cases. For non-custodial wallets, field attr should be present and it should be address with the index 1 of the connected wallet.
+        /// - Using keyPair - addresses which are used as a source of the transaction are entered manually
+        /// It is possible to perform offchain to blockchain transaction for ledger accounts without blockchain address assigned to them.
+        /// This method is a helper method, which internally wraps these steps:
+        /// 1. Store withdrawal - create a ledger transaction, which debits the assets on the sender account.
+        /// 2. Perform blockchain transaction -
+        /// 3. Complete withdrawal - move the withdrawal to the completed state, when all of the previous steps were successful.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and losing funds. In this method, it is possible to enter privateKey or signatureId. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request. Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
+        /// </summary>
+        /// <param name="senderAccountId">Sender account ID</param>
+        /// <param name="to_address">Blockchain address to send assets to. For BTC, LTC and BCH, it is possible to enter list of multiple recipient blockchain addresses as a comma separated string.</param>
+        /// <param name="amount">Amount to be withdrawn to blockchain.</param>
+        /// <param name="compliant">Compliance check, if withdrawal is not compliant, it will not be processed.</param>
+        /// <param name="fee">Fee to be submitted as a transaction fee to blockchain. If none is set, default value of 0.0005 BTC is used.</param>
+        /// <param name="multipleAmounts">For BTC, LTC and BCH, it is possible to enter list of multiple recipient blockchain amounts. List of recipient addresses must be present in the address field and total sum of amounts must be equal to the amount field.</param>
+        /// <param name="keyPairs">Array of assigned blockchain addresses with their private keys. Either mnemonic, keyPair or signature Id must be present - depends on the type of account and xpub. Tatum KMS does not support keyPair type of off-chain transaction, only mnemonic based.</param>
+        /// <param name="attr">Used to parametrize withdrawal as a change address for left coins from transaction. XPub or attr must be used.</param>
+        /// <param name="mnemonic">Mnemonic seed - usually 12-24 words with access to whole wallet. Either mnemonic, keyPair or signature Id must be present - depends on the type of account and xpub. Tatum KMS does not support keyPair type of off-chain transaction, only mnemonic based.</param>
+        /// <param name="signatureId">Signature hash of the mnemonic, which will be used to sign transactions locally. All signature Ids should be present, which might be used to sign transaction. Tatum KMS does not support keyPair type of off-chain transaction, only mnemonic based.</param>
+        /// <param name="xpub">Extended public key (xpub) of the wallet associated with the accounts. Should be present, when mnemonic is used.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="senderNote">Note visible to owner of withdrawing account</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendBitcoinCash(
+            string senderAccountId, string to_address, decimal amount, bool? compliant = null, decimal? fee = null,
+            IEnumerable<decimal> multipleAmounts = null, IEnumerable<OffchainAddressPrivateKeyPair> keyPairs = null,
+            string attr = null, string mnemonic = null, string signatureId = null,
+            string xpub = null, string paymentId = null, string senderNote = null,
+            CancellationToken ct = default)
+            => OffchainBlockchain_Send_Async(BlockchainType.BitcoinCash, senderAccountId, to_address, amount, compliant, fee, multipleAmounts, keyPairs, attr, mnemonic, signatureId, xpub, paymentId, senderNote, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Send Bitcoin Cash from Tatum account to address<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send Bitcoin Cash from Tatum account to address. This will create Tatum internal withdrawal request with ID. If every system works as expected, withdrawal request is marked as complete and transaction id is assigned to it.
+        /// - If Bitcoin Cash server connection is unavailable, withdrawal request is cancelled.
+        /// - If blockchain transfer is successful, but is it not possible to reach Tatum, transaction id of blockchain transaction is returned and withdrawal request must be completed manually, otherwise all other withdrawals will be pending.
+        /// There are two possibilites how the transaction on the blockchain can be created:
+        /// - Using mnemonic - all of the addresses, that are generated from the mnemonic are scanned for the incoming deposits which are used as a source of the transaction.Assets, which are not used in a transaction are moved to the system address wih the derivation index 0. Address with index 0 cannot be assigned automatically to any account and is used for custodial wallet use cases. For non-custodial wallets, field attr should be present and it should be address with the index 1 of the connected wallet.
+        /// - Using keyPair - addresses which are used as a source of the transaction are entered manually
+        /// It is possible to perform offchain to blockchain transaction for ledger accounts without blockchain address assigned to them.
+        /// This method is a helper method, which internally wraps these steps:
+        /// 1. Store withdrawal - create a ledger transaction, which debits the assets on the sender account.
+        /// 2. Perform blockchain transaction -
+        /// 3. Complete withdrawal - move the withdrawal to the completed state, when all of the previous steps were successful.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and losing funds. In this method, it is possible to enter privateKey or signatureId. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request. Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
+        /// </summary>
+        /// <param name="senderAccountId">Sender account ID</param>
+        /// <param name="to_address">Blockchain address to send assets to. For BTC, LTC and BCH, it is possible to enter list of multiple recipient blockchain addresses as a comma separated string.</param>
+        /// <param name="amount">Amount to be withdrawn to blockchain.</param>
+        /// <param name="compliant">Compliance check, if withdrawal is not compliant, it will not be processed.</param>
+        /// <param name="fee">Fee to be submitted as a transaction fee to blockchain. If none is set, default value of 0.0005 BTC is used.</param>
+        /// <param name="multipleAmounts">For BTC, LTC and BCH, it is possible to enter list of multiple recipient blockchain amounts. List of recipient addresses must be present in the address field and total sum of amounts must be equal to the amount field.</param>
+        /// <param name="keyPairs">Array of assigned blockchain addresses with their private keys. Either mnemonic, keyPair or signature Id must be present - depends on the type of account and xpub. Tatum KMS does not support keyPair type of off-chain transaction, only mnemonic based.</param>
+        /// <param name="attr">Used to parametrize withdrawal as a change address for left coins from transaction. XPub or attr must be used.</param>
+        /// <param name="mnemonic">Mnemonic seed - usually 12-24 words with access to whole wallet. Either mnemonic, keyPair or signature Id must be present - depends on the type of account and xpub. Tatum KMS does not support keyPair type of off-chain transaction, only mnemonic based.</param>
+        /// <param name="signatureId">Signature hash of the mnemonic, which will be used to sign transactions locally. All signature Ids should be present, which might be used to sign transaction. Tatum KMS does not support keyPair type of off-chain transaction, only mnemonic based.</param>
+        /// <param name="xpub">Extended public key (xpub) of the wallet associated with the accounts. Should be present, when mnemonic is used.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="senderNote">Note visible to owner of withdrawing account</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendBitcoinCash_Async(
+            string senderAccountId, string to_address, decimal amount, bool? compliant = null, decimal? fee = null,
+            IEnumerable<decimal> multipleAmounts = null, IEnumerable<OffchainAddressPrivateKeyPair> keyPairs = null,
+            string attr = null, string mnemonic = null, string signatureId = null,
+            string xpub = null, string paymentId = null, string senderNote = null,
+            CancellationToken ct = default)
+            => await OffchainBlockchain_Send_Async(BlockchainType.BitcoinCash, senderAccountId, to_address, amount, compliant, fee, multipleAmounts, keyPairs, attr, mnemonic, signatureId, xpub, paymentId, senderNote, ct);
+
+        /// <summary>
+        /// <b>Title:</b> Send Litecoin from Tatum account to address<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send Litecoin from Tatum account to address. This will create Tatum internal withdrawal request with ID. If every system works as expected, withdrawal request is marked as complete and transaction id is assigned to it.
+        /// - If Litecoin server connection is unavailable, withdrawal request is cancelled.
+        /// - If blockchain transfer is successful, but is it not possible to reach Tatum, transaction id of blockchain transaction is returned and withdrawal request must be completed manually, otherwise all other withdrawals will be pending.
+        /// There are two possibilites how the transaction on the blockchain can be created:
+        /// - Using mnemonic - all of the addresses, that are generated from the mnemonic are scanned for the incoming deposits which are used as a source of the transaction.Assets, which are not used in a transaction are moved to the system address wih the derivation index 0. Address with index 0 cannot be assigned automatically to any account and is used for custodial wallet use cases. For non-custodial wallets, field attr should be present and it should be address with the index 1 of the connected wallet.
+        /// - Using keyPair - addresses which are used as a source of the transaction are entered manually
+        /// It is possible to perform offchain to blockchain transaction for ledger accounts without blockchain address assigned to them.
+        /// This method is a helper method, which internally wraps these steps:
+        /// 1. Store withdrawal - create a ledger transaction, which debits the assets on the sender account.
+        /// 2. Perform blockchain transaction -
+        /// 3. Complete withdrawal - move the withdrawal to the completed state, when all of the previous steps were successful.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and losing funds. In this method, it is possible to enter privateKey or signatureId. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request. Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
+        /// </summary>
+        /// <param name="senderAccountId">Sender account ID</param>
+        /// <param name="to_address">Blockchain address to send assets to. For BTC, LTC and BCH, it is possible to enter list of multiple recipient blockchain addresses as a comma separated string.</param>
+        /// <param name="amount">Amount to be withdrawn to blockchain.</param>
+        /// <param name="compliant">Compliance check, if withdrawal is not compliant, it will not be processed.</param>
+        /// <param name="fee">Fee to be submitted as a transaction fee to blockchain. If none is set, default value of 0.0005 BTC is used.</param>
+        /// <param name="multipleAmounts">For BTC, LTC and BCH, it is possible to enter list of multiple recipient blockchain amounts. List of recipient addresses must be present in the address field and total sum of amounts must be equal to the amount field.</param>
+        /// <param name="keyPairs">Array of assigned blockchain addresses with their private keys. Either mnemonic, keyPair or signature Id must be present - depends on the type of account and xpub. Tatum KMS does not support keyPair type of off-chain transaction, only mnemonic based.</param>
+        /// <param name="attr">Used to parametrize withdrawal as a change address for left coins from transaction. XPub or attr must be used.</param>
+        /// <param name="mnemonic">Mnemonic seed - usually 12-24 words with access to whole wallet. Either mnemonic, keyPair or signature Id must be present - depends on the type of account and xpub. Tatum KMS does not support keyPair type of off-chain transaction, only mnemonic based.</param>
+        /// <param name="signatureId">Signature hash of the mnemonic, which will be used to sign transactions locally. All signature Ids should be present, which might be used to sign transaction. Tatum KMS does not support keyPair type of off-chain transaction, only mnemonic based.</param>
+        /// <param name="xpub">Extended public key (xpub) of the wallet associated with the accounts. Should be present, when mnemonic is used.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="senderNote">Note visible to owner of withdrawing account</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendLitecoin(
+            string senderAccountId, string to_address, decimal amount, bool? compliant = null, decimal? fee = null,
+            IEnumerable<decimal> multipleAmounts = null, IEnumerable<OffchainAddressPrivateKeyPair> keyPairs = null,
+            string attr = null, string mnemonic = null, string signatureId = null,
+            string xpub = null, string paymentId = null, string senderNote = null,
+            CancellationToken ct = default)
+            => OffchainBlockchain_Send_Async(BlockchainType.Litecoin, senderAccountId, to_address, amount, compliant, fee, multipleAmounts, keyPairs, attr, mnemonic, signatureId, xpub, paymentId, senderNote, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Send Litecoin from Tatum account to address<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send Litecoin from Tatum account to address. This will create Tatum internal withdrawal request with ID. If every system works as expected, withdrawal request is marked as complete and transaction id is assigned to it.
+        /// - If Litecoin server connection is unavailable, withdrawal request is cancelled.
+        /// - If blockchain transfer is successful, but is it not possible to reach Tatum, transaction id of blockchain transaction is returned and withdrawal request must be completed manually, otherwise all other withdrawals will be pending.
+        /// There are two possibilites how the transaction on the blockchain can be created:
+        /// - Using mnemonic - all of the addresses, that are generated from the mnemonic are scanned for the incoming deposits which are used as a source of the transaction.Assets, which are not used in a transaction are moved to the system address wih the derivation index 0. Address with index 0 cannot be assigned automatically to any account and is used for custodial wallet use cases. For non-custodial wallets, field attr should be present and it should be address with the index 1 of the connected wallet.
+        /// - Using keyPair - addresses which are used as a source of the transaction are entered manually
+        /// It is possible to perform offchain to blockchain transaction for ledger accounts without blockchain address assigned to them.
+        /// This method is a helper method, which internally wraps these steps:
+        /// 1. Store withdrawal - create a ledger transaction, which debits the assets on the sender account.
+        /// 2. Perform blockchain transaction -
+        /// 3. Complete withdrawal - move the withdrawal to the completed state, when all of the previous steps were successful.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and losing funds. In this method, it is possible to enter privateKey or signatureId. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request. Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
+        /// </summary>
+        /// <param name="senderAccountId">Sender account ID</param>
+        /// <param name="to_address">Blockchain address to send assets to. For BTC, LTC and BCH, it is possible to enter list of multiple recipient blockchain addresses as a comma separated string.</param>
+        /// <param name="amount">Amount to be withdrawn to blockchain.</param>
+        /// <param name="compliant">Compliance check, if withdrawal is not compliant, it will not be processed.</param>
+        /// <param name="fee">Fee to be submitted as a transaction fee to blockchain. If none is set, default value of 0.0005 BTC is used.</param>
+        /// <param name="multipleAmounts">For BTC, LTC and BCH, it is possible to enter list of multiple recipient blockchain amounts. List of recipient addresses must be present in the address field and total sum of amounts must be equal to the amount field.</param>
+        /// <param name="keyPairs">Array of assigned blockchain addresses with their private keys. Either mnemonic, keyPair or signature Id must be present - depends on the type of account and xpub. Tatum KMS does not support keyPair type of off-chain transaction, only mnemonic based.</param>
+        /// <param name="attr">Used to parametrize withdrawal as a change address for left coins from transaction. XPub or attr must be used.</param>
+        /// <param name="mnemonic">Mnemonic seed - usually 12-24 words with access to whole wallet. Either mnemonic, keyPair or signature Id must be present - depends on the type of account and xpub. Tatum KMS does not support keyPair type of off-chain transaction, only mnemonic based.</param>
+        /// <param name="signatureId">Signature hash of the mnemonic, which will be used to sign transactions locally. All signature Ids should be present, which might be used to sign transaction. Tatum KMS does not support keyPair type of off-chain transaction, only mnemonic based.</param>
+        /// <param name="xpub">Extended public key (xpub) of the wallet associated with the accounts. Should be present, when mnemonic is used.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="senderNote">Note visible to owner of withdrawing account</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendLitecoin_Async(
+            string senderAccountId, string to_address, decimal amount, bool? compliant = null, decimal? fee = null,
+            IEnumerable<decimal> multipleAmounts = null, IEnumerable<OffchainAddressPrivateKeyPair> keyPairs = null,
+            string attr = null, string mnemonic = null, string signatureId = null,
+            string xpub = null, string paymentId = null, string senderNote = null,
+            CancellationToken ct = default)
+            => await OffchainBlockchain_Send_Async(BlockchainType.Litecoin, senderAccountId, to_address, amount, compliant, fee, multipleAmounts, keyPairs, attr, mnemonic, signatureId, xpub, paymentId, senderNote, ct);
+
+        /// <summary>
+        /// <b>Title:</b> Send Ethereum from Tatum ledger to blockchain<br />
+        /// <b>Credits:</b> 4 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send Ethereum from Tatum Ledger to account. This will create Tatum internal withdrawal request with ID. If every system works as expected, withdrawal request is marked as complete and transaction id is assigned to it.
+        /// - If Ethereum server connection is unavailable, withdrawal request is cancelled.
+        /// - If blockchain transfer is successful, but is it not possible to reach Tatum, transaction id of blockchain transaction is returned and withdrawal request must be completed manually, otherwise all other withdrawals will be pending.
+        /// It is possible to perform offchain to blockchain transaction for ledger accounts without blockchain address assigned to them.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and losing funds. In this method, it is possible to enter privateKey or signatureId. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request. Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
+        /// </summary>
+        /// <param name="senderAccountId">Sender account ID</param>
+        /// <param name="to_address">Blockchain address to send assets</param>
+        /// <param name="amount">Amount to be sent in Ether.</param>
+        /// <param name="currency">Currency to transfer from Ethereum Blockchain Account. Required only for calls from Tatum Middleware.</param>
+        /// <param name="nonce">Nonce to be set to Ethereum transaction. If not present, last known nonce will be used.</param>
+        /// <param name="compliant">Compliance check, if withdrawal is not compliant, it will not be processed.</param>
+        /// <param name="privateKey">Private key of sender address. Either mnemonic and index, privateKey or signature Id must be present - depends on the type of account and xpub.</param>
+        /// <param name="signatureId">Identifier of the mnemonic / private key associated in signing application. When hash identifies mnemonic, index must be present to represent specific account to pay from. Private key, mnemonic or signature Id must be present.</param>
+        /// <param name="index">Derivation index of sender address.</param>
+        /// <param name="mnemonic">Mnemonic to generate private key for sender address. Either mnemonic and index, privateKey or signature Id must be present - depends on the type of account and xpub.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="senderNote">Note visible to owner of withdrawing account</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendEthereum(
+            string senderAccountId, string to_address, decimal amount, string currency = null, long? nonce = null,
+            bool? compliant = null, string privateKey = null, string signatureId = null, int? index = null, string mnemonic = null,
+            string paymentId = null, string senderNote = null,
+            CancellationToken ct = default)
+            => OffchainBlockchain_SendEthereum_Async(
+            senderAccountId, to_address, amount, currency, nonce,
+            compliant, privateKey, signatureId, index, mnemonic,
+            paymentId, senderNote, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Send Ethereum from Tatum ledger to blockchain<br />
+        /// <b>Credits:</b> 4 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send Ethereum from Tatum Ledger to account. This will create Tatum internal withdrawal request with ID. If every system works as expected, withdrawal request is marked as complete and transaction id is assigned to it.
+        /// - If Ethereum server connection is unavailable, withdrawal request is cancelled.
+        /// - If blockchain transfer is successful, but is it not possible to reach Tatum, transaction id of blockchain transaction is returned and withdrawal request must be completed manually, otherwise all other withdrawals will be pending.
+        /// It is possible to perform offchain to blockchain transaction for ledger accounts without blockchain address assigned to them.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and losing funds. In this method, it is possible to enter privateKey or signatureId. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request. Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
+        /// </summary>
+        /// <param name="senderAccountId">Sender account ID</param>
+        /// <param name="to_address">Blockchain address to send assets</param>
+        /// <param name="amount">Amount to be sent in Ether.</param>
+        /// <param name="currency">Currency to transfer from Ethereum Blockchain Account. Required only for calls from Tatum Middleware.</param>
+        /// <param name="nonce">Nonce to be set to Ethereum transaction. If not present, last known nonce will be used.</param>
+        /// <param name="compliant">Compliance check, if withdrawal is not compliant, it will not be processed.</param>
+        /// <param name="privateKey">Private key of sender address. Either mnemonic and index, privateKey or signature Id must be present - depends on the type of account and xpub.</param>
+        /// <param name="signatureId">Identifier of the mnemonic / private key associated in signing application. When hash identifies mnemonic, index must be present to represent specific account to pay from. Private key, mnemonic or signature Id must be present.</param>
+        /// <param name="index">Derivation index of sender address.</param>
+        /// <param name="mnemonic">Mnemonic to generate private key for sender address. Either mnemonic and index, privateKey or signature Id must be present - depends on the type of account and xpub.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="senderNote">Note visible to owner of withdrawing account</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendEthereum_Async(
+            string senderAccountId, string to_address, decimal amount, string currency = null, long? nonce = null,
+            bool? compliant = null, string privateKey = null, string signatureId = null, int? index = null, string mnemonic = null,
+            string paymentId = null, string senderNote = null,
+            CancellationToken ct = default)
+        {
+            var credits = 4;
+            var ci = CultureInfo.InvariantCulture;
+            var parameters = new Dictionary<string, object>
+            {
+                { "senderAccountId", senderAccountId },
+                { "address", to_address },
+                { "amount", amount.ToString(ci) },
+            };
+            parameters.AddOptionalParameter("currency", currency);
+            parameters.AddOptionalParameter("nonce", nonce);
+            parameters.AddOptionalParameter("compliant", compliant);
+            parameters.AddOptionalParameter("privateKey", privateKey);
+            parameters.AddOptionalParameter("signatureId", signatureId);
+            parameters.AddOptionalParameter("index", index);
+            parameters.AddOptionalParameter("mnemonic", mnemonic);
+            parameters.AddOptionalParameter("paymentId", paymentId);
+            parameters.AddOptionalParameter("senderNote", senderNote);
+
+            var url = GetUrl(string.Format(Endpoints_Offchain_Blockchain_EthereumTransfer));
+            var result = await SendTatumRequest<OffchainTransferResponse>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success/* || !result.Data.Completed*/) return WebCallResult<OffchainTransferResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<OffchainTransferResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Create new ERC20 token<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// First step to create new ERC20 token with given supply on Ethereum blockchain with support of Tatum's private ledger.
+        /// This method only creates Tatum Private ledger virtual currency with predefined parameters.It will not generate any blockchain smart contract.
+        /// The whole supply of ERC20 token is stored in the customer's newly created account. Then it is possible to create new Tatum accounts with ERC20 token name as account's currency.
+        /// Newly created account is frozen until the specific ERC20 smart contract address is linked with the Tatum virtual currency, representing the token.
+        /// Order of the steps to create ERC20 smart contract with Tatum private ledger support:
+        /// 1. Create ERC20 token - creates a virtual currency within Tatum
+        /// 2. Deploy ERC20 smart contract - create new ERC20 smart contract on the blockchain
+        /// 3. Store ERC20 smart contract address - link newly created ERC20 smart contract address with Tatum virtual currency - this operation enables frozen account and enables offchain synchronization for ERC20 Tatum accounts
+        /// There is a helper method Deploy Ethereum ERC20 Smart Contract Off-chain, which wraps first 2 steps into 1 method.
+        /// Address on the blockchain, where all initial supply will be transferred, can be defined via the address or xpub and derivationIndex.When xpub is present, the account connected to this virtualCurrency will be set as the account's xpub.
+        /// </summary>
+        /// <param name="symbol">ERC20 token name. Used as a identifier within Tatum system and also in blockchain as a currency symbol.</param>
+        /// <param name="supply">Supply of ERC20 token.</param>
+        /// <param name="description">Used as a description within Tatum system and in blockchain as a currency name.</param>
+        /// <param name="basePair">Base pair for ERC20 token. Transaction value will be calculated according to this base pair.</param>
+        /// <param name="customer">If customer is filled then is created or updated.</param>
+        /// <param name="accountingCurrency">All transaction will be billed in this currency for created account associated with this currency. If not set, EUR is used. ISO-4217</param>
+        /// <param name="derivationIndex">Derivation index for xpub to generate specific deposit address.</param>
+        /// <param name="xpub">Extended public key (xpub), from which address, where all initial supply will be stored, will be generated. Either xpub and derivationIndex, or address must be present, not both.</param>
+        /// <param name="address">Address on Ethereum blockchain, where all initial supply will be stored. Either xpub and derivationIndex, or address must be present, not both.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<OffchainAccountIdAddressPair> OffchainBlockchain_CreateERC20Token(
+            string symbol, string supply, string description, string basePair,
+            LedgerCustomerOptions customer = null, string accountingCurrency = null, int? derivationIndex = null,
+            string xpub = null, string address = null,
+            CancellationToken ct = default)
+            => OffchainBlockchain_CreateERC20Token_Async(
+            symbol, supply, description, basePair,
+            customer, accountingCurrency, derivationIndex,
+            xpub, address, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Create new ERC20 token<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// First step to create new ERC20 token with given supply on Ethereum blockchain with support of Tatum's private ledger.
+        /// This method only creates Tatum Private ledger virtual currency with predefined parameters.It will not generate any blockchain smart contract.
+        /// The whole supply of ERC20 token is stored in the customer's newly created account. Then it is possible to create new Tatum accounts with ERC20 token name as account's currency.
+        /// Newly created account is frozen until the specific ERC20 smart contract address is linked with the Tatum virtual currency, representing the token.
+        /// Order of the steps to create ERC20 smart contract with Tatum private ledger support:
+        /// 1. Create ERC20 token - creates a virtual currency within Tatum
+        /// 2. Deploy ERC20 smart contract - create new ERC20 smart contract on the blockchain
+        /// 3. Store ERC20 smart contract address - link newly created ERC20 smart contract address with Tatum virtual currency - this operation enables frozen account and enables offchain synchronization for ERC20 Tatum accounts
+        /// There is a helper method Deploy Ethereum ERC20 Smart Contract Off-chain, which wraps first 2 steps into 1 method.
+        /// Address on the blockchain, where all initial supply will be transferred, can be defined via the address or xpub and derivationIndex.When xpub is present, the account connected to this virtualCurrency will be set as the account's xpub.
+        /// </summary>
+        /// <param name="symbol">ERC20 token name. Used as a identifier within Tatum system and also in blockchain as a currency symbol.</param>
+        /// <param name="supply">Supply of ERC20 token.</param>
+        /// <param name="description">Used as a description within Tatum system and in blockchain as a currency name.</param>
+        /// <param name="basePair">Base pair for ERC20 token. Transaction value will be calculated according to this base pair.</param>
+        /// <param name="customer">If customer is filled then is created or updated.</param>
+        /// <param name="accountingCurrency">All transaction will be billed in this currency for created account associated with this currency. If not set, EUR is used. ISO-4217</param>
+        /// <param name="derivationIndex">Derivation index for xpub to generate specific deposit address.</param>
+        /// <param name="xpub">Extended public key (xpub), from which address, where all initial supply will be stored, will be generated. Either xpub and derivationIndex, or address must be present, not both.</param>
+        /// <param name="address">Address on Ethereum blockchain, where all initial supply will be stored. Either xpub and derivationIndex, or address must be present, not both.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<OffchainAccountIdAddressPair>> OffchainBlockchain_CreateERC20Token_Async(
+            string symbol, string supply, string description, string basePair,
+            LedgerCustomerOptions customer = null, string accountingCurrency = null, int? derivationIndex = null,
+            string xpub = null, string address = null,
+            CancellationToken ct = default)
+        {
+            var credits = 2;
+            var parameters = new Dictionary<string, object>
+            {
+                { "symbol", symbol },
+                { "supply", supply },
+                { "description", description },
+                { "basePair", basePair },
+            };
+            parameters.AddOptionalParameter("customer", customer);
+            parameters.AddOptionalParameter("accountingCurrency", accountingCurrency);
+            parameters.AddOptionalParameter("derivationIndex", derivationIndex);
+            parameters.AddOptionalParameter("xpub", xpub);
+            parameters.AddOptionalParameter("address", address);
+
+            var url = GetUrl(string.Format(Endpoints_Offchain_Blockchain_CreateERC20Token));
+            var result = await SendTatumRequest<OffchainAccountIdAddressPair>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success/* || !result.Data.Completed*/) return WebCallResult<OffchainAccountIdAddressPair>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<OffchainAccountIdAddressPair>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Deploy Ethereum ERC20 Smart Contract Off-chain<br />
+        /// <b>Credits:</b> 4 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Deploy Ethereum ERC20 Smart Contract. This is a helper method, which is combination of Create new ERC20 token and Deploy blockchain ERC20.
+        /// After deploying a contract to blockchain, the contract address will become available and must be stored within Tatum.Otherwise, it will not be possible to interact with it and starts automatic blockchain synchronization.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and losing funds. In this method, it is possible to enter privateKey or signatureId. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request. Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
+        /// </summary>
+        /// <param name="symbol">Name of the ERC20 token - stored as a symbol on Blockchain</param>
+        /// <param name="supply">max supply of ERC20 token.</param>
+        /// <param name="description">Description of the ERC20 token</param>
+        /// <param name="basePair">Base pair for ERC20 token. 1 token will be equal to 1 unit of base pair. Transaction value will be calculated according to this base pair.</param>
+        /// <param name="customer">If customer is filled then is created or updated.</param>
+        /// <param name="xpub">Extended public key (xpub), from which address, where all initial supply will be stored, will be generated. Either xpub and derivationIndex, or address must be present, not both.</param>
+        /// <param name="derivationIndex">Derivation index for xpub to generate specific deposit address.</param>
+        /// <param name="address">Address on Ethereum blockchain, where all initial supply will be stored. Either xpub and derivationIndex, or address must be present, not both.</param>
+        /// <param name="mnemonic">Mnemonic to generate private key for the deploy account of ERC20, from which the gas will be paid (index will be used). If address is not present, mnemonic is used to generate xpub and index is set to 1. Either mnemonic and index or privateKey and address must be present, not both.</param>
+        /// <param name="index">derivation index of address to pay for deployment of ERC20</param>
+        /// <param name="privateKey">Private key of Ethereum account address, from which gas for deployment of ERC20 will be paid. Private key, mnemonic or signature Id must be present.</param>
+        /// <param name="signatureId">Identifier of the mnemonic / private key associated in signing application. When hash identifies mnemonic, index must be present to represent specific account to pay from. Private key, mnemonic or signature Id must be present.</param>
+        /// <param name="nonce">Nonce to be set to Ethereum transaction. If not present, last known nonce will be used.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<OffchainAccountIdTxIdPair> OffchainBlockchain_DeployERC20Token(
+            string symbol, string supply, string description, string basePair,
+            LedgerCustomerOptions customer = null, string xpub = null, int? derivationIndex = null, string address = null,
+            string mnemonic = null, int? index = null, string privateKey = null, string signatureId = null, long? nonce = null,
+            CancellationToken ct = default)
+            => OffchainBlockchain_DeployERC20Token_Async(
+            symbol, supply, description, basePair,
+            customer, xpub, derivationIndex, address,
+            mnemonic, index, privateKey, signatureId, nonce, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Deploy Ethereum ERC20 Smart Contract Off-chain<br />
+        /// <b>Credits:</b> 4 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Deploy Ethereum ERC20 Smart Contract. This is a helper method, which is combination of Create new ERC20 token and Deploy blockchain ERC20.
+        /// After deploying a contract to blockchain, the contract address will become available and must be stored within Tatum.Otherwise, it will not be possible to interact with it and starts automatic blockchain synchronization.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and losing funds. In this method, it is possible to enter privateKey or signatureId. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request. Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
+        /// </summary>
+        /// <param name="symbol">Name of the ERC20 token - stored as a symbol on Blockchain</param>
+        /// <param name="supply">max supply of ERC20 token.</param>
+        /// <param name="description">Description of the ERC20 token</param>
+        /// <param name="basePair">Base pair for ERC20 token. 1 token will be equal to 1 unit of base pair. Transaction value will be calculated according to this base pair.</param>
+        /// <param name="customer">If customer is filled then is created or updated.</param>
+        /// <param name="xpub">Extended public key (xpub), from which address, where all initial supply will be stored, will be generated. Either xpub and derivationIndex, or address must be present, not both.</param>
+        /// <param name="derivationIndex">Derivation index for xpub to generate specific deposit address.</param>
+        /// <param name="address">Address on Ethereum blockchain, where all initial supply will be stored. Either xpub and derivationIndex, or address must be present, not both.</param>
+        /// <param name="mnemonic">Mnemonic to generate private key for the deploy account of ERC20, from which the gas will be paid (index will be used). If address is not present, mnemonic is used to generate xpub and index is set to 1. Either mnemonic and index or privateKey and address must be present, not both.</param>
+        /// <param name="index">derivation index of address to pay for deployment of ERC20</param>
+        /// <param name="privateKey">Private key of Ethereum account address, from which gas for deployment of ERC20 will be paid. Private key, mnemonic or signature Id must be present.</param>
+        /// <param name="signatureId">Identifier of the mnemonic / private key associated in signing application. When hash identifies mnemonic, index must be present to represent specific account to pay from. Private key, mnemonic or signature Id must be present.</param>
+        /// <param name="nonce">Nonce to be set to Ethereum transaction. If not present, last known nonce will be used.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<OffchainAccountIdTxIdPair>> OffchainBlockchain_DeployERC20Token_Async(
+            string symbol, string supply, string description, string basePair,
+            LedgerCustomerOptions customer = null, string xpub = null, int? derivationIndex = null, string address = null,
+            string mnemonic = null, int? index = null, string privateKey = null, string signatureId = null, long? nonce = null,
+            CancellationToken ct = default)
+        {
+            var credits = 2;
+            var parameters = new Dictionary<string, object>
+            {
+                { "symbol", symbol },
+                { "supply", supply },
+                { "description", description },
+                { "basePair", basePair },
+            };
+            parameters.AddOptionalParameter("customer", customer);
+            parameters.AddOptionalParameter("xpub", xpub);
+            parameters.AddOptionalParameter("derivationIndex", derivationIndex);
+            parameters.AddOptionalParameter("address", address);
+            parameters.AddOptionalParameter("mnemonic", mnemonic);
+            parameters.AddOptionalParameter("index", index);
+            parameters.AddOptionalParameter("privateKey", privateKey);
+            parameters.AddOptionalParameter("signatureId", signatureId);
+            parameters.AddOptionalParameter("nonce", nonce);
+
+            var url = GetUrl(string.Format(Endpoints_Offchain_Blockchain_DeployERC20Token));
+            var result = await SendTatumRequest<OffchainAccountIdTxIdPair>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success/* || !result.Data.Completed*/) return WebCallResult<OffchainAccountIdTxIdPair>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<OffchainAccountIdTxIdPair>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Set ERC20 token contract address<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Set contract address of ERC20 token. This must be done in order to communicate with ERC20 smart contract. After creating and deploying ERC20 token to Ethereum blockchain, smart contract address is generated and must be set within Tatum. Otherwise Tatum platform will not be able to detect incoming deposits of ERC20 and do withdrawals from Tatum accounts to other blockchain addresses.
+        /// </summary>
+        /// <param name="address">ERC20 contract address</param>
+        /// <param name="symbol">ERC20 symbol name.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<bool> OffchainBlockchain_SetERC20TokenContractAddress(string address, string symbol, CancellationToken ct = default) => OffchainBlockchain_SetERC20TokenContractAddress_Async(address, symbol, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Set ERC20 token contract address<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Set contract address of ERC20 token. This must be done in order to communicate with ERC20 smart contract. After creating and deploying ERC20 token to Ethereum blockchain, smart contract address is generated and must be set within Tatum. Otherwise Tatum platform will not be able to detect incoming deposits of ERC20 and do withdrawals from Tatum accounts to other blockchain addresses.
+        /// </summary>
+        /// <param name="address">ERC20 contract address</param>
+        /// <param name="symbol">ERC20 symbol name.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<bool>> OffchainBlockchain_SetERC20TokenContractAddress_Async(string address, string symbol, CancellationToken ct = default)
+        {
+            var credits = 2;
+            var url = GetUrl(string.Format(Endpoints_Offchain_Blockchain_SetERC20TokenContractAddress, symbol, address));
+            var result = await SendTatumRequest<string>(url, HttpMethod.Post, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+            if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<bool>(result.ResponseStatusCode, result.ResponseHeaders, true, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Transfer Ethereum ERC20 from Tatum ledger to blockchain<br />
+        /// <b>Credits:</b> 4 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Transfer Ethereum ERC20 Smart Contract Tokens from Tatum account to blockchain address. This will create Tatum internal withdrawal request with ID. If every system works as expected, withdrawal request is marked as complete and transaction id is assigned to it.
+        /// - If Ethereum server connection is unavailable, withdrawal request is cancelled.
+        /// - If blockchain transfer is successful, but is it not possible to reach Tatum, transaction id of blockchain transaction is returned and withdrawal request must be completed manually, otherwise all other withdrawals will be pending.
+        /// It is possible to perform offchain to blockchain transaction for ledger accounts without blockchain address assigned to them.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and losing funds. In this method, it is possible to enter privateKey or signatureId. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request. Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
+        /// </summary>
+        /// <param name="senderAccountId">Sender account ID</param>
+        /// <param name="to_address">Blockchain address to send ERC20 token to</param>
+        /// <param name="amount">Amount to be sent.</param>
+        /// <param name="currency">ERC20 symbol. Required only for calls from Tatum Middleware.</param>
+        /// <param name="nonce">Nonce to be set to Ethereum transaction. If not present, last known nonce will be used.</param>
+        /// <param name="compliant">Compliance check, if withdrawal is not compliant, it will not be processed.</param>
+        /// <param name="privateKey">Private key of sender address. Either mnemonic and index, privateKey or signature Id must be present - depends on the type of account and xpub.</param>
+        /// <param name="signatureId">Identifier of the mnemonic / private key associated in signing application. When hash identifies mnemonic, index must be present to represent specific account to pay from. Private key, mnemonic or signature Id must be present.</param>
+        /// <param name="index">Derivation index of sender address.</param>
+        /// <param name="mnemonic">Mnemonic to generate private key for sender address. Either mnemonic and index, or privateKey must be present - depends on the type of account and xpub.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="senderNote">Note visible to owner of withdrawing account</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendERC20Token(
+            string senderAccountId, string to_address, decimal amount, string currency = null, long? nonce = null,
+            bool? compliant = null, string privateKey = null, string signatureId = null, int? index = null, string mnemonic = null,
+            string paymentId = null, string senderNote = null,
+            CancellationToken ct = default)
+            => OffchainBlockchain_SendERC20Token_Async(
+            senderAccountId, to_address, amount, currency, nonce,
+            compliant, privateKey, signatureId, index, mnemonic,
+            paymentId, senderNote, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Transfer Ethereum ERC20 from Tatum ledger to blockchain<br />
+        /// <b>Credits:</b> 4 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Transfer Ethereum ERC20 Smart Contract Tokens from Tatum account to blockchain address. This will create Tatum internal withdrawal request with ID. If every system works as expected, withdrawal request is marked as complete and transaction id is assigned to it.
+        /// - If Ethereum server connection is unavailable, withdrawal request is cancelled.
+        /// - If blockchain transfer is successful, but is it not possible to reach Tatum, transaction id of blockchain transaction is returned and withdrawal request must be completed manually, otherwise all other withdrawals will be pending.
+        /// It is possible to perform offchain to blockchain transaction for ledger accounts without blockchain address assigned to them.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and losing funds. In this method, it is possible to enter privateKey or signatureId. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request. Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
+        /// </summary>
+        /// <param name="senderAccountId">Sender account ID</param>
+        /// <param name="to_address">Blockchain address to send ERC20 token to</param>
+        /// <param name="amount">Amount to be sent.</param>
+        /// <param name="currency">ERC20 symbol. Required only for calls from Tatum Middleware.</param>
+        /// <param name="nonce">Nonce to be set to Ethereum transaction. If not present, last known nonce will be used.</param>
+        /// <param name="compliant">Compliance check, if withdrawal is not compliant, it will not be processed.</param>
+        /// <param name="privateKey">Private key of sender address. Either mnemonic and index, privateKey or signature Id must be present - depends on the type of account and xpub.</param>
+        /// <param name="signatureId">Identifier of the mnemonic / private key associated in signing application. When hash identifies mnemonic, index must be present to represent specific account to pay from. Private key, mnemonic or signature Id must be present.</param>
+        /// <param name="index">Derivation index of sender address.</param>
+        /// <param name="mnemonic">Mnemonic to generate private key for sender address. Either mnemonic and index, or privateKey must be present - depends on the type of account and xpub.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="senderNote">Note visible to owner of withdrawing account</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendERC20Token_Async(
+            string senderAccountId, string to_address, decimal amount, string currency = null, long? nonce = null,
+            bool? compliant = null, string privateKey = null, string signatureId = null, int? index = null, string mnemonic = null,
+            string paymentId = null, string senderNote = null,
+            CancellationToken ct = default)
+        {
+            var credits = 4;
+            var ci = CultureInfo.InvariantCulture;
+            var parameters = new Dictionary<string, object>
+            {
+                { "senderAccountId", senderAccountId },
+                { "address", to_address },
+                { "amount", amount.ToString(ci) },
+            };
+            parameters.AddOptionalParameter("currency", currency);
+            parameters.AddOptionalParameter("nonce", nonce);
+            parameters.AddOptionalParameter("compliant", compliant);
+            parameters.AddOptionalParameter("privateKey", privateKey);
+            parameters.AddOptionalParameter("signatureId", signatureId);
+            parameters.AddOptionalParameter("index", index);
+            parameters.AddOptionalParameter("mnemonic", mnemonic);
+            parameters.AddOptionalParameter("paymentId", paymentId);
+            parameters.AddOptionalParameter("senderNote", senderNote);
+
+            var url = GetUrl(string.Format(Endpoints_Offchain_Blockchain_TransferERC20Token));
+            var result = await SendTatumRequest<OffchainTransferResponse>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success/* || !result.Data.Completed*/) return WebCallResult<OffchainTransferResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<OffchainTransferResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Send XLM / Asset from Tatum ledger to blockchain<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send XLM or XLM-based Assets from account to account. This will create Tatum internal withdrawal request with ID. When every system works as expected, withdrawal request is marked as complete and transaction id is assigned to it.
+        /// - If XLM server connection is unavailable, withdrawal request is cancelled.
+        /// - If blockchain transfer is successful, but is it not possible to reach Tatum, transaction id of blockchain transaction is returned and withdrawal request must be completed manually, otherwise all other withdrawals will be pending.
+        /// It is possible to perform offchain to blockchain transaction for ledger accounts without blockchain address assigned to them.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and losing funds. In this method, it is possible to enter privateKey or signatureId. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request. Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
+        /// </summary>
+        /// <param name="senderAccountId">Sender account ID</param>
+        /// <param name="fromAccount">Blockchain account to send from</param>
+        /// <param name="address">Blockchain address to send assets</param>
+        /// <param name="amount">Amount to be sent, in XLM or XLM-based Asset.</param>
+        /// <param name="secret">Secret for account. Secret, or signature Id must be present.</param>
+        /// <param name="signatureId">Identifier of the secret associated in signing application. Secret, or signature Id must be present.</param>
+        /// <param name="compliant">Compliance check, if withdrawal is not compliant, it will not be processed.</param>
+        /// <param name="attr">Short message to recipient. Usually used as an account discriminator. It can be either 28 characters long ASCII text, 64 characters long HEX string or uint64 number. When using as an account disciminator in Tatum Offchain ledger, can be in format of destination_acc|source_acc.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="senderNote">Note visible to owner of withdrawing account.</param>
+        /// <param name="issuerAccount">Blockchain address of the issuer of the assets. Required only for calls from Tatum Middleware.</param>
+        /// <param name="token">Asset name. Required only for calls from Tatum Middleware.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendStellar(
+            string senderAccountId, string fromAccount, string address, decimal amount,
+            string secret = null, string signatureId = null, bool? compliant = null, string attr = null, string paymentId = null,
+            string senderNote = null, string issuerAccount = null, string token = null,
+            CancellationToken ct = default)
+            => OffchainBlockchain_SendStellar_Async(
+            senderAccountId, fromAccount, address, amount,
+            secret, signatureId, compliant, attr, paymentId,
+            senderNote, issuerAccount, token, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Send XLM / Asset from Tatum ledger to blockchain<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send XLM or XLM-based Assets from account to account. This will create Tatum internal withdrawal request with ID. When every system works as expected, withdrawal request is marked as complete and transaction id is assigned to it.
+        /// - If XLM server connection is unavailable, withdrawal request is cancelled.
+        /// - If blockchain transfer is successful, but is it not possible to reach Tatum, transaction id of blockchain transaction is returned and withdrawal request must be completed manually, otherwise all other withdrawals will be pending.
+        /// It is possible to perform offchain to blockchain transaction for ledger accounts without blockchain address assigned to them.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and losing funds. In this method, it is possible to enter privateKey or signatureId. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request. Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
+        /// </summary>
+        /// <param name="senderAccountId">Sender account ID</param>
+        /// <param name="fromAccount">Blockchain account to send from</param>
+        /// <param name="address">Blockchain address to send assets</param>
+        /// <param name="amount">Amount to be sent, in XLM or XLM-based Asset.</param>
+        /// <param name="secret">Secret for account. Secret, or signature Id must be present.</param>
+        /// <param name="signatureId">Identifier of the secret associated in signing application. Secret, or signature Id must be present.</param>
+        /// <param name="compliant">Compliance check, if withdrawal is not compliant, it will not be processed.</param>
+        /// <param name="attr">Short message to recipient. Usually used as an account discriminator. It can be either 28 characters long ASCII text, 64 characters long HEX string or uint64 number. When using as an account disciminator in Tatum Offchain ledger, can be in format of destination_acc|source_acc.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="senderNote">Note visible to owner of withdrawing account.</param>
+        /// <param name="issuerAccount">Blockchain address of the issuer of the assets. Required only for calls from Tatum Middleware.</param>
+        /// <param name="token">Asset name. Required only for calls from Tatum Middleware.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendStellar_Async(
+            string senderAccountId, string fromAccount, string address, decimal amount,
+            string secret = null, string signatureId = null, bool? compliant = null, string attr = null, string paymentId = null,
+            string senderNote = null, string issuerAccount = null, string token = null,
+            CancellationToken ct = default)
+        {
+            var credits = 10;
+            var ci = CultureInfo.InvariantCulture;
+            var parameters = new Dictionary<string, object>
+            {
+                { "senderAccountId", senderAccountId },
+                { "fromAccount", fromAccount },
+                { "address", address },
+                { "amount", amount.ToString(ci) },
+            };
+            parameters.AddOptionalParameter("secret", secret);
+            parameters.AddOptionalParameter("signatureId", signatureId);
+            parameters.AddOptionalParameter("compliant", compliant);
+            parameters.AddOptionalParameter("attr", attr);
+            parameters.AddOptionalParameter("paymentId", paymentId);
+            parameters.AddOptionalParameter("senderNote", senderNote);
+            parameters.AddOptionalParameter("issuerAccount", issuerAccount);
+            parameters.AddOptionalParameter("token", token);
+
+            var url = GetUrl(string.Format(Endpoints_Offchain_Blockchain_StellarTransfer));
+            var result = await SendTatumRequest<OffchainTransferResponse>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success/* || !result.Data.Completed*/) return WebCallResult<OffchainTransferResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<OffchainTransferResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Create XLM based Asset<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Create XLM-based Asset in Tatum Ledger. Asset must be created and configured on XLM blockhain before using Create trust line. This API call will create Tatum internal Virtual Currency. It is possible to create Tatum ledger accounts with off-chain support.
+        /// </summary>
+        /// <param name="issuerAccount">Blockchain address of the issuer of the assets.</param>
+        /// <param name="token">Asset name.</param>
+        /// <param name="basePair">Base pair for Asset. Transaction value will be calculated according to this base pair. e.g. 1 TOKEN123 is equal to 1 EUR, if basePair is set to EUR.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<bool> OffchainBlockchain_CreateXLMAsset(string issuerAccount, string token, string basePair, CancellationToken ct = default) => OffchainBlockchain_CreateXLMAsset_Async(issuerAccount, token, basePair, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Create XLM based Asset<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Create XLM-based Asset in Tatum Ledger. Asset must be created and configured on XLM blockhain before using Create trust line. This API call will create Tatum internal Virtual Currency. It is possible to create Tatum ledger accounts with off-chain support.
+        /// </summary>
+        /// <param name="issuerAccount">Blockchain address of the issuer of the assets.</param>
+        /// <param name="token">Asset name.</param>
+        /// <param name="basePair">Base pair for Asset. Transaction value will be calculated according to this base pair. e.g. 1 TOKEN123 is equal to 1 EUR, if basePair is set to EUR.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<bool>> OffchainBlockchain_CreateXLMAsset_Async(string issuerAccount, string token, string basePair, CancellationToken ct = default)
+        {
+            var credits = 2;
+            var parameters = new Dictionary<string, object>
+            {
+                { "issuerAccount", issuerAccount },
+                { "token", token },
+                { "basePair", basePair },
+            };
+
+            var url = GetUrl(string.Format(Endpoints_Offchain_Blockchain_CreateXLMAsset));
+            var result = await SendTatumRequest<string>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<bool>(result.ResponseStatusCode, result.ResponseHeaders, true, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Send XRP from Tatum ledger to blockchain<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send XRP from account to account. This will create Tatum internal withdrawal request with ID. When every system works as expected, withdrawal request is marked as complete and transaction id is assigned to it.
+        /// - If XRP server connection is unavailable, withdrawal request is cancelled.
+        /// - If blockchain transfer is successful, but is it not possible to reach Tatum, transaction id of blockchain transaction is returned and withdrawal request must be completed manually, otherwise all other withdrawals will be pending.
+        /// It is possible to perform offchain to blockchain transaction for ledger accounts without blockchain address assigned to them.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and losing funds. In this method, it is possible to enter privateKey or signatureId. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request. Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
+        /// </summary>
+        /// <param name="senderAccountId">Sender account ID</param>
+        /// <param name="account">XRP account address. Must be the one used for generating deposit tags.</param>
+        /// <param name="address">Blockchain address to send assets</param>
+        /// <param name="amount">Amount to be sent, in XRP.</param>
+        /// <param name="compliant">Compliance check, if withdrawal is not compliant, it will not be processed.</param>
+        /// <param name="attr">Destination tag of the recipient account, if any. Must be stringified uint32.</param>
+        /// <param name="sourceTag">Source tag of sender account, if any.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="secret">Secret for account. Secret, or signature Id must be present.</param>
+        /// <param name="signatureId">Identifier of the secret associated in signing application. Secret, or signature Id must be present.</param>
+        /// <param name="senderNote">Note visible to owner of withdrawing account.</param>
+        /// <param name="issuerAccount">Blockchain address of the issuer of the assets to create trust line for. Required only for calls from Tatum Middleware.</param>
+        /// <param name="token">Asset name. Must be 160bit HEX string, e.g. SHA1. Required only for calls from Tatum Middleware.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendRipple(
+            string senderAccountId, string account, string address, decimal amount,
+            bool? compliant = null, string attr = null, int? sourceTag = null, string paymentId = null, string secret = null,
+            string signatureId = null, string senderNote = null, string issuerAccount = null, string token = null,
+            CancellationToken ct = default)
+            => OffchainBlockchain_SendRipple_Async(
+            senderAccountId, account, address, amount,
+            compliant, attr, sourceTag, paymentId, secret,
+            signatureId, senderNote, issuerAccount, token, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Send XRP from Tatum ledger to blockchain<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send XRP from account to account. This will create Tatum internal withdrawal request with ID. When every system works as expected, withdrawal request is marked as complete and transaction id is assigned to it.
+        /// - If XRP server connection is unavailable, withdrawal request is cancelled.
+        /// - If blockchain transfer is successful, but is it not possible to reach Tatum, transaction id of blockchain transaction is returned and withdrawal request must be completed manually, otherwise all other withdrawals will be pending.
+        /// It is possible to perform offchain to blockchain transaction for ledger accounts without blockchain address assigned to them.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and losing funds. In this method, it is possible to enter privateKey or signatureId. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request. Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
+        /// </summary>
+        /// <param name="senderAccountId">Sender account ID</param>
+        /// <param name="account">XRP account address. Must be the one used for generating deposit tags.</param>
+        /// <param name="address">Blockchain address to send assets</param>
+        /// <param name="amount">Amount to be sent, in XRP.</param>
+        /// <param name="compliant">Compliance check, if withdrawal is not compliant, it will not be processed.</param>
+        /// <param name="attr">Destination tag of the recipient account, if any. Must be stringified uint32.</param>
+        /// <param name="sourceTag">Source tag of sender account, if any.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="secret">Secret for account. Secret, or signature Id must be present.</param>
+        /// <param name="signatureId">Identifier of the secret associated in signing application. Secret, or signature Id must be present.</param>
+        /// <param name="senderNote">Note visible to owner of withdrawing account.</param>
+        /// <param name="issuerAccount">Blockchain address of the issuer of the assets to create trust line for. Required only for calls from Tatum Middleware.</param>
+        /// <param name="token">Asset name. Must be 160bit HEX string, e.g. SHA1. Required only for calls from Tatum Middleware.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendRipple_Async(
+            string senderAccountId, string account, string address, decimal amount,
+            bool? compliant = null, string attr = null, int? sourceTag = null, string paymentId = null, string secret = null,
+            string signatureId = null, string senderNote = null, string issuerAccount = null, string token = null,
+            CancellationToken ct = default)
+        {
+            var credits = 10;
+            var ci = CultureInfo.InvariantCulture;
+            var parameters = new Dictionary<string, object>
+            {
+                { "senderAccountId", senderAccountId },
+                { "account", account },
+                { "address", address },
+                { "amount", amount.ToString(ci) },
+            };
+            parameters.AddOptionalParameter("compliant", compliant);
+            parameters.AddOptionalParameter("attr", attr);
+            parameters.AddOptionalParameter("sourceTag", sourceTag);
+            parameters.AddOptionalParameter("paymentId", paymentId);
+            parameters.AddOptionalParameter("secret", secret);
+            parameters.AddOptionalParameter("signatureId", signatureId);
+            parameters.AddOptionalParameter("senderNote", senderNote);
+            parameters.AddOptionalParameter("issuerAccount", issuerAccount);
+            parameters.AddOptionalParameter("token", token);
+
+            var url = GetUrl(string.Format(Endpoints_Offchain_Blockchain_RippleTransfer));
+            var result = await SendTatumRequest<OffchainTransferResponse>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success/* || !result.Data.Completed*/) return WebCallResult<OffchainTransferResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<OffchainTransferResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Create XRP based Asset<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Create XRP-based Asset in Tatum Ledger. Asset must be created and configured on XRP blockhain before using Create trust line. This API call will create Tatum internal Virtual Currency. It is possible to create Tatum ledger accounts with off-chain support.
+        /// </summary>
+        /// <param name="issuerAccount">Blockchain address of the issuer of the assets.</param>
+        /// <param name="token">Asset name.</param>
+        /// <param name="basePair">Base pair for Asset. Transaction value will be calculated according to this base pair. e.g. 1 TOKEN123 is equal to 1 EUR, if basePair is set to EUR.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<bool> OffchainBlockchain_CreateXRPAsset(string issuerAccount, string token, string basePair, CancellationToken ct = default) => OffchainBlockchain_CreateXRPAsset_Async(issuerAccount, token, basePair, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Create XRP based Asset<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Create XRP-based Asset in Tatum Ledger. Asset must be created and configured on XRP blockhain before using Create trust line. This API call will create Tatum internal Virtual Currency. It is possible to create Tatum ledger accounts with off-chain support.
+        /// </summary>
+        /// <param name="issuerAccount">Blockchain address of the issuer of the assets.</param>
+        /// <param name="token">Asset name.</param>
+        /// <param name="basePair">Base pair for Asset. Transaction value will be calculated according to this base pair. e.g. 1 TOKEN123 is equal to 1 EUR, if basePair is set to EUR.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<bool>> OffchainBlockchain_CreateXRPAsset_Async(string issuerAccount, string token, string basePair, CancellationToken ct = default)
+        {
+            var credits = 2;
+            var parameters = new Dictionary<string, object>
+            {
+                { "issuerAccount", issuerAccount },
+                { "token", token },
+                { "basePair", basePair },
+            };
+
+            var url = GetUrl(string.Format(Endpoints_Offchain_Blockchain_CreateXRPAsset));
+            var result = await SendTatumRequest<string>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<bool>(result.ResponseStatusCode, result.ResponseHeaders, true, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Send BNB from Tatum ledger to blockchain<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send BNB or BNB Asset from account to account. This will create Tatum internal withdrawal request with ID. When every system works as expected, withdrawal request is marked as complete and transaction id is assigned to it.
+        /// - If BNB server connection is unavailable, withdrawal request is cancelled.
+        /// - If blockchain transfer is successful, but is it not possible to reach Tatum, transaction id of blockchain transaction is returned and withdrawal request must be completed manually, otherwise all other withdrawals will be pending.
+        /// It is possible to perform offchain to blockchain transaction for ledger accounts without blockchain address assigned to them.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and losing funds. In this method, it is possible to enter privateKey or signatureId. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request. Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
+        /// </summary>
+        /// <param name="senderAccountId">Sender account ID</param>
+        /// <param name="address">Blockchain address to send assets</param>
+        /// <param name="amount">Amount to be sent, in BNB.</param>
+        /// <param name="compliant">Compliance check, if withdrawal is not compliant, it will not be processed.</param>
+        /// <param name="attr">Memo of the recipient account, if any.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="privateKey">Private key of sender address.</param>
+        /// <param name="signatureId">Identifier of the secret associated in signing application. Secret, or signature Id must be present.</param>
+        /// <param name="senderNote">Note visible to owner of withdrawing account.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendBNB(
+            string senderAccountId, string address, decimal amount,
+            bool? compliant = null, string attr = null, string paymentId = null,
+            string privateKey = null, string signatureId = null, string senderNote = null,
+            CancellationToken ct = default)
+            => OffchainBlockchain_SendBNB_Async(
+            senderAccountId, address, amount,
+            compliant, attr, paymentId,
+            privateKey, signatureId, senderNote, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Send BNB from Tatum ledger to blockchain<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send BNB or BNB Asset from account to account. This will create Tatum internal withdrawal request with ID. When every system works as expected, withdrawal request is marked as complete and transaction id is assigned to it.
+        /// - If BNB server connection is unavailable, withdrawal request is cancelled.
+        /// - If blockchain transfer is successful, but is it not possible to reach Tatum, transaction id of blockchain transaction is returned and withdrawal request must be completed manually, otherwise all other withdrawals will be pending.
+        /// It is possible to perform offchain to blockchain transaction for ledger accounts without blockchain address assigned to them.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and losing funds. In this method, it is possible to enter privateKey or signatureId. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request. Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
+        /// </summary>
+        /// <param name="senderAccountId">Sender account ID</param>
+        /// <param name="address">Blockchain address to send assets</param>
+        /// <param name="amount">Amount to be sent, in BNB.</param>
+        /// <param name="compliant">Compliance check, if withdrawal is not compliant, it will not be processed.</param>
+        /// <param name="attr">Memo of the recipient account, if any.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="privateKey">Private key of sender address.</param>
+        /// <param name="signatureId">Identifier of the secret associated in signing application. Secret, or signature Id must be present.</param>
+        /// <param name="senderNote">Note visible to owner of withdrawing account.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendBNB_Async(
+            string senderAccountId, string address, decimal amount,
+            bool? compliant = null, string attr = null, string paymentId = null,
+            string privateKey = null, string signatureId = null, string senderNote = null,
+            CancellationToken ct = default)
+        {
+            var credits = 10;
+            var ci = CultureInfo.InvariantCulture;
+            var parameters = new Dictionary<string, object>
+            {
+                { "senderAccountId", senderAccountId },
+                { "address", address },
+                { "amount", amount.ToString(ci) },
+            };
+            parameters.AddOptionalParameter("compliant", compliant);
+            parameters.AddOptionalParameter("attr", attr);
+            parameters.AddOptionalParameter("paymentId", paymentId);
+            parameters.AddOptionalParameter("privateKey", privateKey);
+            parameters.AddOptionalParameter("signatureId", signatureId);
+            parameters.AddOptionalParameter("senderNote", senderNote);
+
+            var url = GetUrl(string.Format(Endpoints_Offchain_Blockchain_BinanceTransfer));
+            var result = await SendTatumRequest<OffchainTransferResponse>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success/* || !result.Data.Completed*/) return WebCallResult<OffchainTransferResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<OffchainTransferResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Create BNB based Asset<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Create BNB-based Asset in Tatum Ledger. Asset must be created and configured on Binance blockhain before. Please see Create Asset. This API call will create Tatum internal Virtual Currency. It is possible to create Tatum ledger accounts with off-chain support.
+        /// </summary>
+        /// <param name="token">Asset name.</param>
+        /// <param name="basePair">Base pair for Asset. Transaction value will be calculated according to this base pair. e.g. 1 TOKEN123 is equal to 1 EUR, if basePair is set to EUR.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<bool> OffchainBlockchain_CreateBNBAsset(string token, string basePair, CancellationToken ct = default) => OffchainBlockchain_CreateBNBAsset_Async(token, basePair, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Create BNB based Asset<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Create BNB-based Asset in Tatum Ledger. Asset must be created and configured on Binance blockhain before. Please see Create Asset. This API call will create Tatum internal Virtual Currency. It is possible to create Tatum ledger accounts with off-chain support.
+        /// </summary>
+        /// <param name="token">Asset name.</param>
+        /// <param name="basePair">Base pair for Asset. Transaction value will be calculated according to this base pair. e.g. 1 TOKEN123 is equal to 1 EUR, if basePair is set to EUR.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<bool>> OffchainBlockchain_CreateBNBAsset_Async(string token, string basePair, CancellationToken ct = default)
+        {
+            var credits = 2;
+            var parameters = new Dictionary<string, object>
+            {
+                { "token", token },
+                { "basePair", basePair },
+            };
+
+            var url = GetUrl(string.Format(Endpoints_Offchain_Blockchain_CreateBNBAsset));
+            var result = await SendTatumRequest<string>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<bool>(result.ResponseStatusCode, result.ResponseHeaders, true, null);
+        }
         #endregion
 
         #region Off-chain / Withdrawal
-        // TODO: Off-chain / Withdrawal -> Store withdrawal
-        // TODO: Off-chain / Withdrawal -> Complete withdrawal
-        // TODO: Off-chain / Withdrawal -> Cancel withdrawal
-        // TODO: Off-chain / Withdrawal -> Broadcast signed transaction and complete withdrawal
+        /// <summary>
+        /// <b>Title:</b> Store withdrawal<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Create a withdrawal from Tatum Ledger account to the blockchain.<br />
+        /// <b>BTC, LTC, BCH</b><br />
+        /// When withdrawal from Tatum is executed, all deposits, which are not processed yet are used as an input and change is moved to pool address 0 of wallet for defined account's xpub. If there are no unspent deposits, only last pool address 0 UTXO is used. If balance of wallet is not sufficient, it is impossible to perform withdrawal from this account -> funds were transferred to another linked wallet within system or outside of Tatum visibility.<br />
+        /// For the first time of withdrawal from wallet, there must be some deposit made and funds are obtained from that.Since there is no withdrawal, there was no transfer to pool address 0 and thus it is not present in vIn.Pool transfer is identified by missing data.address property in response.When last not cancelled withdrawal is not completed and thus there is no tx id of output transaction given, we cannot perform next withdrawal.<br />
+        /// <b>ETH</b><br />
+        /// Withdrawal from Tatum can be processed only from 1 account.In Ethereum Blockchain, each address is recognized as an account and only funds from that account can be sent in 1 transaction.Example: Account A has 0.5 ETH, Account B has 0.3 ETH.Account A is linked to Tatum Account 1, Account B is linked to Tatum Account 2. Tatum Account 1 has balance 0.7 Ethereum and Tatum Account 2 has 0.1 ETH.Withdrawal from Tatum Account 1 can be at most 0.5 ETH, even though balance in Tatum Private Ledger is 0.7 ETH.Because of this Ethereum Blockchain limitation, withdrawal request should always contain sourceAddress, from which withdrawal will be made. To get available balances for Ethereoum wallet accounts, use hint endpoint.<br />
+        /// <b>XRP</b><br />
+        /// XRP withdrawal can contain DestinationTag except of address, which is placed in attr parameter of withdrawal request.SourceTag of the blockchain transaction should be withdrawal ID for autocomplete purposes of withdrawals.<br />
+        /// <b>XLM</b><br />
+        /// XLM withdrawal can contain memo except of address, which is placed in attr parameter of withdrawal request.XLM blockchain does not have possibility to enter source account information.It is possible to create memo in format 'destination|source', which is supported way of memo in Tatum and also there is information about the sender account in the blockchain.<br />
+        /// When withdrawal is created, all other withdrawals with the same currency are pending, unless the current one is marked as complete or cancelled.<br />
+        /// Tatum ledger transaction is created for every withdrawal request with operation type WITHDRAWAL.The value of the transaction is the withdrawal amount + blockchain fee, which should be paid. In the situation, when there is withdrawal for ERC20, XLM, or XRP based custom assets, the fee is not included in the transaction because it is paid in different assets than the withdrawal itself.<br />
+        /// </summary>
+        /// <param name="senderAccountId">Sender account ID</param>
+        /// <param name="address">Blockchain address to send assets to. For BTC, LTC and BCH, it is possible to enter list of multiple recipient blockchain addresses as a comma separated string.</param>
+        /// <param name="amount">Amount to be withdrawn to blockchain.</param>
+        /// <param name="attr">Used to parametrize withdrawal. Used for XRP withdrawal to define destination tag of recipient, or XLM memo of the recipient, if needed. For Bitcoin, Litecoin, Bitcoin Cash, used as a change address for left coins from transaction.</param>
+        /// <param name="compliant">Compliance check, if withdrawal is not compliant, it will not be processed.</param>
+        /// <param name="fee">Fee to be submitted as a transaction fee to blockchain.</param>
+        /// <param name="multipleAmounts">For BTC, LTC and BCH, it is possible to enter list of multiple recipient blockchain amounts. List of recipient addresses must be present in the address field and total sum of amounts must be equal to the amount field.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="senderNote">Note visible to owner of withdrawing account</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<OffchainWithdrawalResponse> OffchainWithdrawal_Request(
+            string senderAccountId, string address, decimal amount, string attr = null,
+            bool? compliant = null, decimal? fee = null, IEnumerable<string> multipleAmounts = null, string paymentId = null, string senderNote = null,
+            CancellationToken ct = default)
+            => OffchainWithdrawal_Request_Async(
+            senderAccountId, address, amount, attr,
+            compliant, fee, multipleAmounts, paymentId, senderNote,
+            ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Store withdrawal<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Create a withdrawal from Tatum Ledger account to the blockchain.<br />
+        /// <b>BTC, LTC, BCH</b><br />
+        /// When withdrawal from Tatum is executed, all deposits, which are not processed yet are used as an input and change is moved to pool address 0 of wallet for defined account's xpub. If there are no unspent deposits, only last pool address 0 UTXO is used. If balance of wallet is not sufficient, it is impossible to perform withdrawal from this account -> funds were transferred to another linked wallet within system or outside of Tatum visibility.<br />
+        /// For the first time of withdrawal from wallet, there must be some deposit made and funds are obtained from that.Since there is no withdrawal, there was no transfer to pool address 0 and thus it is not present in vIn.Pool transfer is identified by missing data.address property in response.When last not cancelled withdrawal is not completed and thus there is no tx id of output transaction given, we cannot perform next withdrawal.<br />
+        /// <b>ETH</b><br />
+        /// Withdrawal from Tatum can be processed only from 1 account.In Ethereum Blockchain, each address is recognized as an account and only funds from that account can be sent in 1 transaction.Example: Account A has 0.5 ETH, Account B has 0.3 ETH.Account A is linked to Tatum Account 1, Account B is linked to Tatum Account 2. Tatum Account 1 has balance 0.7 Ethereum and Tatum Account 2 has 0.1 ETH.Withdrawal from Tatum Account 1 can be at most 0.5 ETH, even though balance in Tatum Private Ledger is 0.7 ETH.Because of this Ethereum Blockchain limitation, withdrawal request should always contain sourceAddress, from which withdrawal will be made. To get available balances for Ethereoum wallet accounts, use hint endpoint.<br />
+        /// <b>XRP</b><br />
+        /// XRP withdrawal can contain DestinationTag except of address, which is placed in attr parameter of withdrawal request.SourceTag of the blockchain transaction should be withdrawal ID for autocomplete purposes of withdrawals.<br />
+        /// <b>XLM</b><br />
+        /// XLM withdrawal can contain memo except of address, which is placed in attr parameter of withdrawal request.XLM blockchain does not have possibility to enter source account information.It is possible to create memo in format 'destination|source', which is supported way of memo in Tatum and also there is information about the sender account in the blockchain.<br />
+        /// When withdrawal is created, all other withdrawals with the same currency are pending, unless the current one is marked as complete or cancelled.<br />
+        /// Tatum ledger transaction is created for every withdrawal request with operation type WITHDRAWAL.The value of the transaction is the withdrawal amount + blockchain fee, which should be paid. In the situation, when there is withdrawal for ERC20, XLM, or XRP based custom assets, the fee is not included in the transaction because it is paid in different assets than the withdrawal itself.<br />
+        /// </summary>
+        /// <param name="senderAccountId">Sender account ID</param>
+        /// <param name="address">Blockchain address to send assets to. For BTC, LTC and BCH, it is possible to enter list of multiple recipient blockchain addresses as a comma separated string.</param>
+        /// <param name="amount">Amount to be withdrawn to blockchain.</param>
+        /// <param name="attr">Used to parametrize withdrawal. Used for XRP withdrawal to define destination tag of recipient, or XLM memo of the recipient, if needed. For Bitcoin, Litecoin, Bitcoin Cash, used as a change address for left coins from transaction.</param>
+        /// <param name="compliant">Compliance check, if withdrawal is not compliant, it will not be processed.</param>
+        /// <param name="fee">Fee to be submitted as a transaction fee to blockchain.</param>
+        /// <param name="multipleAmounts">For BTC, LTC and BCH, it is possible to enter list of multiple recipient blockchain amounts. List of recipient addresses must be present in the address field and total sum of amounts must be equal to the amount field.</param>
+        /// <param name="paymentId">Identifier of the payment, shown for created Transaction within Tatum sender account.</param>
+        /// <param name="senderNote">Note visible to owner of withdrawing account</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<OffchainWithdrawalResponse>> OffchainWithdrawal_Request_Async(
+            string senderAccountId, string address, decimal amount, string attr = null,
+            bool? compliant = null, decimal? fee = null, IEnumerable<string> multipleAmounts = null, string paymentId = null, string senderNote = null,
+            CancellationToken ct = default)
+        {
+            var credits = 4;
+            var ci = CultureInfo.InvariantCulture;
+            var parameters = new Dictionary<string, object>
+            {
+                { "senderAccountId", senderAccountId },
+                { "address", address },
+                { "amount", amount.ToString(ci) },
+            };
+            parameters.AddOptionalParameter("attr", attr);
+            parameters.AddOptionalParameter("compliant", compliant);
+            parameters.AddOptionalParameter("fee", fee?.ToString(ci));
+
+            if (multipleAmounts != null)
+            {
+                var lst = new List<string>();
+                foreach (var ma in multipleAmounts) lst.Add(ma.ToString(ci));
+                parameters.AddOptionalParameter("multipleAmounts", lst);
+            }
+
+            parameters.AddOptionalParameter("paymentId", paymentId);
+            parameters.AddOptionalParameter("senderNote", senderNote);
+
+            var url = GetUrl(string.Format(Endpoints_Offchain_Withdrawal_Store));
+            var result = await SendTatumRequest<OffchainWithdrawalResponse>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success) return WebCallResult<OffchainWithdrawalResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<OffchainWithdrawalResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Complete withdrawal<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Invoke complete withdrawal as soon as blockchain transaction ID is available. All other withdrawals for the same currency will be pending unless the last one is processed and marked as completed.
+        /// </summary>
+        /// <param name="id">ID of created withdrawal</param>
+        /// <param name="txId">Blockchain transaction ID of created withdrawal</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<bool> OffchainWithdrawal_CompleteRequest(string id, string txId, CancellationToken ct = default) => OffchainWithdrawal_CompleteRequest_Async(id, txId, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Complete withdrawal<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Invoke complete withdrawal as soon as blockchain transaction ID is available. All other withdrawals for the same currency will be pending unless the last one is processed and marked as completed.
+        /// </summary>
+        /// <param name="id">ID of created withdrawal</param>
+        /// <param name="txId">Blockchain transaction ID of created withdrawal</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<bool>> OffchainWithdrawal_CompleteRequest_Async(string id, string txId, CancellationToken ct = default)
+        {
+            var credits = 2;
+            var url = GetUrl(string.Format(Endpoints_Offchain_Withdrawal_Complete, id, txId));
+            var result = await SendTatumRequest<string>(url, HttpMethod.Put, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+            if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<bool>(result.ResponseStatusCode, result.ResponseHeaders, true, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Cancel withdrawal<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// This method is helpful if you need to cancel the withdrawal if the blockchain transaction fails or is not yet processed. This does not cancel already broadcast blockchain transaction, only Tatum internal withdrawal, and the ledger transaction, that was linked to this withdrawal.
+        /// By default, the transaction fee is included in the reverted transaction.There are situations, like sending ERC20 on ETH, or XLM or XRP based assets, when the fee should not be reverted, because the fee is in calculated in Ethereum and transaction was in ERC20 currency.In this situation, only the transaction amount should be reverted, not the fee.
+        /// </summary>
+        /// <param name="id">ID of created withdrawal</param>
+        /// <param name="revert">Defines whether fee should be reverted to account balance as well as amount. Defaults to true. Revert true would be typically used when withdrawal was not broadcast to blockchain. False is used usually for Ethereum based currencies when gas was consumed but transaction was reverted.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<bool> OffchainWithdrawal_Cancel(string id, bool revert = true, CancellationToken ct = default) => OffchainWithdrawal_Cancel_Async(id, revert, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Cancel withdrawal<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// This method is helpful if you need to cancel the withdrawal if the blockchain transaction fails or is not yet processed. This does not cancel already broadcast blockchain transaction, only Tatum internal withdrawal, and the ledger transaction, that was linked to this withdrawal.
+        /// By default, the transaction fee is included in the reverted transaction.There are situations, like sending ERC20 on ETH, or XLM or XRP based assets, when the fee should not be reverted, because the fee is in calculated in Ethereum and transaction was in ERC20 currency.In this situation, only the transaction amount should be reverted, not the fee.
+        /// </summary>
+        /// <param name="id">ID of created withdrawal</param>
+        /// <param name="revert">Defines whether fee should be reverted to account balance as well as amount. Defaults to true. Revert true would be typically used when withdrawal was not broadcast to blockchain. False is used usually for Ethereum based currencies when gas was consumed but transaction was reverted.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<bool>> OffchainWithdrawal_Cancel_Async(string id, bool revert = true, CancellationToken ct = default)
+        {
+            var credits = 1;
+            var url = GetUrl(string.Format(Endpoints_Offchain_Withdrawal_Cancel, id));
+            var result = await SendTatumRequest<string>(url, HttpMethod.Delete, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+            if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<bool>(result.ResponseStatusCode, result.ResponseHeaders, true, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Broadcast signed transaction and complete withdrawal<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Broadcast signed raw transaction end complete withdrawal associated with it. When broadcast succeeded but it is impossible to complete withdrawal, transaction id of transaction is returned and withdrawal must be completed manually.
+        /// </summary>
+        /// <param name="currency">Currency of signed transaction to be broadcast, BTC, LTC, BCH, ETH, XRP, ERC20</param>
+        /// <param name="txData">Raw signed transaction to be published to network.</param>
+        /// <param name="withdrawalId">Withdrawal ID to be completed by transaction broadcast</param>
+        /// <param name="signatureId">ID of prepared payment template to sign. This is should be stored on a client side to retrieve ID of the blockchain transaction, when signing application signs the transaction and broadcasts it to the blockchain.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<OffchainResponse> OffchainWithdrawal_Broadcast(string currency, string txData, string withdrawalId, string signatureId, CancellationToken ct = default) => OffchainWithdrawal_Broadcast_Async(currency, txData, withdrawalId, signatureId, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Broadcast signed transaction and complete withdrawal<br />
+        /// <b>Credits:</b> 2 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Broadcast signed raw transaction end complete withdrawal associated with it. When broadcast succeeded but it is impossible to complete withdrawal, transaction id of transaction is returned and withdrawal must be completed manually.
+        /// </summary>
+        /// <param name="currency">Currency of signed transaction to be broadcast, BTC, LTC, BCH, ETH, XRP, ERC20</param>
+        /// <param name="txData">Raw signed transaction to be published to network.</param>
+        /// <param name="withdrawalId">Withdrawal ID to be completed by transaction broadcast</param>
+        /// <param name="signatureId">ID of prepared payment template to sign. This is should be stored on a client side to retrieve ID of the blockchain transaction, when signing application signs the transaction and broadcasts it to the blockchain.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<OffchainResponse>> OffchainWithdrawal_Broadcast_Async(string currency, string txData, string withdrawalId, string signatureId, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object> {
+                { "currency", currency },
+                { "txData", txData },
+            };
+            parameters.AddOptionalParameter("withdrawalId", withdrawalId);
+            parameters.AddOptionalParameter("signatureId", signatureId);
+
+            var credits = 2;
+            var url = GetUrl(string.Format(Endpoints_Offchain_Withdrawal_Broadcast));
+            var result = await SendTatumRequest<OffchainResponse>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success) return WebCallResult<OffchainResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<OffchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
+        }
         #endregion
 
         #region Blockchain / Shared (Bitcoin, BitcoinCash, Ethereum, Litecoin, Scrypta, VeChain)
@@ -982,8 +4104,8 @@ namespace Tatum.Net
             return await SendTatumRequest<BlockchainWallet>(url, HttpMethod.Get, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
         }
 
-        internal WebCallResult<BlockchainAddress> Blockchain_GenerateDepositAddress(BlockchainType chain, string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(chain, xpub, index, ct).Result;
-        internal async Task<WebCallResult<BlockchainAddress>> Blockchain_GenerateDepositAddress_Async(BlockchainType chain, string xpub, int index, CancellationToken ct = default)
+        internal WebCallResult<TatumAddress> Blockchain_GenerateDepositAddress(BlockchainType chain, string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(chain, xpub, index, ct).Result;
+        internal async Task<WebCallResult<TatumAddress>> Blockchain_GenerateDepositAddress_Async(BlockchainType chain, string xpub, int index, CancellationToken ct = default)
         {
             if (!chain.IsOneOf(
                 BlockchainType.Bitcoin,
@@ -1011,20 +4133,20 @@ namespace Tatum.Net
             if (chain == BlockchainType.Scrypta)
             {
                 var result = await SendTatumRequest<string>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
-                if (!result.Success) return WebCallResult<BlockchainAddress>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+                if (!result.Success) return WebCallResult<TatumAddress>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
 
-                return new WebCallResult<BlockchainAddress>(result.ResponseStatusCode, result.ResponseHeaders, new BlockchainAddress { Address = result.Data }, null);
+                return new WebCallResult<TatumAddress>(result.ResponseStatusCode, result.ResponseHeaders, new TatumAddress { Address = result.Data }, null);
             }
             else
             {
-                return await SendTatumRequest<BlockchainAddress>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+                return await SendTatumRequest<TatumAddress>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
             }
         }
 
-        internal WebCallResult<BlockchainKey> Blockchain_GeneratePrivateKey(BlockchainType chain, string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(chain, new List<string> { mnemonics }, index, ct).Result;
-        internal WebCallResult<BlockchainKey> Blockchain_GeneratePrivateKey(BlockchainType chain, IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(chain, mnemonics, index, ct).Result;
-        internal async Task<WebCallResult<BlockchainKey>> Blockchain_GeneratePrivateKey_Async(BlockchainType chain, string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(chain, new List<string> { mnemonics }, index, default);
-        internal async Task<WebCallResult<BlockchainKey>> Blockchain_GeneratePrivateKey_Async(BlockchainType chain, IEnumerable<string> mnemonics, int index, CancellationToken ct = default)
+        internal WebCallResult<TatumKey> Blockchain_GeneratePrivateKey(BlockchainType chain, string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(chain, new List<string> { mnemonics }, index, ct).Result;
+        internal WebCallResult<TatumKey> Blockchain_GeneratePrivateKey(BlockchainType chain, IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(chain, mnemonics, index, ct).Result;
+        internal async Task<WebCallResult<TatumKey>> Blockchain_GeneratePrivateKey_Async(BlockchainType chain, string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(chain, new List<string> { mnemonics }, index, default);
+        internal async Task<WebCallResult<TatumKey>> Blockchain_GeneratePrivateKey_Async(BlockchainType chain, IEnumerable<string> mnemonics, int index, CancellationToken ct = default)
         {
             if (!chain.IsOneOf(
                 BlockchainType.Bitcoin,
@@ -1053,7 +4175,7 @@ namespace Tatum.Net
 
             var ops = chain.GetBlockchainOptions();
             var url = GetUrl(string.Format(Endpoints_Blockchain_GenerateWalletPrivateKey, ops.ChainSlug));
-            return await SendTatumRequest<BlockchainKey>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            return await SendTatumRequest<TatumKey>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
         }
         #endregion
 
@@ -1129,7 +4251,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of desired address to be generated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainAddress> Bitcoin_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.Bitcoin, xpub, index, ct).Result;
+        public WebCallResult<TatumAddress> Bitcoin_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.Bitcoin, xpub, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin deposit address from Extended public key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -1140,7 +4262,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of desired address to be generated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainAddress>> Bitcoin_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.Bitcoin, xpub, index, ct);
+        public async Task<WebCallResult<TatumAddress>> Bitcoin_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.Bitcoin, xpub, index, ct);
 
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin private key<br />
@@ -1153,7 +4275,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainKey> Bitcoin_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Bitcoin, new List<string> { mnemonics }, index, ct).Result;
+        public WebCallResult<TatumKey> Bitcoin_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Bitcoin, new List<string> { mnemonics }, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin private key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -1165,7 +4287,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainKey> Bitcoin_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Bitcoin, mnemonics, index, ct).Result;
+        public WebCallResult<TatumKey> Bitcoin_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Bitcoin, mnemonics, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin private key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -1177,7 +4299,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainKey>> Bitcoin_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Bitcoin, new List<string> { mnemonics }, index, default);
+        public async Task<WebCallResult<TatumKey>> Bitcoin_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Bitcoin, new List<string> { mnemonics }, index, default);
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin private key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -1189,7 +4311,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainKey>> Bitcoin_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Bitcoin, mnemonics, index, default);
+        public async Task<WebCallResult<TatumKey>> Bitcoin_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Bitcoin, mnemonics, index, default);
 
         /// <summary>
         /// <b>Title:</b> Get Blockchain Information<br />
@@ -1224,7 +4346,7 @@ namespace Tatum.Net
         /// <param name="block_id">The number of blocks preceding a particular block on a block chain.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainHash> Bitcoin_GetBlockHash(long block_id, CancellationToken ct = default) => Bitcoin_GetBlockHash_Async(block_id, ct).Result;
+        public WebCallResult<TatumHash> Bitcoin_GetBlockHash(long block_id, CancellationToken ct = default) => Bitcoin_GetBlockHash_Async(block_id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Block hash<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -1234,11 +4356,11 @@ namespace Tatum.Net
         /// <param name="block_id">The number of blocks preceding a particular block on a block chain.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainHash>> Bitcoin_GetBlockHash_Async(long block_id, CancellationToken ct = default)
+        public async Task<WebCallResult<TatumHash>> Bitcoin_GetBlockHash_Async(long block_id, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Bitcoin_GetBlockHash, block_id));
-            return await SendTatumRequest<BlockchainHash>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+            return await SendTatumRequest<TatumHash>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1500,396 +4622,6 @@ namespace Tatum.Net
 
         #endregion
 
-        #region Blockchain / Bitcoin Cash
-        /// <summary>
-        /// <b>Title:</b> Generate Bitcoin Cash wallet<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Tatum supports BIP44 HD wallets. 
-        /// It is very convenient and secure, since it can generate 2^31 addresses from 1 mnemonic phrase. 
-        /// Mnemonic phrase consists of 24 special words in defined order and can restore access to all generated addresses and private keys.
-        /// Each address is identified by 3 main values:
-        /// - Private Key - your secret value, which should never be revealed
-        /// - Public Key - public address to be published
-        /// - Derivation index - index of generated address
-        /// Tatum follows BIP44 specification and generates for Bitcoin Cash wallet with derivation path m'/44'/145'/0'/0. 
-        /// More about BIP44 HD wallets can be found here - https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki. 
-        /// Generate BIP44 compatible Bitcoin Cash wallet.
-        /// </summary>
-        /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public WebCallResult<BlockchainWallet> BitcoinCash_GenerateWallet(string mnemonics, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.BitcoinCash, new List<string> { mnemonics }, ct).Result;
-        /// <summary>
-        /// <b>Title:</b> Generate Bitcoin Cash wallet<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Tatum supports BIP44 HD wallets. 
-        /// It is very convenient and secure, since it can generate 2^31 addresses from 1 mnemonic phrase. 
-        /// Mnemonic phrase consists of 24 special words in defined order and can restore access to all generated addresses and private keys.
-        /// Each address is identified by 3 main values:
-        /// - Private Key - your secret value, which should never be revealed
-        /// - Public Key - public address to be published
-        /// - Derivation index - index of generated address
-        /// Tatum follows BIP44 specification and generates for Bitcoin Cash wallet with derivation path m'/44'/145'/0'/0. 
-        /// More about BIP44 HD wallets can be found here - https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki. 
-        /// Generate BIP44 compatible Bitcoin Cash wallet.
-        /// </summary>
-        /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public WebCallResult<BlockchainWallet> BitcoinCash_GenerateWallet(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.BitcoinCash, mnemonics, ct).Result;
-        /// <summary>
-        /// <b>Title:</b> Generate Bitcoin Cash wallet<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Tatum supports BIP44 HD wallets. 
-        /// It is very convenient and secure, since it can generate 2^31 addresses from 1 mnemonic phrase. 
-        /// Mnemonic phrase consists of 24 special words in defined order and can restore access to all generated addresses and private keys.
-        /// Each address is identified by 3 main values:
-        /// - Private Key - your secret value, which should never be revealed
-        /// - Public Key - public address to be published
-        /// - Derivation index - index of generated address
-        /// Tatum follows BIP44 specification and generates for Bitcoin Cash wallet with derivation path m'/44'/145'/0'/0. 
-        /// More about BIP44 HD wallets can be found here - https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki. 
-        /// Generate BIP44 compatible Bitcoin Cash wallet.
-        /// </summary>
-        /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public async Task<WebCallResult<BlockchainWallet>> BitcoinCash_GenerateWallet_Async(string mnemonics, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.BitcoinCash, new List<string> { mnemonics }, ct);
-        /// <summary>
-        /// <b>Title:</b> Generate Bitcoin Cash wallet<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Tatum supports BIP44 HD wallets. 
-        /// It is very convenient and secure, since it can generate 2^31 addresses from 1 mnemonic phrase. 
-        /// Mnemonic phrase consists of 24 special words in defined order and can restore access to all generated addresses and private keys.
-        /// Each address is identified by 3 main values:
-        /// - Private Key - your secret value, which should never be revealed
-        /// - Public Key - public address to be published
-        /// - Derivation index - index of generated address
-        /// Tatum follows BIP44 specification and generates for Bitcoin Cash wallet with derivation path m'/44'/145'/0'/0. 
-        /// More about BIP44 HD wallets can be found here - https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki. 
-        /// Generate BIP44 compatible Bitcoin Cash wallet.
-        /// </summary>
-        /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public async Task<WebCallResult<BlockchainWallet>> BitcoinCash_GenerateWallet_Async(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.BitcoinCash, mnemonics, ct);
-
-        /// <summary>
-        /// <b>Title:</b> Get Bitcoin Cash Blockchain Information<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Get Bitcoin Cash Blockchain Information. Obtain basic info like testnet / mainent version of the chain, current block number and it's hash.
-        /// </summary>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public WebCallResult<BitcoinCashChainInfo> BitcoinCash_GetBlockchainInformation(CancellationToken ct = default) => BitcoinCash_GetBlockchainInformation_Async(ct).Result;
-        /// <b>Title:</b> Get Bitcoin Cash Blockchain Information<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Get Bitcoin Cash Blockchain Information. Obtain basic info like testnet / mainent version of the chain, current block number and it's hash.
-        /// </summary>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public async Task<WebCallResult<BitcoinCashChainInfo>> BitcoinCash_GetBlockchainInformation_Async(CancellationToken ct = default)
-        {
-            var credits = 5;
-            var url = GetUrl(string.Format(Endpoints_BitcoinCash_BlockchainInformation));
-            return await SendTatumRequest<BitcoinCashChainInfo>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// <b>Title:</b> Get Bitcoin Cash Block hash<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Get Bitcoin Cash Block hash. Returns hash of the block to get the block detail.
-        /// </summary>
-        /// <param name="block_id">Block hash or height</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public WebCallResult<BlockchainHash> BitcoinCash_GetBlockHash(long block_id, CancellationToken ct = default) => BitcoinCash_GetBlockHash_Async(block_id, ct).Result;
-        /// <summary>
-        /// <b>Title:</b> Get Bitcoin Cash Block hash<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Get Bitcoin Cash Block hash. Returns hash of the block to get the block detail.
-        /// </summary>
-        /// <param name="block_id">Block hash or height</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public async Task<WebCallResult<BlockchainHash>> BitcoinCash_GetBlockHash_Async(long block_id, CancellationToken ct = default)
-        {
-            var credits = 5;
-            var url = GetUrl(string.Format(Endpoints_BitcoinCash_GetBlockHash, block_id));
-            return await SendTatumRequest<BlockchainHash>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// <b>Title:</b> Get Bitcoin Cash Block by hash<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Get Bitcoin Cash Block detail by block hash or height.
-        /// </summary>
-        /// <param name="hash_height"></param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public WebCallResult<BitcoinCashBlock> BitcoinCash_GetBlock(string hash_height, CancellationToken ct = default) => BitcoinCash_GetBlock_Async(hash_height, ct).Result;
-        /// <summary>
-        /// <b>Title:</b> Get Bitcoin Cash Block by hash<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Get Bitcoin Cash Block detail by block hash or height.
-        /// </summary>
-        /// <param name="hash_height"></param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public async Task<WebCallResult<BitcoinCashBlock>> BitcoinCash_GetBlock_Async(string hash_height, CancellationToken ct = default)
-        {
-            var credits = 5;
-            var url = GetUrl(string.Format(Endpoints_BitcoinCash_GetBlockByHash, hash_height));
-            return await SendTatumRequest<BitcoinCashBlock>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// <b>Title:</b> Get Bitcoin Cash Transaction by hash<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Get Bitcoin Cash Transaction by transaction hash.
-        /// </summary>
-        /// <param name="hash">Transaction hash</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public WebCallResult<BitcoinCashTransaction> BitcoinCash_GetTransactionByHash(string hash, CancellationToken ct = default) => BitcoinCash_GetTransactionByHash_Async(hash, ct).Result;
-        /// <summary>
-        /// <b>Title:</b> Get Bitcoin Cash Transaction by hash<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Get Bitcoin Cash Transaction by transaction hash.
-        /// </summary>
-        /// <param name="hash">Transaction hash</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public async Task<WebCallResult<BitcoinCashTransaction>> BitcoinCash_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
-        {
-            var credits = 5;
-            var url = GetUrl(string.Format(Endpoints_BitcoinCash_GetTransactionByHash, hash));
-            return await SendTatumRequest<BitcoinCashTransaction>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// <b>Title:</b> Get Bitcoin Cash Transactions by address<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Get Bitcoin Cash Transaction by address. Limit is 50 transaction per response.
-        /// </summary>
-        /// <param name="address">Address</param>
-        /// <param name="skip">Define, how much transactions should be skipped to obtain another page.</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public WebCallResult<IEnumerable<BitcoinCashTransaction>> BitcoinCash_GetTransactionsByAddress(string address, int skip = 0, CancellationToken ct = default) => BitcoinCash_GetTransactionsByAddress_Async(address, skip, ct).Result;
-        /// <summary>
-        /// <b>Title:</b> Get Bitcoin Cash Transactions by address<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Get Bitcoin Cash Transaction by address. Limit is 50 transaction per response.
-        /// </summary>
-        /// <param name="address">Address</param>
-        /// <param name="skip">Define, how much transactions should be skipped to obtain another page.</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<BitcoinCashTransaction>>> BitcoinCash_GetTransactionsByAddress_Async(string address, int skip = 0, CancellationToken ct = default)
-        {
-            var parameters = new Dictionary<string, object> {
-                { "skip", skip },
-            };
-
-            var credits = 5;
-            var url = GetUrl(string.Format(Endpoints_BitcoinCash_GetTransactionsByAddress, address));
-            return await SendTatumRequest<IEnumerable<BitcoinCashTransaction>>(url, HttpMethod.Get, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// <b>Title:</b> Generate Bitcoin Cash deposit address from Extended public key<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Generate Bitcoin Cash deposit address from Extended public key. 
-        /// Deposit address is generated for the specific index - each extended public key can generate up to 2^32 addresses starting from index 0 until 2^31. 
-        /// Generates new format of address starting with bitcoincash: in case of mainnet, bchtest: in case of testnet..
-        /// </summary>
-        /// <param name="xpub">Extended public key of wallet.</param>
-        /// <param name="index">Derivation index of desired address to be generated.</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public WebCallResult<BlockchainAddress> BitcoinCash_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.BitcoinCash, xpub, index, ct).Result;
-        /// <summary>
-        /// <b>Title:</b> Generate Bitcoin Cash deposit address from Extended public key<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Generate Bitcoin Cash deposit address from Extended public key. 
-        /// Deposit address is generated for the specific index - each extended public key can generate up to 2^32 addresses starting from index 0 until 2^31. 
-        /// Generates new format of address starting with bitcoincash: in case of mainnet, bchtest: in case of testnet..
-        /// </summary>
-        /// <param name="xpub">Extended public key of wallet.</param>
-        /// <param name="index">Derivation index of desired address to be generated.</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public async Task<WebCallResult<BlockchainAddress>> BitcoinCash_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.BitcoinCash, xpub, index, ct);
-
-        /// <summary>
-        /// <b>Title:</b> Generate Bitcoin Cash private key<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Generate private key for address from mnemonic for given derivation path index. 
-        /// Private key is generated for the specific index - each mnemonic can generate up to 2^32 private keys starting from index 0 until 2^31.
-        /// </summary>
-        /// <param name="mnemonics">Mnemonic to generate private key from.</param>
-        /// <param name="index">Derivation index of private key to generate.</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public WebCallResult<BlockchainKey> BitcoinCash_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.BitcoinCash, new List<string> { mnemonics }, index, ct).Result;
-        /// <summary>
-        /// <b>Title:</b> Generate Bitcoin Cash private key<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Generate private key for address from mnemonic for given derivation path index. 
-        /// Private key is generated for the specific index - each mnemonic can generate up to 2^32 private keys starting from index 0 until 2^31.
-        /// </summary>
-        /// <param name="mnemonics">Mnemonic to generate private key from.</param>
-        /// <param name="index">Derivation index of private key to generate.</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public WebCallResult<BlockchainKey> BitcoinCash_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.BitcoinCash, mnemonics, index, ct).Result;
-        /// <summary>
-        /// <b>Title:</b> Generate Bitcoin Cash private key<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Generate private key for address from mnemonic for given derivation path index. 
-        /// Private key is generated for the specific index - each mnemonic can generate up to 2^32 private keys starting from index 0 until 2^31.
-        /// </summary>
-        /// <param name="mnemonics">Mnemonic to generate private key from.</param>
-        /// <param name="index">Derivation index of private key to generate.</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public async Task<WebCallResult<BlockchainKey>> BitcoinCash_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.BitcoinCash, new List<string> { mnemonics }, index, default);
-        /// <summary>
-        /// <b>Title:</b> Generate Bitcoin Cash private key<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Generate private key for address from mnemonic for given derivation path index. 
-        /// Private key is generated for the specific index - each mnemonic can generate up to 2^32 private keys starting from index 0 until 2^31.
-        /// </summary>
-        /// <param name="mnemonics">Mnemonic to generate private key from.</param>
-        /// <param name="index">Derivation index of private key to generate.</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public async Task<WebCallResult<BlockchainKey>> BitcoinCash_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.BitcoinCash, mnemonics, index, default);
-
-        /// <summary>
-        /// <b>Title:</b> Send Bitcoin Cash to blockchain addresses<br />
-        /// <b>Credits:</b> 10 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Send Bitcoin Cash to blockchain addresses. It is possible to build a blockchain transaction in 1 way:
-        /// - fromUTXO - assets will be sent from the list of unspent UTXOs.Each of the UTXO will be included in the transaction.
-        /// In bitcoin-like blockchains, transaction is created from the list of previously not spent UTXO.
-        /// Every UTXO contains amount of funds, which can be spent. When the UTXO enters into the transaction, the whole amount is included and must be spent.
-        /// For example, address A receives 2 transactions, T1 with 1 BCH and T2 with 2 BCH.The transaction, which will consume UTXOs for T1 and T2, will have available amount to spent 3 BCH = 1 BCH (T1) + 2 BCH(T2).
-        /// There can be multiple recipients of the transactions, not only one.In the to section, every recipient address has it's corresponding amount. 
-        /// When the amount of funds, that should receive the recipient is lower than the amount of funds from the UTXOs, the difference is used as a transaction fee.
-        /// This operation needs the private key of the blockchain address.
-        /// Every time the funds are transferred, the transaction must be signed with the corresponding private key.
-        /// No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds.
-        /// In this method, it is possible to enter privateKey or signatureId. 
-        /// PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds.
-        /// In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request.
-        /// Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
-        /// </summary>
-        /// <param name="fromUTXO">Array of transaction hashes, index of UTXO in it and corresponding private keys. Use this option if you want to calculate amount to send manually. Either fromUTXO or fromAddress must be present.</param>
-        /// <param name="to">Array of addresses and values to send bitcoins to. Values must be set in BCH. Difference between from and to is transaction fee.</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public WebCallResult<BlockchainResponse> BitcoinCash_Send(IEnumerable<BitcoinCashSendOrderFromUTXO> fromUTXO, IEnumerable<BitcoinCashSendOrderTo> to, CancellationToken ct = default) => BitcoinCash_Send_Async(fromUTXO, to, ct).Result;
-        /// <summary>
-        /// <b>Title:</b> Send Bitcoin Cash to blockchain addresses<br />
-        /// <b>Credits:</b> 10 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Send Bitcoin Cash to blockchain addresses. It is possible to build a blockchain transaction in 1 way:
-        /// - fromUTXO - assets will be sent from the list of unspent UTXOs.Each of the UTXO will be included in the transaction.
-        /// In bitcoin-like blockchains, transaction is created from the list of previously not spent UTXO.
-        /// Every UTXO contains amount of funds, which can be spent. When the UTXO enters into the transaction, the whole amount is included and must be spent.
-        /// For example, address A receives 2 transactions, T1 with 1 BCH and T2 with 2 BCH.The transaction, which will consume UTXOs for T1 and T2, will have available amount to spent 3 BCH = 1 BCH (T1) + 2 BCH(T2).
-        /// There can be multiple recipients of the transactions, not only one.In the to section, every recipient address has it's corresponding amount. 
-        /// When the amount of funds, that should receive the recipient is lower than the amount of funds from the UTXOs, the difference is used as a transaction fee.
-        /// This operation needs the private key of the blockchain address.
-        /// Every time the funds are transferred, the transaction must be signed with the corresponding private key.
-        /// No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds.
-        /// In this method, it is possible to enter privateKey or signatureId. 
-        /// PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds.
-        /// In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request.
-        /// Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
-        /// </summary>
-        /// <param name="fromUTXO">Array of transaction hashes, index of UTXO in it and corresponding private keys. Use this option if you want to calculate amount to send manually. Either fromUTXO or fromAddress must be present.</param>
-        /// <param name="to">Array of addresses and values to send bitcoins to. Values must be set in BCH. Difference between from and to is transaction fee.</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> BitcoinCash_Send_Async(IEnumerable<BitcoinCashSendOrderFromUTXO> fromUTXO, IEnumerable<BitcoinCashSendOrderTo> to, CancellationToken ct = default)
-        {
-            var parameters = new Dictionary<string, object> {
-                { "fromUTXO", fromUTXO },
-                { "to", to },
-            };
-
-            var credits = 10;
-            var url = GetUrl(string.Format(Endpoints_BitcoinCash_Transaction));
-            var result = await SendTatumRequest<BlockchainResponse>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
-            if (!result.Success || result.Data.Failed) return WebCallResult<BlockchainResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
-
-            return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
-        }
-
-        /// <summary>
-        /// <b>Title:</b> Broadcast signed Bitcoin Cash transaction<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Broadcast signed transaction to Bitcoin Cash blockchain.
-        /// This method is used internally from Tatum KMS, Tatum Middleware or Tatum client libraries.
-        /// It is possible to create custom signing mechanism and use this method only for broadcasting data to the blockchian.
-        /// </summary>
-        /// <param name="txData">Raw signed transaction to be published to network.</param>
-        /// <param name="signatureId">ID of prepared payment template to sign. Required only, when broadcasting transaction signed by Tatum KMS.</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public WebCallResult<BlockchainResponse> BitcoinCash_Broadcast(string txData, string signatureId, CancellationToken ct = default) => BitcoinCash_Broadcast_Async(txData, signatureId, ct).Result;
-        /// <summary>
-        /// <b>Title:</b> Broadcast signed Bitcoin Cash transaction<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Broadcast signed transaction to Bitcoin Cash blockchain.
-        /// This method is used internally from Tatum KMS, Tatum Middleware or Tatum client libraries.
-        /// It is possible to create custom signing mechanism and use this method only for broadcasting data to the blockchian.
-        /// </summary>
-        /// <param name="txData">Raw signed transaction to be published to network.</param>
-        /// <param name="signatureId">ID of prepared payment template to sign. Required only, when broadcasting transaction signed by Tatum KMS.</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> BitcoinCash_Broadcast_Async(string txData, string signatureId, CancellationToken ct = default)
-        {
-            var parameters = new Dictionary<string, object> {
-                { "txData", txData },
-            };
-            parameters.AddOptionalParameter("signatureId", signatureId);
-
-            var credits = 5;
-            var url = GetUrl(string.Format(Endpoints_BitcoinCash_Broadcast));
-            var result = await SendTatumRequest<BlockchainResponse>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
-            if (!result.Success || result.Data.Failed) return WebCallResult<BlockchainResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
-
-            return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
-        }
-        #endregion
-
         #region Blockchain / Ethereum
         /// <summary>
         /// <b>Title:</b> Generate Ethereum wallet<br />
@@ -1979,7 +4711,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of desired address to be generated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainAddress> Ethereum_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.Ethereum, xpub, index, ct).Result;
+        public WebCallResult<TatumAddress> Ethereum_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.Ethereum, xpub, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Ethereum account address from Extended public key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -1991,7 +4723,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of desired address to be generated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainAddress>> Ethereum_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.Ethereum, xpub, index, ct);
+        public async Task<WebCallResult<TatumAddress>> Ethereum_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.Ethereum, xpub, index, ct);
 
         /// <summary>
         /// <b>Title:</b> Generate Ethereum private key<br />
@@ -2004,7 +4736,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainKey> Ethereum_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Ethereum, new List<string> { mnemonics }, index, ct).Result;
+        public WebCallResult<TatumKey> Ethereum_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Ethereum, new List<string> { mnemonics }, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Ethereum private key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -2016,7 +4748,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainKey> Ethereum_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Ethereum, mnemonics, index, ct).Result;
+        public WebCallResult<TatumKey> Ethereum_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Ethereum, mnemonics, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Ethereum private key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -2028,7 +4760,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainKey>> Ethereum_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Ethereum, new List<string> { mnemonics }, index, default);
+        public async Task<WebCallResult<TatumKey>> Ethereum_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Ethereum, new List<string> { mnemonics }, index, default);
         /// <summary>
         /// <b>Title:</b> Generate Ethereum private key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -2040,7 +4772,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainKey>> Ethereum_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Ethereum, mnemonics, index, default);
+        public async Task<WebCallResult<TatumKey>> Ethereum_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Ethereum, mnemonics, index, default);
 
         /// <summary>
         /// <b>Title:</b> Web3 HTTP driver<br />
@@ -3254,6 +5986,396 @@ namespace Tatum.Net
         }
         #endregion
 
+        #region Blockchain / Bitcoin Cash
+        /// <summary>
+        /// <b>Title:</b> Generate Bitcoin Cash wallet<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Tatum supports BIP44 HD wallets. 
+        /// It is very convenient and secure, since it can generate 2^31 addresses from 1 mnemonic phrase. 
+        /// Mnemonic phrase consists of 24 special words in defined order and can restore access to all generated addresses and private keys.
+        /// Each address is identified by 3 main values:
+        /// - Private Key - your secret value, which should never be revealed
+        /// - Public Key - public address to be published
+        /// - Derivation index - index of generated address
+        /// Tatum follows BIP44 specification and generates for Bitcoin Cash wallet with derivation path m'/44'/145'/0'/0. 
+        /// More about BIP44 HD wallets can be found here - https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki. 
+        /// Generate BIP44 compatible Bitcoin Cash wallet.
+        /// </summary>
+        /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<BlockchainWallet> BitcoinCash_GenerateWallet(string mnemonics, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.BitcoinCash, new List<string> { mnemonics }, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Generate Bitcoin Cash wallet<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Tatum supports BIP44 HD wallets. 
+        /// It is very convenient and secure, since it can generate 2^31 addresses from 1 mnemonic phrase. 
+        /// Mnemonic phrase consists of 24 special words in defined order and can restore access to all generated addresses and private keys.
+        /// Each address is identified by 3 main values:
+        /// - Private Key - your secret value, which should never be revealed
+        /// - Public Key - public address to be published
+        /// - Derivation index - index of generated address
+        /// Tatum follows BIP44 specification and generates for Bitcoin Cash wallet with derivation path m'/44'/145'/0'/0. 
+        /// More about BIP44 HD wallets can be found here - https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki. 
+        /// Generate BIP44 compatible Bitcoin Cash wallet.
+        /// </summary>
+        /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<BlockchainWallet> BitcoinCash_GenerateWallet(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.BitcoinCash, mnemonics, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Generate Bitcoin Cash wallet<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Tatum supports BIP44 HD wallets. 
+        /// It is very convenient and secure, since it can generate 2^31 addresses from 1 mnemonic phrase. 
+        /// Mnemonic phrase consists of 24 special words in defined order and can restore access to all generated addresses and private keys.
+        /// Each address is identified by 3 main values:
+        /// - Private Key - your secret value, which should never be revealed
+        /// - Public Key - public address to be published
+        /// - Derivation index - index of generated address
+        /// Tatum follows BIP44 specification and generates for Bitcoin Cash wallet with derivation path m'/44'/145'/0'/0. 
+        /// More about BIP44 HD wallets can be found here - https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki. 
+        /// Generate BIP44 compatible Bitcoin Cash wallet.
+        /// </summary>
+        /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<BlockchainWallet>> BitcoinCash_GenerateWallet_Async(string mnemonics, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.BitcoinCash, new List<string> { mnemonics }, ct);
+        /// <summary>
+        /// <b>Title:</b> Generate Bitcoin Cash wallet<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Tatum supports BIP44 HD wallets. 
+        /// It is very convenient and secure, since it can generate 2^31 addresses from 1 mnemonic phrase. 
+        /// Mnemonic phrase consists of 24 special words in defined order and can restore access to all generated addresses and private keys.
+        /// Each address is identified by 3 main values:
+        /// - Private Key - your secret value, which should never be revealed
+        /// - Public Key - public address to be published
+        /// - Derivation index - index of generated address
+        /// Tatum follows BIP44 specification and generates for Bitcoin Cash wallet with derivation path m'/44'/145'/0'/0. 
+        /// More about BIP44 HD wallets can be found here - https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki. 
+        /// Generate BIP44 compatible Bitcoin Cash wallet.
+        /// </summary>
+        /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<BlockchainWallet>> BitcoinCash_GenerateWallet_Async(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.BitcoinCash, mnemonics, ct);
+
+        /// <summary>
+        /// <b>Title:</b> Get Bitcoin Cash Blockchain Information<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get Bitcoin Cash Blockchain Information. Obtain basic info like testnet / mainent version of the chain, current block number and it's hash.
+        /// </summary>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<BitcoinCashChainInfo> BitcoinCash_GetBlockchainInformation(CancellationToken ct = default) => BitcoinCash_GetBlockchainInformation_Async(ct).Result;
+        /// <b>Title:</b> Get Bitcoin Cash Blockchain Information<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get Bitcoin Cash Blockchain Information. Obtain basic info like testnet / mainent version of the chain, current block number and it's hash.
+        /// </summary>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<BitcoinCashChainInfo>> BitcoinCash_GetBlockchainInformation_Async(CancellationToken ct = default)
+        {
+            var credits = 5;
+            var url = GetUrl(string.Format(Endpoints_BitcoinCash_BlockchainInformation));
+            return await SendTatumRequest<BitcoinCashChainInfo>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Get Bitcoin Cash Block hash<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get Bitcoin Cash Block hash. Returns hash of the block to get the block detail.
+        /// </summary>
+        /// <param name="block_id">Block hash or height</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<TatumHash> BitcoinCash_GetBlockHash(long block_id, CancellationToken ct = default) => BitcoinCash_GetBlockHash_Async(block_id, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Get Bitcoin Cash Block hash<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get Bitcoin Cash Block hash. Returns hash of the block to get the block detail.
+        /// </summary>
+        /// <param name="block_id">Block hash or height</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<TatumHash>> BitcoinCash_GetBlockHash_Async(long block_id, CancellationToken ct = default)
+        {
+            var credits = 5;
+            var url = GetUrl(string.Format(Endpoints_BitcoinCash_GetBlockHash, block_id));
+            return await SendTatumRequest<TatumHash>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Get Bitcoin Cash Block by hash<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get Bitcoin Cash Block detail by block hash or height.
+        /// </summary>
+        /// <param name="hash_height"></param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<BitcoinCashBlock> BitcoinCash_GetBlock(string hash_height, CancellationToken ct = default) => BitcoinCash_GetBlock_Async(hash_height, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Get Bitcoin Cash Block by hash<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get Bitcoin Cash Block detail by block hash or height.
+        /// </summary>
+        /// <param name="hash_height"></param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<BitcoinCashBlock>> BitcoinCash_GetBlock_Async(string hash_height, CancellationToken ct = default)
+        {
+            var credits = 5;
+            var url = GetUrl(string.Format(Endpoints_BitcoinCash_GetBlockByHash, hash_height));
+            return await SendTatumRequest<BitcoinCashBlock>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Get Bitcoin Cash Transaction by hash<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get Bitcoin Cash Transaction by transaction hash.
+        /// </summary>
+        /// <param name="hash">Transaction hash</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<BitcoinCashTransaction> BitcoinCash_GetTransactionByHash(string hash, CancellationToken ct = default) => BitcoinCash_GetTransactionByHash_Async(hash, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Get Bitcoin Cash Transaction by hash<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get Bitcoin Cash Transaction by transaction hash.
+        /// </summary>
+        /// <param name="hash">Transaction hash</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<BitcoinCashTransaction>> BitcoinCash_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
+        {
+            var credits = 5;
+            var url = GetUrl(string.Format(Endpoints_BitcoinCash_GetTransactionByHash, hash));
+            return await SendTatumRequest<BitcoinCashTransaction>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Get Bitcoin Cash Transactions by address<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get Bitcoin Cash Transaction by address. Limit is 50 transaction per response.
+        /// </summary>
+        /// <param name="address">Address</param>
+        /// <param name="skip">Define, how much transactions should be skipped to obtain another page.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<IEnumerable<BitcoinCashTransaction>> BitcoinCash_GetTransactionsByAddress(string address, int skip = 0, CancellationToken ct = default) => BitcoinCash_GetTransactionsByAddress_Async(address, skip, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Get Bitcoin Cash Transactions by address<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get Bitcoin Cash Transaction by address. Limit is 50 transaction per response.
+        /// </summary>
+        /// <param name="address">Address</param>
+        /// <param name="skip">Define, how much transactions should be skipped to obtain another page.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<IEnumerable<BitcoinCashTransaction>>> BitcoinCash_GetTransactionsByAddress_Async(string address, int skip = 0, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object> {
+                { "skip", skip },
+            };
+
+            var credits = 5;
+            var url = GetUrl(string.Format(Endpoints_BitcoinCash_GetTransactionsByAddress, address));
+            return await SendTatumRequest<IEnumerable<BitcoinCashTransaction>>(url, HttpMethod.Get, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Generate Bitcoin Cash deposit address from Extended public key<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Generate Bitcoin Cash deposit address from Extended public key. 
+        /// Deposit address is generated for the specific index - each extended public key can generate up to 2^32 addresses starting from index 0 until 2^31. 
+        /// Generates new format of address starting with bitcoincash: in case of mainnet, bchtest: in case of testnet..
+        /// </summary>
+        /// <param name="xpub">Extended public key of wallet.</param>
+        /// <param name="index">Derivation index of desired address to be generated.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<TatumAddress> BitcoinCash_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.BitcoinCash, xpub, index, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Generate Bitcoin Cash deposit address from Extended public key<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Generate Bitcoin Cash deposit address from Extended public key. 
+        /// Deposit address is generated for the specific index - each extended public key can generate up to 2^32 addresses starting from index 0 until 2^31. 
+        /// Generates new format of address starting with bitcoincash: in case of mainnet, bchtest: in case of testnet..
+        /// </summary>
+        /// <param name="xpub">Extended public key of wallet.</param>
+        /// <param name="index">Derivation index of desired address to be generated.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<TatumAddress>> BitcoinCash_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.BitcoinCash, xpub, index, ct);
+
+        /// <summary>
+        /// <b>Title:</b> Generate Bitcoin Cash private key<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Generate private key for address from mnemonic for given derivation path index. 
+        /// Private key is generated for the specific index - each mnemonic can generate up to 2^32 private keys starting from index 0 until 2^31.
+        /// </summary>
+        /// <param name="mnemonics">Mnemonic to generate private key from.</param>
+        /// <param name="index">Derivation index of private key to generate.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<TatumKey> BitcoinCash_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.BitcoinCash, new List<string> { mnemonics }, index, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Generate Bitcoin Cash private key<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Generate private key for address from mnemonic for given derivation path index. 
+        /// Private key is generated for the specific index - each mnemonic can generate up to 2^32 private keys starting from index 0 until 2^31.
+        /// </summary>
+        /// <param name="mnemonics">Mnemonic to generate private key from.</param>
+        /// <param name="index">Derivation index of private key to generate.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<TatumKey> BitcoinCash_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.BitcoinCash, mnemonics, index, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Generate Bitcoin Cash private key<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Generate private key for address from mnemonic for given derivation path index. 
+        /// Private key is generated for the specific index - each mnemonic can generate up to 2^32 private keys starting from index 0 until 2^31.
+        /// </summary>
+        /// <param name="mnemonics">Mnemonic to generate private key from.</param>
+        /// <param name="index">Derivation index of private key to generate.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<TatumKey>> BitcoinCash_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.BitcoinCash, new List<string> { mnemonics }, index, default);
+        /// <summary>
+        /// <b>Title:</b> Generate Bitcoin Cash private key<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Generate private key for address from mnemonic for given derivation path index. 
+        /// Private key is generated for the specific index - each mnemonic can generate up to 2^32 private keys starting from index 0 until 2^31.
+        /// </summary>
+        /// <param name="mnemonics">Mnemonic to generate private key from.</param>
+        /// <param name="index">Derivation index of private key to generate.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<TatumKey>> BitcoinCash_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.BitcoinCash, mnemonics, index, default);
+
+        /// <summary>
+        /// <b>Title:</b> Send Bitcoin Cash to blockchain addresses<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send Bitcoin Cash to blockchain addresses. It is possible to build a blockchain transaction in 1 way:
+        /// - fromUTXO - assets will be sent from the list of unspent UTXOs.Each of the UTXO will be included in the transaction.
+        /// In bitcoin-like blockchains, transaction is created from the list of previously not spent UTXO.
+        /// Every UTXO contains amount of funds, which can be spent. When the UTXO enters into the transaction, the whole amount is included and must be spent.
+        /// For example, address A receives 2 transactions, T1 with 1 BCH and T2 with 2 BCH.The transaction, which will consume UTXOs for T1 and T2, will have available amount to spent 3 BCH = 1 BCH (T1) + 2 BCH(T2).
+        /// There can be multiple recipients of the transactions, not only one.In the to section, every recipient address has it's corresponding amount. 
+        /// When the amount of funds, that should receive the recipient is lower than the amount of funds from the UTXOs, the difference is used as a transaction fee.
+        /// This operation needs the private key of the blockchain address.
+        /// Every time the funds are transferred, the transaction must be signed with the corresponding private key.
+        /// No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds.
+        /// In this method, it is possible to enter privateKey or signatureId. 
+        /// PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds.
+        /// In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request.
+        /// Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
+        /// </summary>
+        /// <param name="fromUTXO">Array of transaction hashes, index of UTXO in it and corresponding private keys. Use this option if you want to calculate amount to send manually. Either fromUTXO or fromAddress must be present.</param>
+        /// <param name="to">Array of addresses and values to send bitcoins to. Values must be set in BCH. Difference between from and to is transaction fee.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<BlockchainResponse> BitcoinCash_Send(IEnumerable<BitcoinCashSendOrderFromUTXO> fromUTXO, IEnumerable<BitcoinCashSendOrderTo> to, CancellationToken ct = default) => BitcoinCash_Send_Async(fromUTXO, to, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Send Bitcoin Cash to blockchain addresses<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send Bitcoin Cash to blockchain addresses. It is possible to build a blockchain transaction in 1 way:
+        /// - fromUTXO - assets will be sent from the list of unspent UTXOs.Each of the UTXO will be included in the transaction.
+        /// In bitcoin-like blockchains, transaction is created from the list of previously not spent UTXO.
+        /// Every UTXO contains amount of funds, which can be spent. When the UTXO enters into the transaction, the whole amount is included and must be spent.
+        /// For example, address A receives 2 transactions, T1 with 1 BCH and T2 with 2 BCH.The transaction, which will consume UTXOs for T1 and T2, will have available amount to spent 3 BCH = 1 BCH (T1) + 2 BCH(T2).
+        /// There can be multiple recipients of the transactions, not only one.In the to section, every recipient address has it's corresponding amount. 
+        /// When the amount of funds, that should receive the recipient is lower than the amount of funds from the UTXOs, the difference is used as a transaction fee.
+        /// This operation needs the private key of the blockchain address.
+        /// Every time the funds are transferred, the transaction must be signed with the corresponding private key.
+        /// No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds.
+        /// In this method, it is possible to enter privateKey or signatureId. 
+        /// PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds.
+        /// In production, Tatum KMS should be used for the highest security standards, and signatureId should be present in the request.
+        /// Alternatively, using the Tatum client library for supported languages or Tatum Middleware with a custom key management system is possible.
+        /// </summary>
+        /// <param name="fromUTXO">Array of transaction hashes, index of UTXO in it and corresponding private keys. Use this option if you want to calculate amount to send manually. Either fromUTXO or fromAddress must be present.</param>
+        /// <param name="to">Array of addresses and values to send bitcoins to. Values must be set in BCH. Difference between from and to is transaction fee.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<BlockchainResponse>> BitcoinCash_Send_Async(IEnumerable<BitcoinCashSendOrderFromUTXO> fromUTXO, IEnumerable<BitcoinCashSendOrderTo> to, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object> {
+                { "fromUTXO", fromUTXO },
+                { "to", to },
+            };
+
+            var credits = 10;
+            var url = GetUrl(string.Format(Endpoints_BitcoinCash_Transaction));
+            var result = await SendTatumRequest<BlockchainResponse>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success || result.Data.Failed) return WebCallResult<BlockchainResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Broadcast signed Bitcoin Cash transaction<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Broadcast signed transaction to Bitcoin Cash blockchain.
+        /// This method is used internally from Tatum KMS, Tatum Middleware or Tatum client libraries.
+        /// It is possible to create custom signing mechanism and use this method only for broadcasting data to the blockchian.
+        /// </summary>
+        /// <param name="txData">Raw signed transaction to be published to network.</param>
+        /// <param name="signatureId">ID of prepared payment template to sign. Required only, when broadcasting transaction signed by Tatum KMS.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<BlockchainResponse> BitcoinCash_Broadcast(string txData, string signatureId, CancellationToken ct = default) => BitcoinCash_Broadcast_Async(txData, signatureId, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Broadcast signed Bitcoin Cash transaction<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Broadcast signed transaction to Bitcoin Cash blockchain.
+        /// This method is used internally from Tatum KMS, Tatum Middleware or Tatum client libraries.
+        /// It is possible to create custom signing mechanism and use this method only for broadcasting data to the blockchian.
+        /// </summary>
+        /// <param name="txData">Raw signed transaction to be published to network.</param>
+        /// <param name="signatureId">ID of prepared payment template to sign. Required only, when broadcasting transaction signed by Tatum KMS.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<BlockchainResponse>> BitcoinCash_Broadcast_Async(string txData, string signatureId, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object> {
+                { "txData", txData },
+            };
+            parameters.AddOptionalParameter("signatureId", signatureId);
+
+            var credits = 5;
+            var url = GetUrl(string.Format(Endpoints_BitcoinCash_Broadcast));
+            var result = await SendTatumRequest<BlockchainResponse>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success || result.Data.Failed) return WebCallResult<BlockchainResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
+        }
+        #endregion
+
         #region Blockchain / Litecoin
         /// <summary>
         /// <b>Title:</b> Generate Litecoin wallet<br />
@@ -3365,7 +6487,7 @@ namespace Tatum.Net
         /// <param name="block_id">The number of blocks preceding a particular block on a block chain.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainHash> Litecoin_GetBlockHash(long block_id, CancellationToken ct = default) => Litecoin_GetBlockHash_Async(block_id, ct).Result;
+        public WebCallResult<TatumHash> Litecoin_GetBlockHash(long block_id, CancellationToken ct = default) => Litecoin_GetBlockHash_Async(block_id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Litecoin Block hash<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -3375,11 +6497,11 @@ namespace Tatum.Net
         /// <param name="block_id">The number of blocks preceding a particular block on a block chain.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainHash>> Litecoin_GetBlockHash_Async(long block_id, CancellationToken ct = default)
+        public async Task<WebCallResult<TatumHash>> Litecoin_GetBlockHash_Async(long block_id, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Litecoin_GetBlockHash, block_id));
-            return await SendTatumRequest<BlockchainHash>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+            return await SendTatumRequest<TatumHash>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -3546,7 +6668,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of desired address to be generated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainAddress> Litecoin_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.Litecoin, xpub, index, ct).Result;
+        public WebCallResult<TatumAddress> Litecoin_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.Litecoin, xpub, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Litecoin deposit address from Extended public key<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -3558,7 +6680,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of desired address to be generated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainAddress>> Litecoin_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.Litecoin, xpub, index, ct);
+        public async Task<WebCallResult<TatumAddress>> Litecoin_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.Litecoin, xpub, index, ct);
 
         /// <summary>
         /// <b>Title:</b> Generate Litecoin private key<br />
@@ -3571,7 +6693,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainKey> Litecoin_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Litecoin, new List<string> { mnemonics }, index, ct).Result;
+        public WebCallResult<TatumKey> Litecoin_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Litecoin, new List<string> { mnemonics }, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Litecoin private key<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -3583,7 +6705,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainKey> Litecoin_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Litecoin, mnemonics, index, ct).Result;
+        public WebCallResult<TatumKey> Litecoin_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Litecoin, mnemonics, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Litecoin private key<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -3595,7 +6717,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainKey>> Litecoin_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Litecoin, new List<string> { mnemonics }, index, default);
+        public async Task<WebCallResult<TatumKey>> Litecoin_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Litecoin, new List<string> { mnemonics }, index, default);
         /// <summary>
         /// <b>Title:</b> Generate Litecoin private key<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -3607,7 +6729,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainKey>> Litecoin_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Litecoin, mnemonics, index, default);
+        public async Task<WebCallResult<TatumKey>> Litecoin_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Litecoin, mnemonics, index, default);
 
         /// <summary>
         /// <b>Title:</b> Send Litecoin to blockchain addresses<br />
@@ -4613,7 +7735,7 @@ namespace Tatum.Net
         /// <param name="id">ID of log record / transaction on blockchain</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainData> Records_GetData(BlockchainType chain, string id, CancellationToken ct = default) => Records_GetData_Async(chain, id, ct).Result;
+        public WebCallResult<TatumData> Records_GetData(BlockchainType chain, string id, CancellationToken ct = default) => Records_GetData_Async(chain, id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get log record<br />
         /// <b>Credits:</b> 1 credits per API call.<br />
@@ -4624,7 +7746,7 @@ namespace Tatum.Net
         /// <param name="id">ID of log record / transaction on blockchain</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainData>> Records_GetData_Async(BlockchainType chain, string id, CancellationToken ct = default)
+        public async Task<WebCallResult<TatumData>> Records_GetData_Async(BlockchainType chain, string id, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "chain", JsonConvert.SerializeObject(chain, new BlockchainTypeConverter(false)) },
@@ -4632,7 +7754,7 @@ namespace Tatum.Net
             };
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Records_Log));
-            return await SendTatumRequest<BlockchainData>(url, HttpMethod.Get, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            return await SendTatumRequest<TatumData>(url, HttpMethod.Get, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
         }
 
         #endregion
@@ -4865,10 +7987,6 @@ namespace Tatum.Net
         }
         #endregion
 
-        #region Blockchain / Libra
-        // N/A
-        #endregion
-
         #region Blockchain / VeChain
         /// <summary>
         /// <b>Title:</b> Generate VeChain wallet<br />
@@ -4941,7 +8059,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of desired address to be generated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainAddress> VeChain_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.VeChain, xpub, index, ct).Result;
+        public WebCallResult<TatumAddress> VeChain_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.VeChain, xpub, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate VeChain wallet<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -4956,7 +8074,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainAddress>> VeChain_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.VeChain, xpub, index, ct);
+        public async Task<WebCallResult<TatumAddress>> VeChain_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.VeChain, xpub, index, ct);
 
         /// <summary>
         /// <b>Title:</b> Generate VeChain private key<br />
@@ -4968,7 +8086,7 @@ namespace Tatum.Net
         /// <param name="index"></param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainKey> VeChain_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.VeChain, new List<string> { mnemonics }, index, ct).Result;
+        public WebCallResult<TatumKey> VeChain_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.VeChain, new List<string> { mnemonics }, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate VeChain private key<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -4979,7 +8097,7 @@ namespace Tatum.Net
         /// <param name="index"></param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainKey> VeChain_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.VeChain, mnemonics, index, ct).Result;
+        public WebCallResult<TatumKey> VeChain_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.VeChain, mnemonics, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate VeChain private key<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -4990,7 +8108,7 @@ namespace Tatum.Net
         /// <param name="index"></param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainKey>> VeChain_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.VeChain, new List<string> { mnemonics }, index, default);
+        public async Task<WebCallResult<TatumKey>> VeChain_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.VeChain, new List<string> { mnemonics }, index, default);
         /// <summary>
         /// <b>Title:</b> Generate VeChain private key<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -5001,7 +8119,7 @@ namespace Tatum.Net
         /// <param name="index"></param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainKey>> VeChain_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.VeChain, mnemonics, index, default);
+        public async Task<WebCallResult<TatumKey>> VeChain_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.VeChain, mnemonics, index, default);
 
         /// <summary>
         /// <b>Title:</b> Get VeChain current block<br />
@@ -5692,6 +8810,211 @@ namespace Tatum.Net
         }
         #endregion
 
+        #region Blockchain / Libra
+        // N/A
+        #endregion
+
+        #region Blockchain / TRON
+        /// <summary>
+        /// <b>Title:</b> Generate Tron wallet<br />
+        /// <b>Credits:</b> 5 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Generate TRON address and private key.
+        /// </summary>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<TronWallet> Tron_GenerateAccount(CancellationToken ct = default) => Tron_GenerateAccount_Async(ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Generate Tron wallet<br />
+        /// <b>Credits:</b> 5 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Generate TRON address and private key.
+        /// </summary>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<TronWallet>> Tron_GenerateAccount_Async(CancellationToken ct = default)
+        {
+            var credits = 5;
+            var url = GetUrl(string.Format(Endpoints_TRON_GenerateAccount));
+            return await SendTatumRequest<TronWallet>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> XXXXXXXXXXXX<br />
+        /// <b>Credits:</b> XXXXXXXXXXXX<br />
+        /// <b>Description:</b>
+        /// </summary>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<TronCurrentBlock> Tron_GetCurrentBlock(CancellationToken ct = default) => Tron_GetCurrentBlock_Async(ct).Result;
+        /// <summary>
+        /// <b>Title:</b> XXXXXXXXXXXX<br />
+        /// <b>Credits:</b> XXXXXXXXXXXX<br />
+        /// <b>Description:</b>
+        /// </summary>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<TronCurrentBlock>> Tron_GetCurrentBlock_Async(CancellationToken ct = default)
+        {
+            var credits = 5;
+            var url = GetUrl(string.Format(Endpoints_TRON_CurrentBlock));
+            return await SendTatumRequest<TronCurrentBlock>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Get current Tron block<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get Tron block by hash or height.
+        /// </summary>
+        /// <param name="hash_height">Block hash or height.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<TronBlock> Tron_GetBlock(string hash_height, CancellationToken ct = default) => Tron_GetBlock_Async(hash_height, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Get current Tron block<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get Tron block by hash or height.
+        /// </summary>
+        /// <param name="hash_height">Block hash or height.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<TronBlock>> Tron_GetBlock_Async(string hash_height, CancellationToken ct = default)
+        {
+            var credits = 5;
+            var url = GetUrl(string.Format(Endpoints_TRON_GetBlock, hash_height));
+            return await SendTatumRequest<TronBlock>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Get Tron Account transactions<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get Tron Account transactions. Default page size is 200 transactions per request.
+        /// </summary>
+        /// <param name="address">Address to get transactions for.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<TronAccountTransactions> Tron_GetTransactionsByAccount(string address, CancellationToken ct = default) => Tron_GetTransactionsByAccount_Async(address, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Get Tron Account transactions<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get Tron Account transactions. Default page size is 200 transactions per request.
+        /// </summary>
+        /// <param name="address">Address to get transactions for.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<TronAccountTransactions>> Tron_GetTransactionsByAccount_Async(string address, CancellationToken ct = default)
+        {
+            var credits = 5;
+            var url = GetUrl(string.Format(Endpoints_TRON_GetTransactionsByAccount, address));
+            return await SendTatumRequest<TronAccountTransactions>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Get Tron transaction by hash<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get Tron transaction by hash.
+        /// </summary>
+        /// <param name="hash">Transaction hash.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<TronTransaction> Tron_GetTransactionByHash(string hash, CancellationToken ct = default) => Tron_GetTransactionByHash_Async(hash, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Get Tron transaction by hash<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get Tron transaction by hash.
+        /// </summary>
+        /// <param name="hash">Transaction hash.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<TronTransaction>> Tron_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
+        {
+            var credits = 5;
+            var url = GetUrl(string.Format(Endpoints_TRON_GetTransactionByHash, hash));
+            return await SendTatumRequest<TronTransaction>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Send Tron transaction<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send Tron transaction from address to address.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds. In this method, it is possible to enter privateKey. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, it is possible to use the Tatum client library for supported languages or Tatum Middleware with a custom key management system.
+        /// </summary>
+        /// <param name="fromPrivateKey">Private key of the address, from which the TRX will be sent.</param>
+        /// <param name="to">Recipient address of TRON account in Base58 format.</param>
+        /// <param name="amount">Amount to be sent in TRX.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<BlockchainResponse> Tron_Send(string fromPrivateKey, string to, decimal amount, CancellationToken ct = default) => Tron_Send_Async(fromPrivateKey, to, amount, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Send Tron transaction<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send Tron transaction from address to address.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds. In this method, it is possible to enter privateKey. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, it is possible to use the Tatum client library for supported languages or Tatum Middleware with a custom key management system.
+        /// </summary>
+        /// <param name="fromPrivateKey">Private key of the address, from which the TRX will be sent.</param>
+        /// <param name="to">Recipient address of TRON account in Base58 format.</param>
+        /// <param name="amount">Amount to be sent in TRX.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<BlockchainResponse>> Tron_Send_Async(string fromPrivateKey, string to, decimal amount, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object> {
+                { "fromPrivateKey", fromPrivateKey },
+                { "to", to },
+                { "amount", amount.ToString(CultureInfo.InvariantCulture) },
+            };
+
+            var credits = 10;
+            var url = GetUrl(string.Format(Endpoints_TRON_Send));
+            var result = await SendTatumRequest<BlockchainResponse>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success || result.Data.Failed) return WebCallResult<BlockchainResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Broadcast Tron transaction<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Broadcast Tron transaction. This method is used internally from Tatum Middleware or Tatum client libraries. It is possible to create custom signing mechanism and use this method only for broadcasting data to the blockchian.
+        /// </summary>
+        /// <param name="txData">Raw signed transaction to be published to network.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public WebCallResult<BlockchainResponse> Tron_Broadcast(string txData, CancellationToken ct = default) => Tron_Broadcast_Async(txData, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Broadcast Tron transaction<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Broadcast Tron transaction. This method is used internally from Tatum Middleware or Tatum client libraries. It is possible to create custom signing mechanism and use this method only for broadcasting data to the blockchian.
+        /// </summary>
+        /// <param name="txData">Raw signed transaction to be published to network.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<BlockchainResponse>> Tron_Broadcast_Async(string txData, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object> {
+                { "txData", txData },
+            };
+
+            var credits = 5;
+            var url = GetUrl(string.Format(Endpoints_TRON_Broadcast));
+            var result = await SendTatumRequest<BlockchainResponse>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success || result.Data.Failed) return WebCallResult<BlockchainResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
+        }
+
+        #endregion
+
         #region Blockchain / Scrypta
         /// <summary>
         /// <b>Title:</b> Generate Scrypta wallet<br />
@@ -5764,7 +9087,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainKey> Scrypta_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Scrypta, new List<string> { mnemonics }, index, ct).Result;
+        public WebCallResult<TatumKey> Scrypta_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Scrypta, new List<string> { mnemonics }, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Scrypta private key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -5775,7 +9098,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainKey> Scrypta_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Scrypta, mnemonics, index, ct).Result;
+        public WebCallResult<TatumKey> Scrypta_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Scrypta, mnemonics, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Scrypta private key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -5786,7 +9109,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainKey>> Scrypta_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Scrypta, new List<string> { mnemonics }, index, default);
+        public async Task<WebCallResult<TatumKey>> Scrypta_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Scrypta, new List<string> { mnemonics }, index, default);
         /// <summary>
         /// <b>Title:</b> Generate Scrypta private key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -5797,7 +9120,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainKey>> Scrypta_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Scrypta, mnemonics, index, default);
+        public async Task<WebCallResult<TatumKey>> Scrypta_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Scrypta, mnemonics, index, default);
 
         /// <summary>
         /// <b>Title:</b> Get Block hash<br />
@@ -6036,7 +9359,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of desired address to be generated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainAddress> Scrypta_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.Scrypta, xpub, index, ct).Result;
+        public WebCallResult<TatumAddress> Scrypta_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.Scrypta, xpub, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Scrypta deposit address from Extended public key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -6047,7 +9370,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of desired address to be generated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainAddress>> Scrypta_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.Scrypta, xpub, index, ct);
+        public async Task<WebCallResult<TatumAddress>> Scrypta_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.Scrypta, xpub, index, ct);
 
         /// <summary>
         /// <b>Title:</b> Get Blockchain Information<br />
@@ -6212,33 +9535,17 @@ namespace Tatum.Net
         }
 
         protected async Task<WebCallResult<T>> SendTatumRequest<T>(
-            Uri uri, 
-            HttpMethod method, 
+            Uri uri,
+            HttpMethod method,
             CancellationToken cancellationToken,
-            Dictionary<string, object> parameters = null, 
-            bool signed = false, 
-            bool checkResult = true, 
-            PostParameters? postPosition = null, 
-            ArrayParametersSerialization? arraySerialization = null, 
+            Dictionary<string, object> parameters = null,
+            bool signed = false,
+            bool checkResult = true,
+            PostParameters? postPosition = null,
+            ArrayParametersSerialization? arraySerialization = null,
             int credits = 1) where T : class
         {
-            foreach (var limiter in RateLimiters)
-            {
-                if (limiter is RateLimiterCredit creditLimiter)
-                {
-                    var limitResult = creditLimiter.LimitRequest(this, uri.AbsolutePath, RateLimitBehaviour, credits);
-                    if (!limitResult.Success)
-                    {
-                        log.Write(LogVerbosity.Debug, $"Request {uri.AbsolutePath} failed because of rate limit");
-                        return new WebCallResult<T>(null, null, null, limitResult.Error);
-                    }
-
-                    if (limitResult.Data > 0)
-                        log.Write(LogVerbosity.Debug, $"Request {uri.AbsolutePath} was limited by {limitResult.Data}ms by {limiter.GetType().Name}");
-                }
-            }
-
-            return await SendRequest<T>(uri, method, cancellationToken, parameters, signed, checkResult, postPosition, arraySerialization);
+            return await SendRequest<T>(uri, method, cancellationToken, parameters, signed, checkResult, postPosition, arraySerialization, credits);
         }
         #endregion
 

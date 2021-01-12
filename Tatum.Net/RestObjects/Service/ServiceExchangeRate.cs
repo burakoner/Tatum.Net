@@ -14,10 +14,10 @@ namespace Tatum.Net.RestObjects
 
         [JsonProperty("value")]
         public decimal value { get; set; }
-    
+
         [JsonProperty("source")]
         public string Source { get; set; }
-    
+
         [JsonProperty("timestamp"), JsonConverter(typeof(TimestampConverter))]
         public DateTime Timestamp { get; set; }
     }

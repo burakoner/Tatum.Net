@@ -7,8 +7,8 @@ A .Net wrapper for the Tatum API as described on [Tatum](https://tatum.io/apidoc
 ## Donations
 Donations are greatly appreciated and a motivation to keep improving.
 
-**BTC**:  33WbRKqt7wXARVdAJSu1G1x3QnbyPtZ2bH  
-**ETH**:  0x65b02db9b67b73f5f1e983ae10796f91ded57b64  
+**BTC**:  33WbRKqt7wXARVdAJSu1G1x3QnbyPtZ2bH
+**ETH**:  0x65b02db9b67b73f5f1e983ae10796f91ded57b64
 
 ## Installation
 ![Nuget version](https://img.shields.io/nuget/v/Tatum.Net.svg)  ![Nuget downloads](https://img.shields.io/nuget/dt/Tatum.Net.svg)
@@ -36,34 +36,144 @@ Tatum.Net provides one main client to interact with the Tatum API. The  `TatumCl
 /* Tatum Api Client */
 var cli_options = new TatumClientOptions
 {
-    LogVerbosity = LogVerbosity.Debug,
     RateLimiters = new List<IRateLimiter> { new RateLimiterCredit(5, TimeSpan.FromMilliseconds(1000)), },
     RateLimitingBehaviour = RateLimitingBehaviour.Wait,
 };
 var api = new TatumClient("XXXXXXXX-API-KEY-XXXXXXXX", cli_options);
 ```
 
-**Ledger Account Endpoints**
+**Ledger / Account Endpoints**
 ```C#
-var ledger_01 = api.Ledger_CreateAccount(BlockchainType.BitcoinCash);
-var ledger_02 = api.Ledger_GetAccounts();
-var ledger_03 = api.Ledger_CreateBatchAccounts(new List<LedgerAccountOptions> { });
-var ledger_04 = api.Ledger_GetAccountsByCustomerId("-----customer-id-----");
-var ledger_05 = api.Ledger_GetAccountByAccountId("-----account-id-----");
-var ledger_06 = api.Ledger_UpdateAccount("-----account-id-----", "-----account-code-----", "-----account-number-----");
-var ledger_07 = api.Ledger_GetAccountBalance("-----account-id-----");
-var ledger_08 = api.Ledger_BlockAmount("-----account-id-----", 1000, "DEBIT_CARD_OP", "Description");
-var ledger_09 = api.Ledger_UnlockAmountAndPerformTransaction("-----blockage-id-----", "-----recipient-account-id-----", 1000.0m, false, false, "-----tx-code-----", "-----payment-id-----", "-----recipient-notes-----", "-----sender-notes-----", 1.0m);
-var ledger_10 = api.Ledger_UnblockAmount("-----blockage-id-----");
-var ledger_11 = api.Ledger_GetBlockedAmounts("-----account-id-----");
-var ledger_12 = api.Ledger_UnblockAllBlockedAmounts("-----account-id-----");
-var ledger_13 = api.Ledger_ActivateAccount("-----account-id-----");
-var ledger_14 = api.Ledger_DeactivateAccount("-----account-id-----");
-var ledger_15 = api.Ledger_FreezeLedgerAccount("-----account-id-----");
-var ledger_16 = api.Ledger_UnfreezeLedgerAccount("-----account-id-----");
+var led_01 = api.LedgerAccount_Create(BlockchainType.BitcoinCash);
+var led_02 = api.LedgerAccount_GetAccounts();
+var led_03 = api.LedgerAccount_CreateBatch(new List<LedgerAccountOptions> { });
+var led_04 = api.LedgerAccount_GetByCustomerId("-----customer-id-----");
+var led_05 = api.LedgerAccount_GetById("-----account-id-----");
+var led_06 = api.LedgerAccount_Update("-----account-id-----", "-----account-code-----", "-----account-number-----");
+var led_07 = api.LedgerAccount_GetBalance("-----account-id-----");
+var led_08 = api.LedgerAccount_BlockAmount("-----account-id-----", 1000, "DEBIT_CARD_OP", "Description");
+var led_09 = api.LedgerAccount_UnlockAmountAndPerformTransaction("-----blockage-id-----", "-----recipient-account-id-----", 1000.0m, false, false, "-----tx-code-----", "-----payment-id-----", "-----recipient-notes-----", "-----sender-notes-----", 1.0m);
+var led_10 = api.LedgerAccount_UnblockAmount("-----blockage-id-----");
+var led_11 = api.LedgerAccount_GetBlockedAmounts("-----account-id-----");
+var led_12 = api.LedgerAccount_UnblockAllBlockedAmounts("-----account-id-----");
+var led_13 = api.LedgerAccount_Activate("-----account-id-----");
+var led_14 = api.LedgerAccount_Deactivate("-----account-id-----");
+var led_15 = api.LedgerAccount_Freeze("-----account-id-----");
+var led_16 = api.LedgerAccount_Unfreeze("-----account-id-----");
 ```
 
-**Blockchain Bitcoin Endpoints**
+**Ledger / Transaction Endpoints**
+```C#
+var led_21 = api.LedgerTransaction_SendPayment("-----sender-account-id-----", "-----recipient-account-id-----", 10.0m);
+var led_22 = api.LedgerTransaction_GetTransactionsByAccount("-----account-id-----");
+var led_23 = api.LedgerTransaction_GetTransactionsByCustomer("-----customer-id-----");
+var led_24 = api.LedgerTransaction_GetTransactionsByLedger();
+var led_25 = api.LedgerTransaction_GetTransactionsByReference("-----reference-----");
+```
+
+**Ledger / Customer Endpoints**
+```C#
+var led_31 = api.LedgerCustomer_ListAll();
+var led_32 = api.LedgerCustomer_Get("-----customer-id-----");
+var led_33 = api.LedgerCustomer_Update("-----customer-internal-id-----", "-----customer-external-id-----");
+var led_34 = api.LedgerCustomer_Activate("-----customer-id-----");
+var led_35 = api.LedgerCustomer_Deactivate("-----customer-id-----");
+var led_36 = api.LedgerCustomer_Enable("-----customer-id-----");
+var led_37 = api.LedgerCustomer_Disable("-----customer-id-----");
+```
+
+**Ledger / Virtual Currency Endpoints**
+```C#
+var led_41 = api.LedgerVirtualCurrency_Create("-----name-----", "-----supply-----", "-----base-pair-----");
+var led_42 = api.LedgerVirtualCurrency_Update("-----name-----", "-----base-pair-----");
+var led_43 = api.LedgerVirtualCurrency_Get("-----name-----");
+var led_44 = api.LedgerVirtualCurrency_Mint("-----account-id-----", 1000000, "-----payment-id-----", "-----reference-----", "-----transaction-code-----", "-----recipient-note-----", "-----counter-account-----", "-----sender-note-----");
+var led_45 = api.LedgerVirtualCurrency_Destroy("-----account-id-----", 1000000, "-----payment-id-----", "-----reference-----", "-----transaction-code-----", "-----recipient-note-----", "-----counter-account-----", "-----sender-note-----");
+```
+
+**Ledger / Subscription Endpoints**
+```C#
+var led_51 = api.LedgerSubscription_Create(LedgerSubscriptionType.ACCOUNT_INCOMING_BLOCKCHAIN_TRANSACTION, account_id: "-----account-id-----", url: "https://www.google.com");
+var led_52 = api.LedgerSubscription_List();
+var led_53 = api.LedgerSubscription_Cancel("-----subscription-id-----");
+var led_54 = api.LedgerSubscription_GetReport("-----subscription-id-----");
+```
+
+**Ledger / Order Book Endpoints**
+```C#
+var led_61 = api.LedgerOrderBook_GetHistoricalTrades("-----account-id-----","-----trade-pair-----");
+var led_62 = api.LedgerOrderBook_GetBuyTrades("-----account-id-----");
+var led_63 = api.LedgerOrderBook_GetSellTrades("-----account-id-----");
+var led_64 = api.LedgerOrderBook_PlaceOrder_Async(LedgerTradeType.Buy, 1300.05m, 15.87m, "-----trade-pair-----", "-----currency1-account-id-----", "-----currency2-account-id-----");
+var led_65 = api.LedgerOrderBook_GetTrade("-----trade-id-----");
+var led_66 = api.LedgerOrderBook_CancelOrder("-----trade-id-----");
+var led_67 = api.LedgerOrderBook_CancelAllOrders("-----account-id-----");
+```
+
+**Security / Key Management System Endpoints**
+```C#
+var kms_01 = api.KMS_GetPendingTransactions(BlockchainType.Bitcoin);
+var kms_02 = api.KMS_GetTransaction("-----tx-id-----");
+var kms_03 = api.KMS_CompletePendingTransaction("-----id-----", "-----tx-id-----");
+var kms_04 = api.KMS_DeleteTransaction("-----id-----");
+```
+
+**Security / Address Endpoints**
+```C#
+var sec_01 = api.Security_CheckMalicousAddress("33WbRKqt7wXARVdAJSu1G1x3QnbyPtZ2bH");
+```
+
+**Off-chain / Blockchain Endpoints**
+```C#
+var off_priv_11 = api.Bitcoin_GeneratePrivateKey("-----mnemonics-----", 0);
+var off_11 = api.OffchainBlockchain_SendBitcoin("-----account-id-----", "-----address-----", 0.01m, mnemonic: "-----mnemonics-----", xpub: "-----xpub-----");
+var off_11_kms = api.KMS_CompletePendingTransaction("-----account-id-----", off_11.Data.Id);
+            
+var off_priv_12 = api.BitcoinCash_GeneratePrivateKey("-----mnemonics-----", 0);
+var off_12 = api.OffchainBlockchain_SendBitcoinCash("-----account-id-----", "-----address-----", 0.01m, mnemonic: "-----mnemonics-----", xpub: "-----xpub-----");
+var off_12_kms = api.KMS_CompletePendingTransaction("-----account-id-----", off_12.Data.Id);
+            
+var off_priv_13 = api.Litecoin_GeneratePrivateKey("-----mnemonics-----", 0);
+var off_13 = api.OffchainBlockchain_SendLitecoin("-----account-id-----", "-----address-----", 0.01m, mnemonic: "-----mnemonics-----", xpub: "-----xpub-----");
+var off_13_kms = api.KMS_CompletePendingTransaction("-----account-id-----", off_13.Data.Id);
+            
+var off_priv_14 = api.Ethereum_GeneratePrivateKey("-----mnemonics-----", 0);
+var off_14 = api.OffchainBlockchain_SendEthereum("-----account-id-----", "-----address-----", 0.01m, mnemonic: "-----mnemonics-----");
+var off_14_kms = api.KMS_CompletePendingTransaction("-----account-id-----", off_14.Data.Id);
+
+var off_15 = api.OffchainBlockchain_CreateERC20Token("-----symbol-----", "-----supply-----", "-----description-----", "-----base-pair-----");
+var off_16 = api.OffchainBlockchain_DeployERC20Token("-----symbol-----", "-----supply-----", "-----description-----", "-----base-pair-----");
+var off_17 = api.OffchainBlockchain_SetERC20TokenContractAddress("-----address-----", "-----symbol-----");
+
+var off_priv_18 = api.Ethereum_GeneratePrivateKey("-----mnemonics-----", 0);
+var off_18 = api.OffchainBlockchain_SendERC20Token("-----account-id-----", "-----address-----", 0.01m, mnemonic: "-----mnemonics-----");
+var off_18_kms = api.KMS_CompletePendingTransaction("-----account-id-----", off_18.Data.Id);
+
+var off_19 = api.OffchainBlockchain_SendStellar("-----account-id-----", "-----account-----", "-----address-----", 0.01m, "-----secret-----");
+var off_19_kms = api.KMS_CompletePendingTransaction("-----account-id-----", off_19.Data.Id);
+
+var off_20 = api.OffchainBlockchain_CreateXLMAsset("-----issuer-account-----", "-----token-----", "-----base-pair-----");
+
+var off_21 = api.OffchainBlockchain_SendRipple("-----account-id-----", "-----account-----", "-----address-----", 0.01m, secret: "-----secret-----");
+var off_21_kms = api.KMS_CompletePendingTransaction("-----account-id-----", off_21.Data.Id);
+
+var off_22 = api.OffchainBlockchain_CreateXRPAsset("-----issuer-account-----", "-----token-----", "-----base-pair-----");
+
+var off_23 = api.OffchainBlockchain_SendBNB("-----account-id-----", "-----address-----", 0.01m, privateKey: "-----private-key-----");
+var off_23_kms = api.KMS_CompletePendingTransaction("-----account-id-----", off_23.Data.Id);
+
+var off_24 = api.OffchainBlockchain_CreateBNBAsset("-----token-----", "-----base-pair-----");
+```
+
+**Off-chain / Withdrawal Endpoints**
+```C#
+var off_31 = api.OffchainWithdrawal_Request("-----account-id-----", "-----address-----", 15.97m);
+var off_32 = api.OffchainWithdrawal_CompleteRequest("-----withdrawal-id-----", "-----txid-----");
+var off_33 = api.OffchainWithdrawal_Cancel("-----withdrawal-id-----");
+var off_34 = api.OffchainWithdrawal_Broadcast("-----currency-----", "-----tx-data-----", "-----withdrawal-id-----", "-----signature-id-----");
+```
+
+**Blockchain / Bitcoin Endpoints**
 ```C#
 var btc_mnemonics = Mnemonics.Generate(12);
 var btc_01 = api.Bitcoin_GenerateWallet();
@@ -87,28 +197,7 @@ var btc_15 = api.Bitcoin_Send(btc_fromAddress, btc_fromUTXO, btc_to);
 var btc_16 = api.Bitcoin_Broadcast("-----tx-data-----", "-----signature-id-----");
 ```
 
-**Blockchain BitcoinCash Endpoints**
-```C#
-var bch_mnemonics = Mnemonics.Generate(12);
-var bch_01 = api.BitcoinCash_GenerateWallet();
-var bch_02 = api.BitcoinCash_GenerateWallet(bch_mnemonics);
-var bch_03 = api.BitcoinCash_GenerateWallet(string.Join(" ", bch_mnemonics));
-var bch_04 = api.BitcoinCash_GenerateDepositAddress("-----xpub-----", 0);
-var bch_05 = api.BitcoinCash_GeneratePrivateKey(bch_mnemonics, 0);
-var bch_06 = api.BitcoinCash_GeneratePrivateKey(string.Join(" ", bch_mnemonics), 0);
-var bch_07 = api.BitcoinCash_GetBlockchainInformation();
-var bch_08 = api.BitcoinCash_GetBlockHash(669153);
-var bch_09 = api.BitcoinCash_GetBlock("669153");
-var bch_10 = api.BitcoinCash_GetBlock("000000000000000003876f9ec88c2848b62ed35ebc154bd7299c19f1b12a8988");
-var bch_11 = api.BitcoinCash_GetTransactionByHash("df3fe80b5689dd707a4f670d3aaed493c39db6b14906cc4e51937c161fd1210a");
-var bch_12 = api.BitcoinCash_GetTransactionsByAddress("qrzf7nwy52j98rs5aped95ah3l42884wavaqp6vv4t");
-var bch_fromUTXO = new List<BitcoinCashSendOrderFromUTXO> { new BitcoinCashSendOrderFromUTXO { Index = 0, PrivateKey = "-----private-key-----", SignatureId = "-----signature-id-----", TxHash = "53fa-----tx-hash-----a103e8217e1520f5149a4e8c84aeb58e55bdab11164a95e69a8ca50f8fcc" } };
-var bch_to = new List<BitcoinCashSendOrderTo> { new BitcoinCashSendOrderTo { Address = "-----to-address-----", Value = 0.02969944m } };
-var bch_13 = api.BitcoinCash_Send(bch_fromUTXO, bch_to);
-var bch_14 = api.BitcoinCash_Broadcast("-----tx-data-----", "-----signature-id-----");
-```
-
-**Blockchain Ethereum Endpoints**
+**Blockchain / Ethereum Endpoints**
 ```C#
 var eth_mnemonics = Mnemonics.Generate(12);
 var eth_01 = api.Ethereum_GenerateWallet();
@@ -144,7 +233,28 @@ var eth_30 = api.Ethereum_ERC721_GetTokenOwner("-----address-----", "-----contra
 var eth_31 = api.Ethereum_Broadcast("-----tx-data-----", "-----signature-id-----");
 ```
 
-**Blockchain Litecoin Endpoints**
+**Blockchain / BitcoinCash Endpoints**
+```C#
+var bch_mnemonics = Mnemonics.Generate(12);
+var bch_01 = api.BitcoinCash_GenerateWallet();
+var bch_02 = api.BitcoinCash_GenerateWallet(bch_mnemonics);
+var bch_03 = api.BitcoinCash_GenerateWallet(string.Join(" ", bch_mnemonics));
+var bch_04 = api.BitcoinCash_GenerateDepositAddress("-----xpub-----", 0);
+var bch_05 = api.BitcoinCash_GeneratePrivateKey(bch_mnemonics, 0);
+var bch_06 = api.BitcoinCash_GeneratePrivateKey(string.Join(" ", bch_mnemonics), 0);
+var bch_07 = api.BitcoinCash_GetBlockchainInformation();
+var bch_08 = api.BitcoinCash_GetBlockHash(669153);
+var bch_09 = api.BitcoinCash_GetBlock("669153");
+var bch_10 = api.BitcoinCash_GetBlock("000000000000000003876f9ec88c2848b62ed35ebc154bd7299c19f1b12a8988");
+var bch_11 = api.BitcoinCash_GetTransactionByHash("df3fe80b5689dd707a4f670d3aaed493c39db6b14906cc4e51937c161fd1210a");
+var bch_12 = api.BitcoinCash_GetTransactionsByAddress("qrzf7nwy52j98rs5aped95ah3l42884wavaqp6vv4t");
+var bch_fromUTXO = new List<BitcoinCashSendOrderFromUTXO> { new BitcoinCashSendOrderFromUTXO { Index = 0, PrivateKey = "-----private-key-----", SignatureId = "-----signature-id-----", TxHash = "53fa-----tx-hash-----a103e8217e1520f5149a4e8c84aeb58e55bdab11164a95e69a8ca50f8fcc" } };
+var bch_to = new List<BitcoinCashSendOrderTo> { new BitcoinCashSendOrderTo { Address = "-----to-address-----", Value = 0.02969944m } };
+var bch_13 = api.BitcoinCash_Send(bch_fromUTXO, bch_to);
+var bch_14 = api.BitcoinCash_Broadcast("-----tx-data-----", "-----signature-id-----");
+```
+
+**Blockchain / Litecoin Endpoints**
 ```C#
 var ltc_mnemonics = Mnemonics.Generate(12);
 var ltc_01 = api.Litecoin_GenerateWallet();
@@ -168,7 +278,7 @@ var ltc_15 = api.Litecoin_Send(ltc_fromAddress, ltc_fromUTXO, ltc_to);
 var ltc_16 = api.Litecoin_Broadcast("-----tx-data-----", "-----signature-id-----");
 ```
 
-**Blockchain Ripple Endpoints**
+**Blockchain / Ripple Endpoints**
 ```C#
 var xrp_01 = api.Ripple_GenerateAccount();
 var xrp_02 = api.Ripple_GetBlockchainInformation();
@@ -183,7 +293,7 @@ var xrp_10 = api.Ripple_ModifyAccountSettings("-----from-account-----", "-----fr
 var xrp_11 = api.Ripple_Broadcast("-----tx-data-----", "-----signature-id-----");
 ```
 
-**Blockchain Stellar Endpoints**
+**Blockchain / Stellar Endpoints**
 ```C#
 var xlm_01 = api.Stellar_GenerateAccount();
 var xlm_02 = api.Stellar_GetBlockchainInformation();
@@ -198,13 +308,13 @@ var xlm_10 = api.Stellar_TrustLine("-----from-account-----", "-----issuer-accoun
 var xlm_11 = api.Stellar_Broadcast("-----tx-data-----", "-----signature-id-----");
 ```
 
-**Blockchain Records Endpoints**
+**Blockchain / Records Endpoints**
 ```C#
 var rec_01 = api.Records_SetData(BlockchainType.Ethereum, "-----data-----");
 var rec_02 = api.Records_GetData(BlockchainType.Ethereum, "-----id-----");
 ```
 
-**Blockchain Binance Endpoints**
+**Blockchain / Binance Endpoints**
 ```C#
 var bnb_01 = api.Binance_GenerateAccount();
 var bnb_02 = api.Binance_GetCurrentBlock();
@@ -215,7 +325,7 @@ var bnb_06 = api.Binance_Send("-----to-address-----", "-----currency-----", "---
 var bnb_07 = api.Binance_Broadcast("-----tx-data-----");
 ```
 
-**Blockchain VeChain Endpoints**
+**Blockchain / VeChain Endpoints**
 ```C#
 var vet_mnemonics = Mnemonics.Generate(12);
 var vet_01 = api.VeChain_GenerateWallet();
@@ -237,7 +347,7 @@ var vet_17 = api.VeChain_EstimateGasForTransaction("-----from-address-----", "--
 var vet_18 = api.Bitcoin_Broadcast("-----tx-data-----", "-----signature-id-----");
 ```
 
-**Blockchain NEO Endpoints**
+**Blockchain / NEO Endpoints**
 ```C#
 var neo_01 = api.Neo_GenerateAccount();
 var neo_02 = api.Neo_GetCurrentBlock();
@@ -253,6 +363,18 @@ var neo_11 = api.Neo_Send("-----to-address-----", 10.0m, 0.0m, "-----from-privat
 var neo_12 = api.Neo_ClaimGAS("-----from-private-key-----");
 var neo_13 = api.Neo_SendToken("-----script-hash-----", 10.019m, 3, "-----from-private-key-----", "-----to-address-----");
 var neo_14 = api.Neo_Broadcast("-----tx-data-----");
+```
+
+**Blockchain / TRON Endpoints**
+```C#
+var trx_01 = api.Tron_GenerateAccount();
+var trx_02 = api.Tron_GetCurrentBlock();
+var trx_03 = api.Tron_GetBlock("26669070");
+var trx_04 = api.Tron_GetBlock("000000000196f00e8d83c7bd0e294b5566e1f182d5b8d2434df8cad68d93ad8a");
+var trx_05 = api.Tron_GetTransactionsByAccount("TY65QiDt4hLTMpf3WRzcX357BnmdxT2sw9");
+var trx_06 = api.Tron_GetTransactionByHash("b821cf24dd81edb93b63cbd2e39e79f314c6505d3b728c4de9692fa7bcc6d894");
+var trx_07 = api.Tron_Send("-----from-private-key-----", "-----to-address-----", 10.0m);
+var trx_08 = api.Tron_Broadcast("-----tx-data-----");
 ```
 
 **Blockchain Scrypta Endpoints**
@@ -286,7 +408,9 @@ var service_02 = api.Service_GetExchangeRates("-----currency-----","-----base-pa
 var service_03 = api.Service_GetVersion();
 ```
 
-
 ## Release Notes
+* Version 1.1.0 - 12 Jan 2021
+    * Completed All Rest Api Endpoints
+
 * Version 1.0.0 - 10 Jan 2021
     * First Release

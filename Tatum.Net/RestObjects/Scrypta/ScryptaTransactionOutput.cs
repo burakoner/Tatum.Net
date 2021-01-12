@@ -6,7 +6,7 @@ namespace Tatum.Net.RestObjects
     {
         [JsonProperty("value")]
         public decimal Value { get; set; }
-        
+
         [JsonProperty("n")]
         public long N { get; set; }
 

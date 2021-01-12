@@ -2,7 +2,7 @@
 
 namespace Tatum.Net.RestObjects
 {
-    public class BlockchainData
+    public class TatumData
     {
         [JsonProperty("data")]
         public string Data { get; set; }

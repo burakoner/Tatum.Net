@@ -6,7 +6,7 @@ namespace Tatum.Net.RestObjects
     {
         [JsonProperty("balance")]
         public string Balance { get; set; }
-        
+
         [JsonProperty("currency")]
         public string Currency { get; set; }
     }

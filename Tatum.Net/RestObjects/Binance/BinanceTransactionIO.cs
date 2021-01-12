@@ -7,7 +7,7 @@ namespace Tatum.Net.RestObjects
     {
         [JsonProperty("address")]
         public string address { get; set; }
-        
+
         [JsonProperty("coins")]
         public IEnumerable<BinanceTransactionInputCoin> Coins { get; set; }
     }
