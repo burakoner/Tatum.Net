@@ -377,7 +377,7 @@ var trx_07 = api.Tron_Send("-----from-private-key-----", "-----to-address-----",
 var trx_08 = api.Tron_Broadcast("-----tx-data-----");
 ```
 
-**Blockchain Scrypta Endpoints**
+**Blockchain / Scrypta Endpoints**
 ```C#
 var lyra_mnemonics = Mnemonics.Generate(12);
 var lyra_01 = api.Scrypta_GenerateWallet();
@@ -401,7 +401,7 @@ var lyra_15 = api.Scrypta_Send(lyra_fromAddress, lyra_fromUTXO, lyra_to);
 var lyra_16 = api.Scrypta_Broadcast("-----tx-data-----", "-----signature-id-----");
 ```
 
-**Tatum Service Endpoints**
+**Tatum / Service Endpoints**
 ```C#
 var service_01 = api.Service_GetConsumptions();
 var service_02 = api.Service_GetExchangeRates("-----currency-----","-----base-pair-----");
