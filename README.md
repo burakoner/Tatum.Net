@@ -7,8 +7,8 @@ A .Net wrapper for the Tatum API as described on [Tatum](https://tatum.io/apidoc
 ## Donations
 Donations are greatly appreciated and a motivation to keep improving.
 
-**BTC**:  33WbRKqt7wXARVdAJSu1G1x3QnbyPtZ2bH
-**ETH**:  0x65b02db9b67b73f5f1e983ae10796f91ded57b64
+**BTC**:  33WbRKqt7wXARVdAJSu1G1x3QnbyPtZ2bH  
+**ETH**:  0x65b02db9b67b73f5f1e983ae10796f91ded57b64  
 
 ## Installation
 ![Nuget version](https://img.shields.io/nuget/v/Tatum.Net.svg)  ![Nuget downloads](https://img.shields.io/nuget/dt/Tatum.Net.svg)
