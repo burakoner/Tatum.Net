@@ -5,7 +5,7 @@ using Tatum.Net.Enums;
 
 namespace Tatum.Net.Converters
 {
-    internal class EthereumPredefinedCurrencyConverter : BaseConverter<EthereumPredefinedCurrency>
+    public class EthereumPredefinedCurrencyConverter : BaseConverter<EthereumPredefinedCurrency>
     {
         public EthereumPredefinedCurrencyConverter() : this(true) { }
         public EthereumPredefinedCurrencyConverter(bool quotes) : base(quotes) { }

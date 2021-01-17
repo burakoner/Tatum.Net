@@ -92,9 +92,9 @@ namespace Tatum.Net.Examples
             var led_52 = api.LedgerSubscription_List();
             var led_53 = api.LedgerSubscription_Cancel("-----subscription-id-----");
             var led_54 = api.LedgerSubscription_GetReport("-----subscription-id-----");
-            
+
             /* Ledger / Order Book */
-            var led_61 = api.LedgerOrderBook_GetHistoricalTrades("-----account-id-----","-----trade-pair-----");
+            var led_61 = api.LedgerOrderBook_GetHistoricalTrades("-----account-id-----", "-----trade-pair-----");
             var led_62 = api.LedgerOrderBook_GetBuyTrades("-----account-id-----");
             var led_63 = api.LedgerOrderBook_GetSellTrades("-----account-id-----");
             var led_64 = api.LedgerOrderBook_PlaceOrder_Async(LedgerTradeType.Buy, 1300.05m, 15.87m, "-----trade-pair-----", "-----currency1-account-id-----", "-----currency2-account-id-----");
@@ -125,15 +125,15 @@ namespace Tatum.Net.Examples
             var off_priv_11 = api.Bitcoin_GeneratePrivateKey("-----mnemonics-----", 0);
             var off_11 = api.OffchainBlockchain_SendBitcoin("-----account-id-----", "-----address-----", 0.01m, mnemonic: "-----mnemonics-----", xpub: "-----xpub-----");
             var off_11_kms = api.KMS_CompletePendingTransaction("-----account-id-----", off_11.Data.Id);
-            
+
             var off_priv_12 = api.BitcoinCash_GeneratePrivateKey("-----mnemonics-----", 0);
             var off_12 = api.OffchainBlockchain_SendBitcoinCash("-----account-id-----", "-----address-----", 0.01m, mnemonic: "-----mnemonics-----", xpub: "-----xpub-----");
             var off_12_kms = api.KMS_CompletePendingTransaction("-----account-id-----", off_12.Data.Id);
-            
+
             var off_priv_13 = api.Litecoin_GeneratePrivateKey("-----mnemonics-----", 0);
             var off_13 = api.OffchainBlockchain_SendLitecoin("-----account-id-----", "-----address-----", 0.01m, mnemonic: "-----mnemonics-----", xpub: "-----xpub-----");
             var off_13_kms = api.KMS_CompletePendingTransaction("-----account-id-----", off_13.Data.Id);
-            
+
             var off_priv_14 = api.Ethereum_GeneratePrivateKey("-----mnemonics-----", 0);
             var off_14 = api.OffchainBlockchain_SendEthereum("-----account-id-----", "-----address-----", 0.01m, mnemonic: "-----mnemonics-----");
             var off_14_kms = api.KMS_CompletePendingTransaction("-----account-id-----", off_14.Data.Id);
@@ -348,6 +348,12 @@ namespace Tatum.Net.Examples
             var trx_06 = api.Tron_GetTransactionByHash("b821cf24dd81edb93b63cbd2e39e79f314c6505d3b728c4de9692fa7bcc6d894");
             var trx_07 = api.Tron_Send("-----from-private-key-----", "-----to-address-----", 10.0m);
             var trx_08 = api.Tron_Broadcast("-----tx-data-----");
+            var trx_09 = api.Tron_FreezeBalance("-----from-private-key-----", "-----receiver-----", 3, "-----resource-----", 15.0m);
+            var trx_10 = api.Tron_TRC10GetTokenDetails(1000540);
+            var trx_11 = api.Tron_TRC10CreateToken("-----from-private-key-----", "-----recipient-----", "-----name-----", "-----abbreviation-----", "-----description-----", "-----url-----", 300000000, 2);
+            var trx_12 = api.Tron_TRC10Send("-----from-private-key-----", "-----to-----", 1000540, 15.0m);
+            var trx_13 = api.Tron_TRC20CreateToken("-----from-private-key-----", "-----recipient-----", "-----name-----", "-----symbol-----", 300000000, 2);
+            var trx_14 = api.Tron_TRC20Send("-----from-private-key-----", "-----to-----", "-----token-address-----", 15.0m, 0.01m);
 
             /* Blockchain / Scrypta */
             var scr_mnemonics = Mnemonics.Generate(12);
@@ -457,7 +463,31 @@ namespace Tatum.Net.Examples
             wm.AddAsset(new WalletAssetOptions { AssetCode = "PAXG", AssetName = "PAX Gold", AssetType = AssetType.Token, BlockchainManager = BlockchainManager.Tatum, BlockchainType = BlockchainType.Ethereum, TokenType = TokenType.ERC20, TokenContract = "0x45804880de22913dafe09f4980848ece6ecbaf78" });
             wm.AddAsset(new WalletAssetOptions { AssetCode = "AAVE", AssetName = "Aave", AssetType = AssetType.Token, BlockchainManager = BlockchainManager.Tatum, BlockchainType = BlockchainType.Ethereum, TokenType = TokenType.ERC20, TokenContract = "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9" });
 
-            // var wm_01 = wm.CreateLedgerAccount("BTC");
+            var wm_01 = wm.CreateLedgerAccount("BTC");
+            var wm_02 = wm.CreateLedgerAccount("ETH");
+            var wm_03 = wm.CreateLedgerAccount("XRP");
+            var wm_04 = wm.CreateLedgerAccount("USDT");
+            var wm_05 = wm.CreateLedgerAccount("WAVES");
+
+            var mnemo = wm.GenerateMnemonics(12);
+            var wm_11 = wm.CreateDepositAddress("BTC", mnemo);
+            var wm_12 = wm.CreateDepositAddress("ETH", mnemo);
+            var wm_13 = wm.CreateDepositAddress("XRP", mnemo);
+            var wm_14 = wm.CreateDepositAddress("USDT", mnemo);
+            var wm_15 = wm.CreateDepositAddress("WAVES", mnemo);
+
+            var wm_21 = wm.GetBlockchainBalance("BTC", "-----address-----");
+            var wm_22 = wm.GetBlockchainBalance("ETH", "-----address-----");
+            var wm_23 = wm.GetBlockchainBalance("XRP", "-----address-----");
+            var wm_24 = wm.GetBlockchainBalance("USDT", "-----address-----");
+            var wm_25 = wm.GetBlockchainBalance("WAVES", "-----address-----");
+
+            var userWallet = new WalletDepositAddress(); // Please full fields with user specific data
+            var wm_31 = wm.Withdraw("BTC", userWallet, 0.1m, "-----address-----", "-----tag-or-memo-----", triggerBroadcasting: true);
+            var wm_32 = wm.Withdraw("ETH", userWallet, 0.1m, "-----address-----", "-----tag-or-memo-----", triggerBroadcasting: true);
+            var wm_33 = wm.Withdraw("XRP", userWallet, 0.1m, "-----address-----", "-----tag-or-memo-----", triggerBroadcasting: true);
+            var wm_34 = wm.Withdraw("USDT", userWallet, 0.1m, "-----address-----", "-----tag-or-memo-----", triggerBroadcasting: true);
+            var wm_35 = wm.Withdraw("WAVES", userWallet, 0.1m, "-----address-----", "-----tag-or-memo-----", triggerBroadcasting: true);
         }
     }
 }

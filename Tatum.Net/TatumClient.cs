@@ -50,295 +50,309 @@ namespace Tatum.Net
         ITatumServiceClient
     {
         #region Core Fields
-        private static TatumClientOptions defaultOptions = new TatumClientOptions();
-        private static TatumClientOptions DefaultOptions => defaultOptions.Copy();
+        protected static TatumClientOptions defaultOptions = new TatumClientOptions();
+        protected static TatumClientOptions DefaultOptions => defaultOptions.Copy();
         #endregion
 
         #region API Endpoints
 
         #region Version
-        private const int Endpoints_Version = 3;
+        protected const int Endpoints_Version = 3;
         #endregion
 
         #region Ledger Account
-        private const string Endpoints_Ledger_Account_Create = "ledger/account";
-        private const string Endpoints_Ledger_Account_List = "ledger/account";
-        private const string Endpoints_Ledger_Account_CreateBatch = "ledger/account/batch";
-        private const string Endpoints_Ledger_Account_ListByCustomer = "ledger/account/customer/{0}";
-        private const string Endpoints_Ledger_Account_GetById = "ledger/account/{0}";
-        private const string Endpoints_Ledger_Account_Update = "ledger/account/{0}";
-        private const string Endpoints_Ledger_Account_Balance = "ledger/account/{0}/balance";
-        private const string Endpoints_Ledger_Account_BlockAmount = "ledger/account/block/{0}";
-        private const string Endpoints_Ledger_Account_UnlockAmountAndTransfer = "ledger/account/block/{0}";
-        private const string Endpoints_Ledger_Account_UnblockAmount = "ledger/account/block/{0}";
-        private const string Endpoints_Ledger_Account_GetBlockedAmounts = "ledger/account/block/{0}";
-        private const string Endpoints_Ledger_Account_UnblockAllBlockedAmounts = "ledger/account/block/account/{0}";
-        private const string Endpoints_Ledger_Account_ActivateLedgerAccount = "ledger/account/{0}/activate";
-        private const string Endpoints_Ledger_Account_DeactivateLedgerAccount = "ledger/account/{0}/deactivate";
-        private const string Endpoints_Ledger_Account_FreezeLedgerAccount = "ledger/account/{0}/freeze";
-        private const string Endpoints_Ledger_Account_UnfreezeLedgerAccount = "ledger/account/{0}/unfreeze";
+        protected const string Endpoints_Ledger_Account_Create = "ledger/account";
+        protected const string Endpoints_Ledger_Account_List = "ledger/account";
+        protected const string Endpoints_Ledger_Account_CreateBatch = "ledger/account/batch";
+        protected const string Endpoints_Ledger_Account_ListByCustomer = "ledger/account/customer/{0}";
+        protected const string Endpoints_Ledger_Account_GetById = "ledger/account/{0}";
+        protected const string Endpoints_Ledger_Account_Update = "ledger/account/{0}";
+        protected const string Endpoints_Ledger_Account_Balance = "ledger/account/{0}/balance";
+        protected const string Endpoints_Ledger_Account_BlockAmount = "ledger/account/block/{0}";
+        protected const string Endpoints_Ledger_Account_UnlockAmountAndTransfer = "ledger/account/block/{0}";
+        protected const string Endpoints_Ledger_Account_UnblockAmount = "ledger/account/block/{0}";
+        protected const string Endpoints_Ledger_Account_GetBlockedAmounts = "ledger/account/block/{0}";
+        protected const string Endpoints_Ledger_Account_UnblockAllBlockedAmounts = "ledger/account/block/account/{0}";
+        protected const string Endpoints_Ledger_Account_ActivateLedgerAccount = "ledger/account/{0}/activate";
+        protected const string Endpoints_Ledger_Account_DeactivateLedgerAccount = "ledger/account/{0}/deactivate";
+        protected const string Endpoints_Ledger_Account_FreezeLedgerAccount = "ledger/account/{0}/freeze";
+        protected const string Endpoints_Ledger_Account_UnfreezeLedgerAccount = "ledger/account/{0}/unfreeze";
         #endregion
 
         #region Ledger Transaction
-        private const string Endpoints_Ledger_Transaction_SendPayment = "ledger/transaction";
-        private const string Endpoints_Ledger_Transaction_GetTransactionsByAccount = "ledger/transaction/account";
-        private const string Endpoints_Ledger_Transaction_GetTransactionsByCustomer = "ledger/transaction/customer";
-        private const string Endpoints_Ledger_Transaction_GetTransactionsByLedger = "ledger/transaction/ledger";
-        private const string Endpoints_Ledger_Transaction_GetTransactionsByReference = "ledger/transaction/reference/{0}";
+        protected const string Endpoints_Ledger_Transaction_SendPayment = "ledger/transaction";
+        protected const string Endpoints_Ledger_Transaction_GetTransactionsByAccount = "ledger/transaction/account";
+        protected const string Endpoints_Ledger_Transaction_GetTransactionsByCustomer = "ledger/transaction/customer";
+        protected const string Endpoints_Ledger_Transaction_GetTransactionsByLedger = "ledger/transaction/ledger";
+        protected const string Endpoints_Ledger_Transaction_GetTransactionsByReference = "ledger/transaction/reference/{0}";
         #endregion
 
         #region Ledger Customer
-        private const string Endpoints_Ledger_Customer_List = "ledger/customer";
-        private const string Endpoints_Ledger_Customer_Get = "ledger/customer/{0}";
-        private const string Endpoints_Ledger_Customer_Update = "ledger/customer/{0}";
-        private const string Endpoints_Ledger_Customer_Activate = "ledger/customer/{0}/activate";
-        private const string Endpoints_Ledger_Customer_Deactivate = "ledger/customer/{0}/deactivate";
-        private const string Endpoints_Ledger_Customer_Enable = "ledger/customer/{0}/enable";
-        private const string Endpoints_Ledger_Customer_Disable = "ledger/customer/{0}/disable";
+        protected const string Endpoints_Ledger_Customer_List = "ledger/customer";
+        protected const string Endpoints_Ledger_Customer_Get = "ledger/customer/{0}";
+        protected const string Endpoints_Ledger_Customer_Update = "ledger/customer/{0}";
+        protected const string Endpoints_Ledger_Customer_Activate = "ledger/customer/{0}/activate";
+        protected const string Endpoints_Ledger_Customer_Deactivate = "ledger/customer/{0}/deactivate";
+        protected const string Endpoints_Ledger_Customer_Enable = "ledger/customer/{0}/enable";
+        protected const string Endpoints_Ledger_Customer_Disable = "ledger/customer/{0}/disable";
         #endregion
 
         #region Ledger Virtual Currency
-        private const string Endpoints_Ledger_VirtualCurrency_Create = "ledger/virtualCurrency";
-        private const string Endpoints_Ledger_VirtualCurrency_Update = "ledger/virtualCurrency";
-        private const string Endpoints_Ledger_VirtualCurrency_Get = "ledger/virtualCurrency/{0}";
-        private const string Endpoints_Ledger_VirtualCurrency_Mint = "ledger/virtualCurrency/mint";
-        private const string Endpoints_Ledger_VirtualCurrency_Destroy = "ledger/virtualCurrency/revoke";
+        protected const string Endpoints_Ledger_VirtualCurrency_Create = "ledger/virtualCurrency";
+        protected const string Endpoints_Ledger_VirtualCurrency_Update = "ledger/virtualCurrency";
+        protected const string Endpoints_Ledger_VirtualCurrency_Get = "ledger/virtualCurrency/{0}";
+        protected const string Endpoints_Ledger_VirtualCurrency_Mint = "ledger/virtualCurrency/mint";
+        protected const string Endpoints_Ledger_VirtualCurrency_Destroy = "ledger/virtualCurrency/revoke";
         #endregion
 
         #region Ledger Subscription
-        private const string Endpoints_Ledger_Subscription_Create = "subscription";
-        private const string Endpoints_Ledger_Subscription_List = "subscription";
-        private const string Endpoints_Ledger_Subscription_Cancel = "subscription/{0}";
-        private const string Endpoints_Ledger_Subscription_Report = "subscription/report/{0}";
+        protected const string Endpoints_Ledger_Subscription_Create = "subscription";
+        protected const string Endpoints_Ledger_Subscription_List = "subscription";
+        protected const string Endpoints_Ledger_Subscription_Cancel = "subscription/{0}";
+        protected const string Endpoints_Ledger_Subscription_Report = "subscription/report/{0}";
         #endregion
 
         #region Ledger Order Book
-        private const string Endpoints_Ledger_OrderBook_ListHistory = "trade/history";
-        private const string Endpoints_Ledger_OrderBook_ListBuys = "trade/buy";
-        private const string Endpoints_Ledger_OrderBook_ListSells = "trade/sell";
-        private const string Endpoints_Ledger_OrderBook_Place = "trade";
-        private const string Endpoints_Ledger_OrderBook_Get = "trade/{0}";
-        private const string Endpoints_Ledger_OrderBook_Cancel = "trade/{0}";
-        private const string Endpoints_Ledger_OrderBook_CancelAll = "trade/account/{0}";
+        protected const string Endpoints_Ledger_OrderBook_ListHistory = "trade/history";
+        protected const string Endpoints_Ledger_OrderBook_ListBuys = "trade/buy";
+        protected const string Endpoints_Ledger_OrderBook_ListSells = "trade/sell";
+        protected const string Endpoints_Ledger_OrderBook_Place = "trade";
+        protected const string Endpoints_Ledger_OrderBook_Get = "trade/{0}";
+        protected const string Endpoints_Ledger_OrderBook_Cancel = "trade/{0}";
+        protected const string Endpoints_Ledger_OrderBook_CancelAll = "trade/account/{0}";
         #endregion
 
         #region Security Key Management System
-        private const string Endpoints_KMS_GetPendingTransactions = "kms/pending/{0}";
-        private const string Endpoints_KMS_CompletePendingTransaction = "kms/{0}/{1}";
-        private const string Endpoints_KMS_Transaction = "kms/{0}";
+        protected const string Endpoints_KMS_GetPendingTransactions = "kms/pending/{0}";
+        protected const string Endpoints_KMS_CompletePendingTransaction = "kms/{0}/{1}";
+        protected const string Endpoints_KMS_Transaction = "kms/{0}";
         #endregion
 
         #region Security Address
-        private const string Endpoints_Security_CheckMalicousAddress = "security/address/{0}";
+        protected const string Endpoints_Security_CheckMalicousAddress = "security/address/{0}";
         #endregion
 
         #region Off-chain Account
-        private const string Endpoints_Offchain_Account_DepositAddress = "offchain/account/{0}/address";
-        private const string Endpoints_Offchain_Account_DepositAddressBatch = "offchain/account/address/batch";
-        private const string Endpoints_Offchain_Account_CheckAddress = "offchain/account/address/{0}/{1}";
-        private const string Endpoints_Offchain_Account_RemoveAddress = "offchain/account/{0}/address/{1}";
-        private const string Endpoints_Offchain_Account_AssignAddress = "offchain/account/{0}/address/{1}";
+        protected const string Endpoints_Offchain_Account_DepositAddress = "offchain/account/{0}/address";
+        protected const string Endpoints_Offchain_Account_DepositAddressBatch = "offchain/account/address/batch";
+        protected const string Endpoints_Offchain_Account_CheckAddress = "offchain/account/address/{0}/{1}";
+        protected const string Endpoints_Offchain_Account_RemoveAddress = "offchain/account/{0}/address/{1}";
+        protected const string Endpoints_Offchain_Account_AssignAddress = "offchain/account/{0}/address/{1}";
         #endregion
 
         #region Off-chain Blockchain
-        private const string Endpoints_Offchain_Blockchain_Transfer = "offchain/{0}/transfer";
-        private const string Endpoints_Offchain_Blockchain_BitcoinTransfer = "offchain/bitcoin/transfer";
-        private const string Endpoints_Offchain_Blockchain_BitcoinCashTransfer = "offchain/bcash/transfer";
-        private const string Endpoints_Offchain_Blockchain_LitecoinTransfer = "offchain/litecoin/transfer";
-        private const string Endpoints_Offchain_Blockchain_EthereumTransfer = "offchain/ethereum/transfer";
-        private const string Endpoints_Offchain_Blockchain_CreateERC20Token = "offchain/ethereum/erc20";
-        private const string Endpoints_Offchain_Blockchain_DeployERC20Token = "offchain/ethereum/erc20/deploy";
-        private const string Endpoints_Offchain_Blockchain_SetERC20TokenContractAddress = "offchain/ethereum/erc20/{0}/{1}";
-        private const string Endpoints_Offchain_Blockchain_TransferERC20Token = "offchain/ethereum/erc20/transfer";
-        private const string Endpoints_Offchain_Blockchain_StellarTransfer = "offchain/xlm/transfer";
-        private const string Endpoints_Offchain_Blockchain_CreateXLMAsset = "offchain/xlm/asset";
-        private const string Endpoints_Offchain_Blockchain_RippleTransfer = "offchain/xrp/transfer";
-        private const string Endpoints_Offchain_Blockchain_CreateXRPAsset = "offchain/xrp/asset";
-        private const string Endpoints_Offchain_Blockchain_BinanceTransfer = "offchain/bnb/transfer";
-        private const string Endpoints_Offchain_Blockchain_CreateBNBAsset = "offchain/bnb/asset";
+        protected const string Endpoints_Offchain_Blockchain_Transfer = "offchain/{0}/transfer";
+        protected const string Endpoints_Offchain_Blockchain_BitcoinTransfer = "offchain/bitcoin/transfer";
+        protected const string Endpoints_Offchain_Blockchain_BitcoinCashTransfer = "offchain/bcash/transfer";
+        protected const string Endpoints_Offchain_Blockchain_LitecoinTransfer = "offchain/litecoin/transfer";
+        protected const string Endpoints_Offchain_Blockchain_EthereumTransfer = "offchain/ethereum/transfer";
+        protected const string Endpoints_Offchain_Blockchain_CreateERC20Token = "offchain/ethereum/erc20";
+        protected const string Endpoints_Offchain_Blockchain_DeployERC20Token = "offchain/ethereum/erc20/deploy";
+        protected const string Endpoints_Offchain_Blockchain_SetERC20TokenContractAddress = "offchain/ethereum/erc20/{0}/{1}";
+        protected const string Endpoints_Offchain_Blockchain_TransferERC20Token = "offchain/ethereum/erc20/transfer";
+        protected const string Endpoints_Offchain_Blockchain_StellarTransfer = "offchain/xlm/transfer";
+        protected const string Endpoints_Offchain_Blockchain_CreateXLMAsset = "offchain/xlm/asset";
+        protected const string Endpoints_Offchain_Blockchain_RippleTransfer = "offchain/xrp/transfer";
+        protected const string Endpoints_Offchain_Blockchain_CreateXRPAsset = "offchain/xrp/asset";
+        protected const string Endpoints_Offchain_Blockchain_BinanceTransfer = "offchain/bnb/transfer";
+        protected const string Endpoints_Offchain_Blockchain_CreateBNBAsset = "offchain/bnb/asset";
         #endregion
 
         #region Off-chain Withdrawal
-        private const string Endpoints_Offchain_Withdrawal_Store = "offchain/withdrawal";
-        private const string Endpoints_Offchain_Withdrawal_Complete = "offchain/withdrawal/{0}/{1}";
-        private const string Endpoints_Offchain_Withdrawal_Cancel = "offchain/withdrawal/{0";
-        private const string Endpoints_Offchain_Withdrawal_Broadcast = "offchain/withdrawal/broadcast";
+        protected const string Endpoints_Offchain_Withdrawal_Store = "offchain/withdrawal";
+        protected const string Endpoints_Offchain_Withdrawal_Complete = "offchain/withdrawal/{0}/{1}";
+        protected const string Endpoints_Offchain_Withdrawal_Cancel = "offchain/withdrawal/{0";
+        protected const string Endpoints_Offchain_Withdrawal_Broadcast = "offchain/withdrawal/broadcast";
         #endregion
 
         #region Blockchain - Shared
-        private const string Endpoints_Blockchain_GenerateWallet = "{0}/wallet";
-        private const string Endpoints_Blockchain_GenerateDepositAddress = "{0}/address/{1}/{2}";
-        private const string Endpoints_Blockchain_GenerateWalletPrivateKey = "{0}/wallet/priv";
+        protected const string Endpoints_Blockchain_GenerateWallet = "{0}/wallet";
+        protected const string Endpoints_Blockchain_GenerateDepositAddress = "{0}/address/{1}/{2}";
+        protected const string Endpoints_Blockchain_GenerateWalletPrivateKey = "{0}/wallet/priv";
         #endregion
 
         #region Blockchain - Bitcoin
-        private const string Endpoints_Bitcoin_BlockchainInformation = "bitcoin/info";
-        private const string Endpoints_Bitcoin_GetBlockHash = "bitcoin/block/hash/{0}";
-        private const string Endpoints_Bitcoin_GetBlockByHash = "bitcoin/block/{0}";
-        private const string Endpoints_Bitcoin_GetTransactionByHash = "bitcoin/transaction/{0}";
-        private const string Endpoints_Bitcoin_GetTransactionsByAddress = "bitcoin/transaction/address/{0}";
-        private const string Endpoints_Bitcoin_GetBalance = "bitcoin/address/balance/{0}";
-        private const string Endpoints_Bitcoin_GetTransactionUTXO = "bitcoin/utxo/{0}/{1}";
-        private const string Endpoints_Bitcoin_Transaction = "bitcoin/transaction";
-        private const string Endpoints_Bitcoin_Broadcast = "bitcoin/broadcast";
+        protected const string Endpoints_Bitcoin_BlockchainInformation = "bitcoin/info";
+        protected const string Endpoints_Bitcoin_GetBlockHash = "bitcoin/block/hash/{0}";
+        protected const string Endpoints_Bitcoin_GetBlockByHash = "bitcoin/block/{0}";
+        protected const string Endpoints_Bitcoin_GetTransactionByHash = "bitcoin/transaction/{0}";
+        protected const string Endpoints_Bitcoin_GetTransactionsByAddress = "bitcoin/transaction/address/{0}";
+        protected const string Endpoints_Bitcoin_GetBalance = "bitcoin/address/balance/{0}";
+        protected const string Endpoints_Bitcoin_GetTransactionUTXO = "bitcoin/utxo/{0}/{1}";
+        protected const string Endpoints_Bitcoin_Transaction = "bitcoin/transaction";
+        protected const string Endpoints_Bitcoin_Broadcast = "bitcoin/broadcast";
         #endregion
 
         #region Blockchain - Ethereum
-        private const string Endpoints_Ethereum_Web3HttpDriver = "ethereum/web3/{0}";
-        private const string Endpoints_Ethereum_CurrentBlockNumber = "ethereum/block/current";
-        private const string Endpoints_Ethereum_GetBlockByHash = "ethereum/block/{0}";
-        private const string Endpoints_Ethereum_GetTransactionByHash = "ethereum/transaction/{0}";
-        private const string Endpoints_Ethereum_GetETHBalance = "ethereum/account/balance/{0}";
-        private const string Endpoints_Ethereum_GetOutgoingTransactionsCount = "ethereum/transaction/count/{0}";
-        private const string Endpoints_Ethereum_GetTransactionsByAddress = "ethereum/account/transaction/{0}";
-        private const string Endpoints_Ethereum_Send = "ethereum/transaction";
-        private const string Endpoints_Ethereum_Broadcast = "ethereum/broadcast";
-        private const string Endpoints_Ethereum_SmartContract = "ethereum/smartcontract";
-        private const string Endpoints_Ethereum_ERC20Balance = "ethereum/account/balance/erc20/{0}";
-        private const string Endpoints_Ethereum_ERC20DeploySmartContract = "ethereum/erc20/deploy";
-        private const string Endpoints_Ethereum_ERC20Transfer = "ethereum/erc20/transaction";
-        private const string Endpoints_Ethereum_ERC721Balance = "ethereum/erc721/balance/{0}/{1}";
-        private const string Endpoints_Ethereum_ERC721DeploySmartContract = "ethereum/erc721/deploy";
-        private const string Endpoints_Ethereum_ERC721Mint = "ethereum/erc721/mint";
-        private const string Endpoints_Ethereum_ERC721MintMultiple = "ethereum/erc721/mint/batch";
-        private const string Endpoints_Ethereum_ERC721Transfer = "ethereum/erc721/transaction";
-        private const string Endpoints_Ethereum_ERC721Burn = "ethereum/erc721/burn";
-        private const string Endpoints_Ethereum_ERC721Token = "ethereum/erc721/token/{0}/{1}/{2}";
-        private const string Endpoints_Ethereum_ERC721TokenMetadata = "ethereum/erc721/metadata/{0}/{1}";
-        private const string Endpoints_Ethereum_ERC721TokenOwner = "ethereum/erc721/owner/{0}/{1}";
+        protected const string Endpoints_Ethereum_Web3HttpDriver = "ethereum/web3/{0}";
+        protected const string Endpoints_Ethereum_CurrentBlockNumber = "ethereum/block/current";
+        protected const string Endpoints_Ethereum_GetBlockByHash = "ethereum/block/{0}";
+        protected const string Endpoints_Ethereum_GetTransactionByHash = "ethereum/transaction/{0}";
+        protected const string Endpoints_Ethereum_GetETHBalance = "ethereum/account/balance/{0}";
+        protected const string Endpoints_Ethereum_GetOutgoingTransactionsCount = "ethereum/transaction/count/{0}";
+        protected const string Endpoints_Ethereum_GetTransactionsByAddress = "ethereum/account/transaction/{0}";
+        protected const string Endpoints_Ethereum_Send = "ethereum/transaction";
+        protected const string Endpoints_Ethereum_Broadcast = "ethereum/broadcast";
+        protected const string Endpoints_Ethereum_SmartContract = "ethereum/smartcontract";
+        protected const string Endpoints_Ethereum_ERC20Balance = "ethereum/account/balance/erc20/{0}";
+        protected const string Endpoints_Ethereum_ERC20DeploySmartContract = "ethereum/erc20/deploy";
+        protected const string Endpoints_Ethereum_ERC20Transfer = "ethereum/erc20/transaction";
+        protected const string Endpoints_Ethereum_ERC721Balance = "ethereum/erc721/balance/{0}/{1}";
+        protected const string Endpoints_Ethereum_ERC721DeploySmartContract = "ethereum/erc721/deploy";
+        protected const string Endpoints_Ethereum_ERC721Mint = "ethereum/erc721/mint";
+        protected const string Endpoints_Ethereum_ERC721MintMultiple = "ethereum/erc721/mint/batch";
+        protected const string Endpoints_Ethereum_ERC721Transfer = "ethereum/erc721/transaction";
+        protected const string Endpoints_Ethereum_ERC721Burn = "ethereum/erc721/burn";
+        protected const string Endpoints_Ethereum_ERC721Token = "ethereum/erc721/token/{0}/{1}/{2}";
+        protected const string Endpoints_Ethereum_ERC721TokenMetadata = "ethereum/erc721/metadata/{0}/{1}";
+        protected const string Endpoints_Ethereum_ERC721TokenOwner = "ethereum/erc721/owner/{0}/{1}";
         #endregion
 
         #region Blockchain - BitcoinCash
-        private const string Endpoints_BitcoinCash_BlockchainInformation = "bcash/info";
-        private const string Endpoints_BitcoinCash_GetBlockHash = "bcash/block/hash/{0}";
-        private const string Endpoints_BitcoinCash_GetBlockByHash = "bcash/block/{0}";
-        private const string Endpoints_BitcoinCash_GetTransactionByHash = "bcash/transaction/{0}";
-        private const string Endpoints_BitcoinCash_GetTransactionsByAddress = "bcash/transaction/address/{0}";
-        private const string Endpoints_BitcoinCash_Transaction = "bcash/transaction";
-        private const string Endpoints_BitcoinCash_Broadcast = "bcash/broadcast";
+        protected const string Endpoints_BitcoinCash_BlockchainInformation = "bcash/info";
+        protected const string Endpoints_BitcoinCash_GetBlockHash = "bcash/block/hash/{0}";
+        protected const string Endpoints_BitcoinCash_GetBlockByHash = "bcash/block/{0}";
+        protected const string Endpoints_BitcoinCash_GetTransactionByHash = "bcash/transaction/{0}";
+        protected const string Endpoints_BitcoinCash_GetTransactionsByAddress = "bcash/transaction/address/{0}";
+        protected const string Endpoints_BitcoinCash_Transaction = "bcash/transaction";
+        protected const string Endpoints_BitcoinCash_Broadcast = "bcash/broadcast";
         #endregion
 
         #region Blockchain - Litecoin
-        private const string Endpoints_Litecoin_BlockchainInformation = "litecoin/info";
-        private const string Endpoints_Litecoin_GetBlockHash = "litecoin/block/hash/{0}";
-        private const string Endpoints_Litecoin_GetBlockByHash = "litecoin/block/{0}";
-        private const string Endpoints_Litecoin_GetTransactionByHash = "litecoin/transaction/{0}";
-        private const string Endpoints_Litecoin_GetTransactionsByAddress = "litecoin/transaction/address/{0}";
-        private const string Endpoints_Litecoin_GetBalance = "litecoin/address/balance/{0}";
-        private const string Endpoints_Litecoin_GetTransactionUTXO = "litecoin/utxo/{0}/{1}";
-        private const string Endpoints_Litecoin_Transaction = "litecoin/transaction";
-        private const string Endpoints_Litecoin_Broadcast = "litecoin/broadcast";
+        protected const string Endpoints_Litecoin_BlockchainInformation = "litecoin/info";
+        protected const string Endpoints_Litecoin_GetBlockHash = "litecoin/block/hash/{0}";
+        protected const string Endpoints_Litecoin_GetBlockByHash = "litecoin/block/{0}";
+        protected const string Endpoints_Litecoin_GetTransactionByHash = "litecoin/transaction/{0}";
+        protected const string Endpoints_Litecoin_GetTransactionsByAddress = "litecoin/transaction/address/{0}";
+        protected const string Endpoints_Litecoin_GetBalance = "litecoin/address/balance/{0}";
+        protected const string Endpoints_Litecoin_GetTransactionUTXO = "litecoin/utxo/{0}/{1}";
+        protected const string Endpoints_Litecoin_Transaction = "litecoin/transaction";
+        protected const string Endpoints_Litecoin_Broadcast = "litecoin/broadcast";
         #endregion
 
         #region Blockchain - Ripple
-        private const string Endpoints_Ripple_GenerateAccount = "xrp/account";
-        private const string Endpoints_Ripple_BlockchainInformation = "xrp/info";
-        private const string Endpoints_Ripple_BlockchainFee = "xrp/fee";
-        private const string Endpoints_Ripple_GetTransactionsByAccount = "xrp/account/tx/{0}";
-        private const string Endpoints_Ripple_GetLedger = "xrp/ledger/{0}";
-        private const string Endpoints_Ripple_GetTransactionByHash = "xrp/transaction/{0}";
-        private const string Endpoints_Ripple_AccountInfo = "xrp/account/{0}";
-        private const string Endpoints_Ripple_GetBalance = "xrp/account/{0}/balance";
-        private const string Endpoints_Ripple_Send = "xrp/transaction";
-        private const string Endpoints_Ripple_Trust = "xrp/trust";
-        private const string Endpoints_Ripple_AccountSettings = "xrp/account/settings";
-        private const string Endpoints_Ripple_Broadcast = "xrp/broadcast";
+        protected const string Endpoints_Ripple_GenerateAccount = "xrp/account";
+        protected const string Endpoints_Ripple_BlockchainInformation = "xrp/info";
+        protected const string Endpoints_Ripple_BlockchainFee = "xrp/fee";
+        protected const string Endpoints_Ripple_GetTransactionsByAccount = "xrp/account/tx/{0}";
+        protected const string Endpoints_Ripple_GetLedger = "xrp/ledger/{0}";
+        protected const string Endpoints_Ripple_GetTransactionByHash = "xrp/transaction/{0}";
+        protected const string Endpoints_Ripple_AccountInfo = "xrp/account/{0}";
+        protected const string Endpoints_Ripple_GetBalance = "xrp/account/{0}/balance";
+        protected const string Endpoints_Ripple_Send = "xrp/transaction";
+        protected const string Endpoints_Ripple_Trust = "xrp/trust";
+        protected const string Endpoints_Ripple_AccountSettings = "xrp/account/settings";
+        protected const string Endpoints_Ripple_Broadcast = "xrp/broadcast";
         #endregion
 
         #region Blockchain - Stellar
-        private const string Endpoints_Stellar_GenerateAccount = "xlm/account";
-        private const string Endpoints_Stellar_BlockchainInformation = "xlm/info";
-        private const string Endpoints_Stellar_BlockchainFee = "xlm/fee";
-        private const string Endpoints_Stellar_GetLedger = "xlm/ledger/{0}";
-        private const string Endpoints_Stellar_GetTransactionsInLedger = "xlm/ledger/{0}/transaction";
-        private const string Endpoints_Stellar_GetTransactionsByAccount = "xlm/account/tx/{0}";
-        private const string Endpoints_Stellar_GetTransactionByHash = "xlm/transaction/{0}";
-        private const string Endpoints_Stellar_AccountInfo = "xlm/account/{0}";
-        private const string Endpoints_Stellar_Send = "xlm/transaction";
-        private const string Endpoints_Stellar_Trust = "xlm/trust";
-        private const string Endpoints_Stellar_Broadcast = "xlm/broadcast";
+        protected const string Endpoints_Stellar_GenerateAccount = "xlm/account";
+        protected const string Endpoints_Stellar_BlockchainInformation = "xlm/info";
+        protected const string Endpoints_Stellar_BlockchainFee = "xlm/fee";
+        protected const string Endpoints_Stellar_GetLedger = "xlm/ledger/{0}";
+        protected const string Endpoints_Stellar_GetTransactionsInLedger = "xlm/ledger/{0}/transaction";
+        protected const string Endpoints_Stellar_GetTransactionsByAccount = "xlm/account/tx/{0}";
+        protected const string Endpoints_Stellar_GetTransactionByHash = "xlm/transaction/{0}";
+        protected const string Endpoints_Stellar_AccountInfo = "xlm/account/{0}";
+        protected const string Endpoints_Stellar_Send = "xlm/transaction";
+        protected const string Endpoints_Stellar_Trust = "xlm/trust";
+        protected const string Endpoints_Stellar_Broadcast = "xlm/broadcast";
         #endregion
 
         #region Blockchain - Records
-        private const string Endpoints_Records_Log = "record";
+        protected const string Endpoints_Records_Log = "record";
         #endregion
 
         #region Blockchain - Binance
-        private const string Endpoints_Binance_GenerateAccount = "bnb/account";
-        private const string Endpoints_Binance_CurrentBlock = "bnb/block/current";
-        private const string Endpoints_Binance_GetTransactionsInBlock = "bnb/block/{0}";
-        private const string Endpoints_Binance_AccountInfo = "bnb/account/{0}";
-        private const string Endpoints_Binance_GetTransaction = "bnb/transaction/{0}";
-        private const string Endpoints_Binance_Send = "bnb/transaction";
-        private const string Endpoints_Binance_Broadcast = "bnb/broadcast";
+        protected const string Endpoints_Binance_GenerateAccount = "bnb/account";
+        protected const string Endpoints_Binance_CurrentBlock = "bnb/block/current";
+        protected const string Endpoints_Binance_GetTransactionsInBlock = "bnb/block/{0}";
+        protected const string Endpoints_Binance_AccountInfo = "bnb/account/{0}";
+        protected const string Endpoints_Binance_GetTransaction = "bnb/transaction/{0}";
+        protected const string Endpoints_Binance_Send = "bnb/transaction";
+        protected const string Endpoints_Binance_Broadcast = "bnb/broadcast";
         #endregion
 
         #region Blockchain - VeChain
-        private const string Endpoints_VeChain_CurrentBlock = "vet/block/current";
-        private const string Endpoints_VeChain_GetBlockByHash = "vet/block/{0}";
-        private const string Endpoints_VeChain_GetBalance = "vet/account/balance/{0}";
-        private const string Endpoints_VeChain_GetEnergy = "vet/account/energy/{0}";
-        private const string Endpoints_VeChain_GetTransactionByHash = "vet/transaction/{0}";
-        private const string Endpoints_VeChain_GetTransactionReceipt = "vet/transaction/{0}/receipt";
-        private const string Endpoints_VeChain_Transaction = "vet/transaction";
-        private const string Endpoints_VeChain_Gas = "vet/transaction/gas";
-        private const string Endpoints_VeChain_Broadcast = "vet/broadcast";
+        protected const string Endpoints_VeChain_CurrentBlock = "vet/block/current";
+        protected const string Endpoints_VeChain_GetBlockByHash = "vet/block/{0}";
+        protected const string Endpoints_VeChain_GetBalance = "vet/account/balance/{0}";
+        protected const string Endpoints_VeChain_GetEnergy = "vet/account/energy/{0}";
+        protected const string Endpoints_VeChain_GetTransactionByHash = "vet/transaction/{0}";
+        protected const string Endpoints_VeChain_GetTransactionReceipt = "vet/transaction/{0}/receipt";
+        protected const string Endpoints_VeChain_Transaction = "vet/transaction";
+        protected const string Endpoints_VeChain_Gas = "vet/transaction/gas";
+        protected const string Endpoints_VeChain_Broadcast = "vet/broadcast";
         #endregion
 
         #region Blockchain - NEO
-        private const string Endpoints_NEO_GenerateAccount = "neo/wallet";
-        private const string Endpoints_NEO_CurrentBlock = "neo/block/current";
-        private const string Endpoints_NEO_GetBlock = "neo/block/{0}";
-        private const string Endpoints_NEO_GetBalance = "neo/account/balance/{0}";
-        private const string Endpoints_NEO_GetAssetInfo = "neo/asset/{0}";
-        private const string Endpoints_NEO_GetUnspentTransactionOutputs = "neo/transaction/out/{0}/{1}";
-        private const string Endpoints_NEO_GetTransactionsByAccount = "neo/account/tx/{0}";
-        private const string Endpoints_NEO_GetContractInfo = "neo/contract/{0}";
-        private const string Endpoints_NEO_GetTransactionByHash = "neo/transaction/{0}";
-        private const string Endpoints_NEO_Send = "neo/transaction";
-        private const string Endpoints_NEO_ClaimGAS = "neo/claim";
-        private const string Endpoints_NEO_Invoke = "neo/invoke";
-        private const string Endpoints_NEO_Broadcast = "neo/broadcast";
+        protected const string Endpoints_NEO_GenerateAccount = "neo/wallet";
+        protected const string Endpoints_NEO_CurrentBlock = "neo/block/current";
+        protected const string Endpoints_NEO_GetBlock = "neo/block/{0}";
+        protected const string Endpoints_NEO_GetBalance = "neo/account/balance/{0}";
+        protected const string Endpoints_NEO_GetAssetInfo = "neo/asset/{0}";
+        protected const string Endpoints_NEO_GetUnspentTransactionOutputs = "neo/transaction/out/{0}/{1}";
+        protected const string Endpoints_NEO_GetTransactionsByAccount = "neo/account/tx/{0}";
+        protected const string Endpoints_NEO_GetContractInfo = "neo/contract/{0}";
+        protected const string Endpoints_NEO_GetTransactionByHash = "neo/transaction/{0}";
+        protected const string Endpoints_NEO_Send = "neo/transaction";
+        protected const string Endpoints_NEO_ClaimGAS = "neo/claim";
+        protected const string Endpoints_NEO_Invoke = "neo/invoke";
+        protected const string Endpoints_NEO_Broadcast = "neo/broadcast";
         #endregion
 
         #region Blockchain - Libra
-        private const string Endpoints_Libra_BlockchainInformation = "libra/info";
-        private const string Endpoints_Libra_GetTransactionsByAccount = "libra/account/transaction/{0}";
-        private const string Endpoints_Libra_AccountInfo = "libra/account/{0}";
-        private const string Endpoints_Libra_GetTransactions = "libra/transaction/{0}/{0}";
+        protected const string Endpoints_Libra_BlockchainInformation = "libra/info";
+        protected const string Endpoints_Libra_GetTransactionsByAccount = "libra/account/transaction/{0}";
+        protected const string Endpoints_Libra_AccountInfo = "libra/account/{0}";
+        protected const string Endpoints_Libra_GetTransactions = "libra/transaction/{0}/{0}";
         #endregion
 
         #region Blockchain - TRON
-        private const string Endpoints_TRON_GenerateAccount = "tron/account";
-        private const string Endpoints_TRON_CurrentBlock = "tron/info";
-        private const string Endpoints_TRON_GetBlock = "tron/block/{0}";
-        private const string Endpoints_TRON_GetTransactionsByAccount = "tron/transaction/account/{0}";
-        private const string Endpoints_TRON_GetTransactionByHash = "tron/transaction/{0}";
-        private const string Endpoints_TRON_Send = "tron/transaction";
-        private const string Endpoints_TRON_Broadcast = "tron/broadcast";
+        protected const string Endpoints_TRON_GenerateAccount = "tron/account";
+        protected const string Endpoints_TRON_CurrentBlock = "tron/info";
+        protected const string Endpoints_TRON_GetBlock = "tron/block/{0}";
+        protected const string Endpoints_TRON_GetTransactionsByAccount = "tron/transaction/account/{0}";
+        protected const string Endpoints_TRON_GetTransactionByHash = "tron/transaction/{0}";
+        protected const string Endpoints_TRON_Send = "tron/transaction";
+        protected const string Endpoints_TRON_Broadcast = "tron/broadcast";
+
+        protected const string Endpoints_TRON_Freeze = "tron/freezeBalance";
+        protected const string Endpoints_TRON_TRC10GetToken = "tron/trc10/detail/{0}";
+        protected const string Endpoints_TRON_TRC10CreateToken = "tron/trc10/deploy";
+        protected const string Endpoints_TRON_TRC10Send = "tron/trc10/transaction";
+        protected const string Endpoints_TRON_TRC20CreateToken = "tron/trc20/deploy";
+        protected const string Endpoints_TRON_TRC20Send = "tron/trc20/transaction";
         #endregion
 
         #region Blockchain - Scrypta
-        private const string Endpoints_Scrypta_BlockchainInformation = "scrypta/info";
-        private const string Endpoints_Scrypta_GetBlockHash = "scrypta/block/hash/{0}";
-        private const string Endpoints_Scrypta_GetBlockByHash = "scrypta/block/{0}";
-        private const string Endpoints_Scrypta_GetTransactionByHash = "scrypta/transaction/{0}";
-        private const string Endpoints_Scrypta_GetTransactionsByAddress = "scrypta/transaction/address/{0}";
-        private const string Endpoints_Scrypta_GetSpendableUTXO = "scrypta/utxo/{0}";
-        private const string Endpoints_Scrypta_GetTransactionUTXO = "scrypta/utxo/{0}/{1}";
-        private const string Endpoints_Scrypta_Transaction = "scrypta/transaction";
-        private const string Endpoints_Scrypta_Broadcast = "scrypta/broadcast";
+        protected const string Endpoints_Scrypta_BlockchainInformation = "scrypta/info";
+        protected const string Endpoints_Scrypta_GetBlockHash = "scrypta/block/hash/{0}";
+        protected const string Endpoints_Scrypta_GetBlockByHash = "scrypta/block/{0}";
+        protected const string Endpoints_Scrypta_GetTransactionByHash = "scrypta/transaction/{0}";
+        protected const string Endpoints_Scrypta_GetTransactionsByAddress = "scrypta/transaction/address/{0}";
+        protected const string Endpoints_Scrypta_GetSpendableUTXO = "scrypta/utxo/{0}";
+        protected const string Endpoints_Scrypta_GetTransactionUTXO = "scrypta/utxo/{0}/{1}";
+        protected const string Endpoints_Scrypta_Transaction = "scrypta/transaction";
+        protected const string Endpoints_Scrypta_Broadcast = "scrypta/broadcast";
         #endregion
 
         #region Tatum Service
-        private const string Endpoints_Service_Consumption = "tatum/usage";
-        private const string Endpoints_Service_ExchangeRates = "tatum/rate/{0}";
-        private const string Endpoints_Service_Version = "tatum/version";
+        protected const string Endpoints_Service_Consumption = "tatum/usage";
+        protected const string Endpoints_Service_ExchangeRates = "tatum/rate/{0}";
+        protected const string Endpoints_Service_Version = "tatum/version";
         #endregion
 
         #endregion
 
         #region Constructor / Destructor
+        /// <summary>
+        /// Create a new instance of TatumClient using the default options
+        /// </summary>
+        public TatumClient() : this("", DefaultOptions)
+        {
+        }
+
         /// <summary>
         /// Create a new instance of TatumClient using the default options
         /// </summary>
@@ -407,7 +421,7 @@ namespace Tatum.Net
         /// <param name="options">Ledger Account Options</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<LedgerAccount> LedgerAccount_Create(BlockchainType chain, LedgerAccountOptions options = null, CancellationToken ct = default) => LedgerAccount_Create_Async(chain, options, ct).Result;
+        public virtual WebCallResult<LedgerAccount> LedgerAccount_Create(BlockchainType chain, LedgerAccountOptions options = null, CancellationToken ct = default) => LedgerAccount_Create_Async(chain, options, ct).Result;
         /// <summary>
         /// <b>Title:</b> Create new account<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -431,7 +445,7 @@ namespace Tatum.Net
         /// <param name="options">Ledger Account Options</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<LedgerAccount>> LedgerAccount_Create_Async(BlockchainType chain, LedgerAccountOptions options = null, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<LedgerAccount>> LedgerAccount_Create_Async(BlockchainType chain, LedgerAccountOptions options = null, CancellationToken ct = default)
         {
             var ops = chain.GetBlockchainOptions();
             var parameters = new Dictionary<string, object> {
@@ -462,7 +476,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<LedgerAccount>> LedgerAccount_GetAccounts(int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerAccount_GetAccounts_Async(pageSize, offset, ct).Result;
+        public virtual WebCallResult<IEnumerable<LedgerAccount>> LedgerAccount_GetAccounts(int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerAccount_GetAccounts_Async(pageSize, offset, ct).Result;
         /// <summary>
         /// <b>Title:</b> List all accounts<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -473,7 +487,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<LedgerAccount>>> LedgerAccount_GetAccounts_Async(int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<LedgerAccount>>> LedgerAccount_GetAccounts_Async(int pageSize = 50, int offset = 0, CancellationToken ct = default)
         {
             pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
 
@@ -499,7 +513,7 @@ namespace Tatum.Net
         /// <param name="accounts">Ledger Accounts List</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<LedgerAccount>> LedgerAccount_CreateBatch(IEnumerable<LedgerAccountOptions> accounts, CancellationToken ct = default) => LedgerAccount_CreateBatch_Async(accounts, ct).Result;
+        public virtual WebCallResult<IEnumerable<LedgerAccount>> LedgerAccount_CreateBatch(IEnumerable<LedgerAccountOptions> accounts, CancellationToken ct = default) => LedgerAccount_CreateBatch_Async(accounts, ct).Result;
         /// <summary>
         /// <b>Title:</b> Create multiple accounts in a batch call<br />
         /// <b>Credits:</b> 2 credits per API call + 1 credit for every created account.<br />
@@ -509,7 +523,7 @@ namespace Tatum.Net
         /// <param name="accounts">Ledger Accounts List</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<LedgerAccount>>> LedgerAccount_CreateBatch_Async(IEnumerable<LedgerAccountOptions> accounts, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<LedgerAccount>>> LedgerAccount_CreateBatch_Async(IEnumerable<LedgerAccountOptions> accounts, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "accounts", accounts },
@@ -532,7 +546,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<LedgerAccount>> LedgerAccount_GetByCustomerId(string customer_id, int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerAccount_GetByCustomerId_Async(customer_id, pageSize, offset, ct).Result;
+        public virtual WebCallResult<IEnumerable<LedgerAccount>> LedgerAccount_GetByCustomerId(string customer_id, int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerAccount_GetByCustomerId_Async(customer_id, pageSize, offset, ct).Result;
         /// <summary>
         /// <b>Title:</b> List all customer accounts<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -544,7 +558,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<LedgerAccount>>> LedgerAccount_GetByCustomerId_Async(string customer_id, int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<LedgerAccount>>> LedgerAccount_GetByCustomerId_Async(string customer_id, int pageSize = 50, int offset = 0, CancellationToken ct = default)
         {
             pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
 
@@ -564,7 +578,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<LedgerAccount> LedgerAccount_GetById(string account_id, int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerAccount_GetById_Async(account_id, pageSize, offset, ct).Result;
+        public virtual WebCallResult<LedgerAccount> LedgerAccount_GetById(string account_id, int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerAccount_GetById_Async(account_id, pageSize, offset, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get account by ID<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -576,7 +590,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<LedgerAccount>> LedgerAccount_GetById_Async(string account_id, int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<LedgerAccount>> LedgerAccount_GetById_Async(string account_id, int pageSize = 50, int offset = 0, CancellationToken ct = default)
         {
             pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
 
@@ -601,7 +615,7 @@ namespace Tatum.Net
         /// <param name="accountNumber">Account number from external system.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> LedgerAccount_Update(string account_id, string accountCode, string accountNumber, CancellationToken ct = default) => LedgerAccount_Update_Async(account_id, accountCode, accountNumber, ct).Result;
+        public virtual WebCallResult<bool> LedgerAccount_Update(string account_id, string accountCode, string accountNumber, CancellationToken ct = default) => LedgerAccount_Update_Async(account_id, accountCode, accountNumber, ct).Result;
         /// <summary>
         /// <b>Title:</b> Update account<br />
         /// <b>Credits:</b> 2 credit per API call.<br />
@@ -613,7 +627,7 @@ namespace Tatum.Net
         /// <param name="accountNumber">Account number from external system.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> LedgerAccount_Update_Async(string account_id, string accountCode, string accountNumber, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> LedgerAccount_Update_Async(string account_id, string accountCode, string accountNumber, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "accountCode", accountCode },
@@ -637,7 +651,7 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<LedgerBalance> LedgerAccount_GetBalance(string account_id, CancellationToken ct = default) => LedgerAccount_GetBalance_Async(account_id, ct).Result;
+        public virtual WebCallResult<LedgerBalance> LedgerAccount_GetBalance(string account_id, CancellationToken ct = default) => LedgerAccount_GetBalance_Async(account_id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get account balance<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -647,7 +661,7 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<LedgerBalance>> LedgerAccount_GetBalance_Async(string account_id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<LedgerBalance>> LedgerAccount_GetBalance_Async(string account_id, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Ledger_Account_Balance, account_id));
@@ -672,7 +686,7 @@ namespace Tatum.Net
         /// <param name="description">Description of blockage.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumId> LedgerAccount_BlockAmount(string account_id, decimal amount, string type, string description, CancellationToken ct = default) => LedgerAccount_BlockAmount_Async(account_id, amount, type, description, ct).Result;
+        public virtual WebCallResult<TatumId> LedgerAccount_BlockAmount(string account_id, decimal amount, string type, string description, CancellationToken ct = default) => LedgerAccount_BlockAmount_Async(account_id, amount, type, description, ct).Result;
         /// <summary>
         /// <b>Title:</b> Block amount on account<br />
         /// <b>Credits:</b> 2 credit per API call.<br />
@@ -691,7 +705,7 @@ namespace Tatum.Net
         /// <param name="description">Description of blockage.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumId>> LedgerAccount_BlockAmount_Async(string account_id, decimal amount, string type, string description, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<TatumId>> LedgerAccount_BlockAmount_Async(string account_id, decimal amount, string type, string description, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "amount", amount.ToString() },
@@ -723,7 +737,7 @@ namespace Tatum.Net
         /// <param name="baseRate">Exchange rate of the base pair. Only applicable for Tatum's Virtual currencies Ledger transactions. Override default exchange rate for the Virtual Currency. Default: 1</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumReference> LedgerAccount_UnlockAmountAndPerformTransaction(
+        public virtual WebCallResult<TatumReference> LedgerAccount_UnlockAmountAndPerformTransaction(
             string blockage_id,
             string recipientAccountId,
             decimal amount,
@@ -755,7 +769,7 @@ namespace Tatum.Net
         /// <param name="baseRate">Exchange rate of the base pair. Only applicable for Tatum's Virtual currencies Ledger transactions. Override default exchange rate for the Virtual Currency. Default: 1</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumReference>> LedgerAccount_UnlockAmountAndPerformTransaction_Async(
+        public virtual async Task<WebCallResult<TatumReference>> LedgerAccount_UnlockAmountAndPerformTransaction_Async(
             string blockage_id,
             string recipientAccountId,
             decimal amount,
@@ -794,7 +808,7 @@ namespace Tatum.Net
         /// <param name="blockage_id">Blockage ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> LedgerAccount_UnblockAmount(string blockage_id, CancellationToken ct = default) => LedgerAccount_UnblockAmount_Async(blockage_id, ct).Result;
+        public virtual WebCallResult<bool> LedgerAccount_UnblockAmount(string blockage_id, CancellationToken ct = default) => LedgerAccount_UnblockAmount_Async(blockage_id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Unblock blocked amount on account<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -804,7 +818,7 @@ namespace Tatum.Net
         /// <param name="blockage_id">Blockage ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> LedgerAccount_UnblockAmount_Async(string blockage_id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> LedgerAccount_UnblockAmount_Async(string blockage_id, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Ledger_Account_UnblockAmount, blockage_id));
@@ -825,7 +839,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<LedgerBlockedAmount>> LedgerAccount_GetBlockedAmounts(string account_id, int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerAccount_GetBlockedAmounts_Async(account_id, pageSize, offset, ct).Result;
+        public virtual WebCallResult<IEnumerable<LedgerBlockedAmount>> LedgerAccount_GetBlockedAmounts(string account_id, int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerAccount_GetBlockedAmounts_Async(account_id, pageSize, offset, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get blocked amounts on account<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -837,7 +851,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<LedgerBlockedAmount>>> LedgerAccount_GetBlockedAmounts_Async(string account_id, int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<LedgerBlockedAmount>>> LedgerAccount_GetBlockedAmounts_Async(string account_id, int pageSize = 50, int offset = 0, CancellationToken ct = default)
         {
             pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
 
@@ -860,7 +874,7 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> LedgerAccount_UnblockAllBlockedAmounts(string account_id, CancellationToken ct = default) => LedgerAccount_UnblockAllBlockedAmounts_Async(account_id, ct).Result;
+        public virtual WebCallResult<bool> LedgerAccount_UnblockAllBlockedAmounts(string account_id, CancellationToken ct = default) => LedgerAccount_UnblockAllBlockedAmounts_Async(account_id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Unblock all blocked amounts on account<br />
         /// <b>Credits:</b>  credit per API call, 1 credits for each deleted blockage. 1 API call + 2 blockages = 3 credits.<br />
@@ -870,7 +884,7 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> LedgerAccount_UnblockAllBlockedAmounts_Async(string account_id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> LedgerAccount_UnblockAllBlockedAmounts_Async(string account_id, CancellationToken ct = default)
         {
             var credits = 1; // 1 credit per API call, 1 credits for each deleted blockage. 1 API call + 2 blockages = 3 credits.
             var url = GetUrl(string.Format(Endpoints_Ledger_Account_UnblockAllBlockedAmounts, account_id));
@@ -889,7 +903,7 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> LedgerAccount_Activate(string account_id, CancellationToken ct = default) => LedgerAccount_Activate_Async(account_id, ct).Result;
+        public virtual WebCallResult<bool> LedgerAccount_Activate(string account_id, CancellationToken ct = default) => LedgerAccount_Activate_Async(account_id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Activate account<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -899,7 +913,7 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> LedgerAccount_Activate_Async(string account_id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> LedgerAccount_Activate_Async(string account_id, CancellationToken ct = default)
         {
             var credits = 2;
             var url = GetUrl(string.Format(Endpoints_Ledger_Account_ActivateLedgerAccount, account_id));
@@ -920,7 +934,7 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> LedgerAccount_Deactivate(string account_id, CancellationToken ct = default) => LedgerAccount_Deactivate_Async(account_id, ct).Result;
+        public virtual WebCallResult<bool> LedgerAccount_Deactivate(string account_id, CancellationToken ct = default) => LedgerAccount_Deactivate_Async(account_id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Deactivate account<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -932,7 +946,7 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> LedgerAccount_Deactivate_Async(string account_id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> LedgerAccount_Deactivate_Async(string account_id, CancellationToken ct = default)
         {
             var credits = 2;
             var url = GetUrl(string.Format(Endpoints_Ledger_Account_DeactivateLedgerAccount, account_id));
@@ -954,7 +968,7 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> LedgerAccount_Freeze(string account_id, CancellationToken ct = default) => LedgerAccount_Freeze_Async(account_id, ct).Result;
+        public virtual WebCallResult<bool> LedgerAccount_Freeze(string account_id, CancellationToken ct = default) => LedgerAccount_Freeze_Async(account_id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Freeze account<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -967,7 +981,7 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> LedgerAccount_Freeze_Async(string account_id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> LedgerAccount_Freeze_Async(string account_id, CancellationToken ct = default)
         {
             var credits = 2;
             var url = GetUrl(string.Format(Endpoints_Ledger_Account_FreezeLedgerAccount, account_id));
@@ -986,7 +1000,7 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> LedgerAccount_Unfreeze(string account_id, CancellationToken ct = default) => LedgerAccount_Unfreeze_Async(account_id, ct).Result;
+        public virtual WebCallResult<bool> LedgerAccount_Unfreeze(string account_id, CancellationToken ct = default) => LedgerAccount_Unfreeze_Async(account_id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Unfreeze account<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -996,7 +1010,7 @@ namespace Tatum.Net
         /// <param name="account_id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> LedgerAccount_Unfreeze_Async(string account_id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> LedgerAccount_Unfreeze_Async(string account_id, CancellationToken ct = default)
         {
             var credits = 2;
             var url = GetUrl(string.Format(Endpoints_Ledger_Account_UnfreezeLedgerAccount, account_id));
@@ -1031,7 +1045,7 @@ namespace Tatum.Net
         /// <param name="senderNote">Note visible to sender</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumReference> LedgerTransaction_SendPayment(
+        public virtual WebCallResult<TatumReference> LedgerTransaction_SendPayment(
             string senderAccountId,
             string recipientAccountId,
             decimal amount,
@@ -1067,7 +1081,7 @@ namespace Tatum.Net
         /// <param name="senderNote">Note visible to sender</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumReference>> LedgerTransaction_SendPayment_Async(
+        public virtual async Task<WebCallResult<TatumReference>> LedgerTransaction_SendPayment_Async(
             string senderAccountId,
             string recipientAccountId,
             decimal amount,
@@ -1121,7 +1135,7 @@ namespace Tatum.Net
         /// <param name="count">Get total count of transactions based on the filter. Either count, or pageSize is accepted.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<LedgerTransaction>> LedgerTransaction_GetTransactionsByAccount(
+        public virtual WebCallResult<IEnumerable<LedgerTransaction>> LedgerTransaction_GetTransactionsByAccount(
             string id,
             string counterAccount = null,
             DateTime? from = null,
@@ -1160,7 +1174,7 @@ namespace Tatum.Net
         /// <param name="count">Get total count of transactions based on the filter. Either count, or pageSize is accepted.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<LedgerTransaction>>> LedgerTransaction_GetTransactionsByAccount_Async(
+        public virtual async Task<WebCallResult<IEnumerable<LedgerTransaction>>> LedgerTransaction_GetTransactionsByAccount_Async(
             string id,
             string counterAccount = null,
             DateTime? from = null,
@@ -1226,7 +1240,7 @@ namespace Tatum.Net
         /// <param name="count">Get total count of transactions based on the filter. Either count, or pageSize is accepted.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<LedgerTransaction>> LedgerTransaction_GetTransactionsByCustomer(
+        public virtual WebCallResult<IEnumerable<LedgerTransaction>> LedgerTransaction_GetTransactionsByCustomer(
             string id,
             string account = null,
             string counterAccount = null,
@@ -1267,7 +1281,7 @@ namespace Tatum.Net
         /// <param name="count">Get total count of transactions based on the filter. Either count, or pageSize is accepted.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<LedgerTransaction>>> LedgerTransaction_GetTransactionsByCustomer_Async(
+        public virtual async Task<WebCallResult<IEnumerable<LedgerTransaction>>> LedgerTransaction_GetTransactionsByCustomer_Async(
             string id,
             string account = null,
             string counterAccount = null,
@@ -1334,7 +1348,7 @@ namespace Tatum.Net
         /// <param name="count">Get total count of transactions based on the filter. Either count, or pageSize is accepted.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<LedgerTransaction>> LedgerTransaction_GetTransactionsByLedger(
+        public virtual WebCallResult<IEnumerable<LedgerTransaction>> LedgerTransaction_GetTransactionsByLedger(
             string account = null,
             string counterAccount = null,
             DateTime? from = null,
@@ -1373,7 +1387,7 @@ namespace Tatum.Net
         /// <param name="count">Get total count of transactions based on the filter. Either count, or pageSize is accepted.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<LedgerTransaction>>> LedgerTransaction_GetTransactionsByLedger_Async(
+        public virtual async Task<WebCallResult<IEnumerable<LedgerTransaction>>> LedgerTransaction_GetTransactionsByLedger_Async(
             string account = null,
             string counterAccount = null,
             DateTime? from = null,
@@ -1423,7 +1437,7 @@ namespace Tatum.Net
         /// <param name="reference">reference</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<LedgerTransaction>> LedgerTransaction_GetTransactionsByReference(string reference, CancellationToken ct = default) => LedgerTransaction_GetTransactionsByReference_Async(reference, ct).Result;
+        public virtual WebCallResult<IEnumerable<LedgerTransaction>> LedgerTransaction_GetTransactionsByReference(string reference, CancellationToken ct = default) => LedgerTransaction_GetTransactionsByReference_Async(reference, ct).Result;
         /// <summary>
         /// <b>Title:</b> Find transactions with given reference across all accounts.<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -1433,7 +1447,7 @@ namespace Tatum.Net
         /// <param name="reference">reference</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<LedgerTransaction>>> LedgerTransaction_GetTransactionsByReference_Async(string reference, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<LedgerTransaction>>> LedgerTransaction_GetTransactionsByReference_Async(string reference, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Ledger_Transaction_GetTransactionsByReference, reference));
@@ -1452,7 +1466,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<LedgerCustomer>> LedgerCustomer_ListAll(int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerCustomer_ListAll_Async(pageSize, offset, ct).Result;
+        public virtual WebCallResult<IEnumerable<LedgerCustomer>> LedgerCustomer_ListAll(int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerCustomer_ListAll_Async(pageSize, offset, ct).Result;
         /// <summary>
         /// <b>Title:</b> List all customers<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -1463,7 +1477,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<LedgerCustomer>>> LedgerCustomer_ListAll_Async(int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<LedgerCustomer>>> LedgerCustomer_ListAll_Async(int pageSize = 50, int offset = 0, CancellationToken ct = default)
         {
             pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
             var parameters = new Dictionary<string, object> {
@@ -1485,7 +1499,7 @@ namespace Tatum.Net
         /// <param name="id">Customer external or internal ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<LedgerCustomer> LedgerCustomer_Get(string id, CancellationToken ct = default) => LedgerCustomer_Get_Async(id, ct).Result;
+        public virtual WebCallResult<LedgerCustomer> LedgerCustomer_Get(string id, CancellationToken ct = default) => LedgerCustomer_Get_Async(id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get customer details<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -1495,7 +1509,7 @@ namespace Tatum.Net
         /// <param name="id">Customer external or internal ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<LedgerCustomer>> LedgerCustomer_Get_Async(string id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<LedgerCustomer>> LedgerCustomer_Get_Async(string id, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Ledger_Customer_Get, id));
@@ -1515,7 +1529,7 @@ namespace Tatum.Net
         /// <param name="providerCountry">Country service provider has to be compliant with. If not set, it will not be updated. ISO-3166-1</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<LedgerCustomer> LedgerCustomer_Update(string id, string externalId, string accountingCurrency = null, string customerCountry = null, string providerCountry = null, CancellationToken ct = default) => LedgerCustomer_Update_Async(id, externalId, accountingCurrency, customerCountry, providerCountry, ct).Result;
+        public virtual WebCallResult<LedgerCustomer> LedgerCustomer_Update(string id, string externalId, string accountingCurrency = null, string customerCountry = null, string providerCountry = null, CancellationToken ct = default) => LedgerCustomer_Update_Async(id, externalId, accountingCurrency, customerCountry, providerCountry, ct).Result;
         /// <summary>
         /// <b>Title:</b> Update customer<br />
         /// <b>Credits:</b> 2 credit per API call.<br />
@@ -1529,7 +1543,7 @@ namespace Tatum.Net
         /// <param name="providerCountry">Country service provider has to be compliant with. If not set, it will not be updated. ISO-3166-1</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<LedgerCustomer>> LedgerCustomer_Update_Async(string id, string externalId, string accountingCurrency = null, string customerCountry = null, string providerCountry = null, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<LedgerCustomer>> LedgerCustomer_Update_Async(string id, string externalId, string accountingCurrency = null, string customerCountry = null, string providerCountry = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "externalId", externalId },
@@ -1552,7 +1566,7 @@ namespace Tatum.Net
         /// <param name="id">Customer internal ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> LedgerCustomer_Activate(string id, CancellationToken ct = default) => LedgerCustomer_Activate_Async(id, ct).Result;
+        public virtual WebCallResult<bool> LedgerCustomer_Activate(string id, CancellationToken ct = default) => LedgerCustomer_Activate_Async(id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Activate customer<br />
         /// <b>Credits:</b> 2 credit per API call.<br />
@@ -1562,7 +1576,7 @@ namespace Tatum.Net
         /// <param name="id">Customer internal ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> LedgerCustomer_Activate_Async(string id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> LedgerCustomer_Activate_Async(string id, CancellationToken ct = default)
         {
             var credits = 2;
             var url = GetUrl(string.Format(Endpoints_Ledger_Customer_Activate, id));
@@ -1581,7 +1595,7 @@ namespace Tatum.Net
         /// <param name="id">Customer internal ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> LedgerCustomer_Deactivate(string id, CancellationToken ct = default) => LedgerCustomer_Deactivate_Async(id, ct).Result;
+        public virtual WebCallResult<bool> LedgerCustomer_Deactivate(string id, CancellationToken ct = default) => LedgerCustomer_Deactivate_Async(id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Deactivate customer<br />
         /// <b>Credits:</b> 2 credit per API call.<br />
@@ -1591,7 +1605,7 @@ namespace Tatum.Net
         /// <param name="id">Customer internal ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> LedgerCustomer_Deactivate_Async(string id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> LedgerCustomer_Deactivate_Async(string id, CancellationToken ct = default)
         {
             var credits = 2;
             var url = GetUrl(string.Format(Endpoints_Ledger_Customer_Deactivate, id));
@@ -1610,7 +1624,7 @@ namespace Tatum.Net
         /// <param name="id">Customer internal ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> LedgerCustomer_Enable(string id, CancellationToken ct = default) => LedgerCustomer_Enable_Async(id, ct).Result;
+        public virtual WebCallResult<bool> LedgerCustomer_Enable(string id, CancellationToken ct = default) => LedgerCustomer_Enable_Async(id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Enable customer<br />
         /// <b>Credits:</b> 2 credit per API call.<br />
@@ -1620,7 +1634,7 @@ namespace Tatum.Net
         /// <param name="id">Customer internal ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> LedgerCustomer_Enable_Async(string id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> LedgerCustomer_Enable_Async(string id, CancellationToken ct = default)
         {
             var credits = 2;
             var url = GetUrl(string.Format(Endpoints_Ledger_Customer_Enable, id));
@@ -1639,7 +1653,7 @@ namespace Tatum.Net
         /// <param name="id">Customer internal ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> LedgerCustomer_Disable(string id, CancellationToken ct = default) => LedgerCustomer_Disable_Async(id, ct).Result;
+        public virtual WebCallResult<bool> LedgerCustomer_Disable(string id, CancellationToken ct = default) => LedgerCustomer_Disable_Async(id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Disable customer<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -1649,7 +1663,7 @@ namespace Tatum.Net
         /// <param name="id">Customer internal ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> LedgerCustomer_Disable_Async(string id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> LedgerCustomer_Disable_Async(string id, CancellationToken ct = default)
         {
             var credits = 2;
             var url = GetUrl(string.Format(Endpoints_Ledger_Customer_Disable, id));
@@ -1681,7 +1695,7 @@ namespace Tatum.Net
         /// <param name="accountingCurrency">All transaction will be billed in this currency for created account associated with this currency. If not set, EUR is used. ISO-4217</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<LedgerReport> LedgerVirtualCurrency_Create(
+        public virtual WebCallResult<LedgerReport> LedgerVirtualCurrency_Create(
             string name,
             string supply,
             string basePair,
@@ -1713,7 +1727,7 @@ namespace Tatum.Net
         /// <param name="accountingCurrency">All transaction will be billed in this currency for created account associated with this currency. If not set, EUR is used. ISO-4217</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<LedgerReport>> LedgerVirtualCurrency_Create_Async(
+        public virtual async Task<WebCallResult<LedgerReport>> LedgerVirtualCurrency_Create_Async(
             string name,
             string supply,
             string basePair,
@@ -1753,7 +1767,7 @@ namespace Tatum.Net
         /// <param name="baseRate">Base pair for virtual currency. Transaction value will be calculated according to this base pair. e.g. 1 VC_VIRTUAL is equal to 1 BTC, if basePair is set to BTC.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> LedgerVirtualCurrency_Update(string name, string basePair = null, decimal? baseRate = null, CancellationToken ct = default) => LedgerVirtualCurrency_Update_Async(name, basePair, baseRate, ct).Result;
+        public virtual WebCallResult<bool> LedgerVirtualCurrency_Update(string name, string basePair = null, decimal? baseRate = null, CancellationToken ct = default) => LedgerVirtualCurrency_Update_Async(name, basePair, baseRate, ct).Result;
         /// <summary>
         /// <b>Title:</b> Update virtual currency<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -1765,7 +1779,7 @@ namespace Tatum.Net
         /// <param name="baseRate">Base pair for virtual currency. Transaction value will be calculated according to this base pair. e.g. 1 VC_VIRTUAL is equal to 1 BTC, if basePair is set to BTC.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> LedgerVirtualCurrency_Update_Async(string name, string basePair = null, decimal? baseRate = null, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> LedgerVirtualCurrency_Update_Async(string name, string basePair = null, decimal? baseRate = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "name", name },
@@ -1790,7 +1804,7 @@ namespace Tatum.Net
         /// <param name="name">name</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<LedgerReport> LedgerVirtualCurrency_Get(string name, CancellationToken ct = default) => LedgerVirtualCurrency_Get_Async(name, ct).Result;
+        public virtual WebCallResult<LedgerReport> LedgerVirtualCurrency_Get(string name, CancellationToken ct = default) => LedgerVirtualCurrency_Get_Async(name, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get virtual currency<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -1800,7 +1814,7 @@ namespace Tatum.Net
         /// <param name="name">name</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<LedgerReport>> LedgerVirtualCurrency_Get_Async(string name, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<LedgerReport>> LedgerVirtualCurrency_Get_Async(string name, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Ledger_VirtualCurrency_Get, name));
@@ -1824,7 +1838,7 @@ namespace Tatum.Net
         /// <param name="senderNote">Note visible to sender. Available in Revoke operation.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumReference> LedgerVirtualCurrency_Mint(
+        public virtual WebCallResult<TatumReference> LedgerVirtualCurrency_Mint(
             string accountId,
             decimal amount,
             string paymentId = null,
@@ -1852,7 +1866,7 @@ namespace Tatum.Net
         /// <param name="senderNote">Note visible to sender. Available in Revoke operation.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumReference>> LedgerVirtualCurrency_Mint_Async(
+        public virtual async Task<WebCallResult<TatumReference>> LedgerVirtualCurrency_Mint_Async(
             string accountId,
             decimal amount,
             string paymentId = null,
@@ -1896,7 +1910,7 @@ namespace Tatum.Net
         /// <param name="senderNote">Note visible to sender. Available in Revoke operation.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumReference> LedgerVirtualCurrency_Destroy(
+        public virtual WebCallResult<TatumReference> LedgerVirtualCurrency_Destroy(
             string accountId,
             decimal amount,
             string paymentId = null,
@@ -1924,7 +1938,7 @@ namespace Tatum.Net
         /// <param name="senderNote">Note visible to sender. Available in Revoke operation.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumReference>> LedgerVirtualCurrency_Destroy_Async(
+        public virtual async Task<WebCallResult<TatumReference>> LedgerVirtualCurrency_Destroy_Async(
             string accountId,
             decimal amount,
             string paymentId = null,
@@ -1991,7 +2005,7 @@ namespace Tatum.Net
         /// <param name="typeOfBalance">Type of balance to filter.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumId> LedgerSubscription_Create(
+        public virtual WebCallResult<TatumId> LedgerSubscription_Create(
             LedgerSubscriptionType type,
             string account_id = null,
             string url = null,
@@ -2039,7 +2053,7 @@ namespace Tatum.Net
         /// <param name="typeOfBalance">Type of balance to filter.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumId>> LedgerSubscription_Create_Async(
+        public virtual async Task<WebCallResult<TatumId>> LedgerSubscription_Create_Async(
             LedgerSubscriptionType type,
             string account_id = null,
             string url = null,
@@ -2116,7 +2130,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<LedgerSubscription>> LedgerSubscription_List(int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerSubscription_List_Async(pageSize, offset, ct).Result;
+        public virtual WebCallResult<IEnumerable<LedgerSubscription>> LedgerSubscription_List(int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerSubscription_List_Async(pageSize, offset, ct).Result;
         /// <summary>
         /// <b>Title:</b> List all active subscriptions<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -2127,7 +2141,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<LedgerSubscription>>> LedgerSubscription_List_Async(int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<LedgerSubscription>>> LedgerSubscription_List_Async(int pageSize = 50, int offset = 0, CancellationToken ct = default)
         {
             pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
 
@@ -2150,7 +2164,7 @@ namespace Tatum.Net
         /// <param name="id">Subscription ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> LedgerSubscription_Cancel(string id, CancellationToken ct = default) => LedgerSubscription_Cancel_Async(id, ct).Result;
+        public virtual WebCallResult<bool> LedgerSubscription_Cancel(string id, CancellationToken ct = default) => LedgerSubscription_Cancel_Async(id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Cancel existing subscription<br />
         /// <b>Credits:</b> 1 credit for API call<br />
@@ -2160,7 +2174,7 @@ namespace Tatum.Net
         /// <param name="id">Subscription ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> LedgerSubscription_Cancel_Async(string id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> LedgerSubscription_Cancel_Async(string id, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Ledger_Subscription_Cancel, id));
@@ -2181,7 +2195,7 @@ namespace Tatum.Net
         /// <param name="id">Subscription ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<LedgerReport>> LedgerSubscription_GetReport(string id, CancellationToken ct = default) => LedgerSubscription_GetReport_Async(id, ct).Result;
+        public virtual WebCallResult<IEnumerable<LedgerReport>> LedgerSubscription_GetReport(string id, CancellationToken ct = default) => LedgerSubscription_GetReport_Async(id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Obtain report for subscription<br />
         /// <b>Credits:</b> 1 credit for API call. Based on the required report type, additional credits may be charged.<br />
@@ -2193,7 +2207,7 @@ namespace Tatum.Net
         /// <param name="id">Subscription ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<LedgerReport>>> LedgerSubscription_GetReport_Async(string id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<LedgerReport>>> LedgerSubscription_GetReport_Async(string id, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Ledger_Subscription_Report, id));
@@ -2214,7 +2228,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<LedgerTrade>> LedgerOrderBook_GetHistoricalTrades(string id, string pair, int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerOrderBook_GetHistoricalTrades_Async(id, pair, pageSize, offset, ct).Result;
+        public virtual WebCallResult<IEnumerable<LedgerTrade>> LedgerOrderBook_GetHistoricalTrades(string id, string pair, int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerOrderBook_GetHistoricalTrades_Async(id, pair, pageSize, offset, ct).Result;
         /// <summary>
         /// <b>Title:</b> List all historical trades<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -2227,7 +2241,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<LedgerTrade>>> LedgerOrderBook_GetHistoricalTrades_Async(string id, string pair, int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<LedgerTrade>>> LedgerOrderBook_GetHistoricalTrades_Async(string id, string pair, int pageSize = 50, int offset = 0, CancellationToken ct = default)
         {
             pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
             var parameters = new Dictionary<string, object> {
@@ -2253,7 +2267,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<LedgerTrade>> LedgerOrderBook_GetBuyTrades(string id, int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerOrderBook_GetBuyTrades_Async(id, pageSize, offset, ct).Result;
+        public virtual WebCallResult<IEnumerable<LedgerTrade>> LedgerOrderBook_GetBuyTrades(string id, int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerOrderBook_GetBuyTrades_Async(id, pageSize, offset, ct).Result;
         /// <summary>
         /// <b>Title:</b> List all active buy trades<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -2265,7 +2279,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<LedgerTrade>>> LedgerOrderBook_GetBuyTrades_Async(string id, int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<LedgerTrade>>> LedgerOrderBook_GetBuyTrades_Async(string id, int pageSize = 50, int offset = 0, CancellationToken ct = default)
         {
             pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
             var parameters = new Dictionary<string, object> {
@@ -2290,7 +2304,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<LedgerTrade>> LedgerOrderBook_GetSellTrades(string id, int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerOrderBook_GetSellTrades_Async(id, pageSize, offset, ct).Result;
+        public virtual WebCallResult<IEnumerable<LedgerTrade>> LedgerOrderBook_GetSellTrades(string id, int pageSize = 50, int offset = 0, CancellationToken ct = default) => LedgerOrderBook_GetSellTrades_Async(id, pageSize, offset, ct).Result;
         /// <summary>
         /// <b>Title:</b> List all active sell trades<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -2302,7 +2316,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<LedgerTrade>>> LedgerOrderBook_GetSellTrades_Async(string id, int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<LedgerTrade>>> LedgerOrderBook_GetSellTrades_Async(string id, int pageSize = 50, int offset = 0, CancellationToken ct = default)
         {
             pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
             var parameters = new Dictionary<string, object> {
@@ -2333,7 +2347,7 @@ namespace Tatum.Net
         /// <param name="fee">Percentage of the trade amount to be paid as a fee.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumId> LedgerOrderBook_PlaceOrder(
+        public virtual WebCallResult<TatumId> LedgerOrderBook_PlaceOrder(
             LedgerTradeType type,
             decimal price,
             decimal amount,
@@ -2360,7 +2374,7 @@ namespace Tatum.Net
         /// <param name="fee">Percentage of the trade amount to be paid as a fee.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumId>> LedgerOrderBook_PlaceOrder_Async(
+        public virtual async Task<WebCallResult<TatumId>> LedgerOrderBook_PlaceOrder_Async(
             LedgerTradeType type,
             decimal price,
             decimal amount,
@@ -2396,7 +2410,7 @@ namespace Tatum.Net
         /// <param name="id">Trade ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<LedgerTrade> LedgerOrderBook_GetTrade(string id, CancellationToken ct = default) => LedgerOrderBook_GetTrade_Async(id, ct).Result;
+        public virtual WebCallResult<LedgerTrade> LedgerOrderBook_GetTrade(string id, CancellationToken ct = default) => LedgerOrderBook_GetTrade_Async(id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get existing trade<br />
         /// <b>Credits:</b> 1 credit for API call<br />
@@ -2406,7 +2420,7 @@ namespace Tatum.Net
         /// <param name="id">Trade ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<LedgerTrade>> LedgerOrderBook_GetTrade_Async(string id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<LedgerTrade>> LedgerOrderBook_GetTrade_Async(string id, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Ledger_OrderBook_Get, id));
@@ -2422,7 +2436,7 @@ namespace Tatum.Net
         /// <param name="id">Trade ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> LedgerOrderBook_CancelOrder(string id, CancellationToken ct = default) => LedgerOrderBook_CancelOrder_Async(id, ct).Result;
+        public virtual WebCallResult<bool> LedgerOrderBook_CancelOrder(string id, CancellationToken ct = default) => LedgerOrderBook_CancelOrder_Async(id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Cancel existing trade<br />
         /// <b>Credits:</b> 1 credit for API call<br />
@@ -2432,7 +2446,7 @@ namespace Tatum.Net
         /// <param name="id">Trade ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> LedgerOrderBook_CancelOrder_Async(string id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> LedgerOrderBook_CancelOrder_Async(string id, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Ledger_OrderBook_Cancel, id));
@@ -2451,7 +2465,7 @@ namespace Tatum.Net
         /// <param name="id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> LedgerOrderBook_CancelAllOrders(string id, CancellationToken ct = default) => LedgerOrderBook_CancelAllOrders_Async(id, ct).Result;
+        public virtual WebCallResult<bool> LedgerOrderBook_CancelAllOrders(string id, CancellationToken ct = default) => LedgerOrderBook_CancelAllOrders_Async(id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Cancel all existing trades for account<br />
         /// <b>Credits:</b> 1 credit for API call, 1 credit for each cancelled trade. 1 API call + 2 cancellations = 3 credits.<br />
@@ -2461,7 +2475,7 @@ namespace Tatum.Net
         /// <param name="id">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> LedgerOrderBook_CancelAllOrders_Async(string id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> LedgerOrderBook_CancelAllOrders_Async(string id, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Ledger_OrderBook_CancelAll, id));
@@ -2482,7 +2496,7 @@ namespace Tatum.Net
         /// <param name="chain">Blockchain to get pending transactions for.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<KMSPendingTransaction>> KMS_GetPendingTransactions(BlockchainType chain, CancellationToken ct = default) => KMS_GetPendingTransactions_Async(chain, ct).Result;
+        public virtual WebCallResult<IEnumerable<KMSPendingTransaction>> KMS_GetPendingTransactions(BlockchainType chain, CancellationToken ct = default) => KMS_GetPendingTransactions_Async(chain, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get pending transactions to sign<br />
         /// <b>Credits:</b> 1 credits per API call.<br />
@@ -2492,7 +2506,7 @@ namespace Tatum.Net
         /// <param name="chain">Blockchain to get pending transactions for.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<KMSPendingTransaction>>> KMS_GetPendingTransactions_Async(BlockchainType chain, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<KMSPendingTransaction>>> KMS_GetPendingTransactions_Async(BlockchainType chain, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_KMS_GetPendingTransactions, JsonConvert.SerializeObject(chain, new BlockchainTypeConverter(false))));
@@ -2509,7 +2523,7 @@ namespace Tatum.Net
         /// <param name="txId">transaction ID of blockchain transaction</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> KMS_CompletePendingTransaction(string id, string txId, CancellationToken ct = default) => KMS_CompletePendingTransaction_Async(id, txId, ct).Result;
+        public virtual WebCallResult<bool> KMS_CompletePendingTransaction(string id, string txId, CancellationToken ct = default) => KMS_CompletePendingTransaction_Async(id, txId, ct).Result;
         /// <summary>
         /// <b>Title:</b> Complete pending transaction to sign<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -2520,7 +2534,7 @@ namespace Tatum.Net
         /// <param name="txId">transaction ID of blockchain transaction</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> KMS_CompletePendingTransaction_Async(string id, string txId, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> KMS_CompletePendingTransaction_Async(string id, string txId, CancellationToken ct = default)
         {
             var credits = 2;
             var url = GetUrl(string.Format(Endpoints_KMS_CompletePendingTransaction, id, txId));
@@ -2539,7 +2553,7 @@ namespace Tatum.Net
         /// <param name="id">ID of transaction</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<KMSPendingTransaction> KMS_GetTransaction(string id, CancellationToken ct = default) => KMS_GetTransaction_Async(id, ct).Result;
+        public virtual WebCallResult<KMSPendingTransaction> KMS_GetTransaction(string id, CancellationToken ct = default) => KMS_GetTransaction_Async(id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get transaction details<br />
         /// <b>Credits:</b> 1 credits per API call.<br />
@@ -2549,7 +2563,7 @@ namespace Tatum.Net
         /// <param name="id">ID of transaction</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<KMSPendingTransaction>> KMS_GetTransaction_Async(string id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<KMSPendingTransaction>> KMS_GetTransaction_Async(string id, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_KMS_Transaction, id));
@@ -2566,7 +2580,7 @@ namespace Tatum.Net
         /// <param name="revert">Defines whether fee should be reverted to account balance as well as amount. Defaults to true. Revert true would be typically used when withdrawal was not broadcast to blockchain. False is used usually for Ethereum ERC20 based currencies.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> KMS_DeleteTransaction(string id, bool revert = true, CancellationToken ct = default) => KMS_DeleteTransaction_Async(id, revert, ct).Result;
+        public virtual WebCallResult<bool> KMS_DeleteTransaction(string id, bool revert = true, CancellationToken ct = default) => KMS_DeleteTransaction_Async(id, revert, ct).Result;
         /// <summary>
         /// <b>Title:</b> Delete transaction<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -2577,7 +2591,7 @@ namespace Tatum.Net
         /// <param name="revert">Defines whether fee should be reverted to account balance as well as amount. Defaults to true. Revert true would be typically used when withdrawal was not broadcast to blockchain. False is used usually for Ethereum ERC20 based currencies.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> KMS_DeleteTransaction_Async(string id, bool revert = true, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> KMS_DeleteTransaction_Async(string id, bool revert = true, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -2603,7 +2617,7 @@ namespace Tatum.Net
         /// <param name="address">Check, if the blockchain address is malicous. Malicous address can contain assets from the DarkWeb, is connected to the scam projects or contains stolen funds.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<SecurityStatus> Security_CheckMalicousAddress(string address, CancellationToken ct = default) => Security_CheckMalicousAddress_Async(address, ct).Result;
+        public virtual WebCallResult<SecurityStatus> Security_CheckMalicousAddress(string address, CancellationToken ct = default) => Security_CheckMalicousAddress_Async(address, ct).Result;
         /// <summary>
         /// <b>Title:</b> Check malicous address<br />
         /// <b>Credits:</b> 1 credits per API call.<br />
@@ -2613,7 +2627,7 @@ namespace Tatum.Net
         /// <param name="address">Check, if the blockchain address is malicous. Malicous address can contain assets from the DarkWeb, is connected to the scam projects or contains stolen funds.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<SecurityStatus>> Security_CheckMalicousAddress_Async(string address, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<SecurityStatus>> Security_CheckMalicousAddress_Async(string address, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Security_CheckMalicousAddress, address));
@@ -2634,7 +2648,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation path index for specific address. If not present, last used index for given xpub of account + 1 is used. We recommend not to pass this value manually, since when some of the indexes are skipped, it is not possible to use them lately to generate address from it.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<OffchainDepositAddress> OffchainAccount_GenerateDepositAddress(string account, int? index = null, CancellationToken ct = default) => OffchainAccount_GenerateDepositAddress_Async(account, index, ct).Result;
+        public virtual WebCallResult<OffchainDepositAddress> OffchainAccount_GenerateDepositAddress(string account, int? index = null, CancellationToken ct = default) => OffchainAccount_GenerateDepositAddress_Async(account, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Create new deposit address<br />
         /// <b>Credits:</b> 2 credits per API call and 5 credits for each address registered for scanning every day.<br />
@@ -2647,7 +2661,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation path index for specific address. If not present, last used index for given xpub of account + 1 is used. We recommend not to pass this value manually, since when some of the indexes are skipped, it is not possible to use them lately to generate address from it.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<OffchainDepositAddress>> OffchainAccount_GenerateDepositAddress_Async(string account, int? index = null, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<OffchainDepositAddress>> OffchainAccount_GenerateDepositAddress_Async(string account, int? index = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("index", index);
@@ -2666,7 +2680,7 @@ namespace Tatum.Net
         /// <param name="account">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<OffchainDepositAddress>> OffchainAccount_GetAllDepositAddresses(string account, CancellationToken ct = default) => OffchainAccount_GetAllDepositAddresses_Async(account, ct).Result;
+        public virtual WebCallResult<IEnumerable<OffchainDepositAddress>> OffchainAccount_GetAllDepositAddresses(string account, CancellationToken ct = default) => OffchainAccount_GetAllDepositAddresses_Async(account, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get all deposit addresses for account<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -2676,7 +2690,7 @@ namespace Tatum.Net
         /// <param name="account">Account ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<OffchainDepositAddress>>> OffchainAccount_GetAllDepositAddresses_Async(string account, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<OffchainDepositAddress>>> OffchainAccount_GetAllDepositAddresses_Async(string account, CancellationToken ct = default)
         {
             var credits = 2;
             var url = GetUrl(string.Format(Endpoints_Offchain_Account_DepositAddress, account));
@@ -2694,7 +2708,7 @@ namespace Tatum.Net
         /// <param name="addresses"></param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<OffchainDepositAddress>> OffchainAccount_GenerateMultipleDepositAddresses(IEnumerable<OffchainDepositAddressRequest> addresses, CancellationToken ct = default) => OffchainAccount_GenerateMultipleDepositAddresses_Async(addresses, ct).Result;
+        public virtual WebCallResult<IEnumerable<OffchainDepositAddress>> OffchainAccount_GenerateMultipleDepositAddresses(IEnumerable<OffchainDepositAddressRequest> addresses, CancellationToken ct = default) => OffchainAccount_GenerateMultipleDepositAddresses_Async(addresses, ct).Result;
         /// <summary>
         /// <b>Title:</b> Create new deposit addresses in a batch call<br />
         /// <b>Credits:</b> 2 credits per API call, 1 credit for every address created and 5 credits for each address registered for scanning every day.<br />
@@ -2706,7 +2720,7 @@ namespace Tatum.Net
         /// <param name="addresses"></param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<OffchainDepositAddress>>> OffchainAccount_GenerateMultipleDepositAddresses_Async(IEnumerable<OffchainDepositAddressRequest> addresses, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<OffchainDepositAddress>>> OffchainAccount_GenerateMultipleDepositAddresses_Async(IEnumerable<OffchainDepositAddressRequest> addresses, CancellationToken ct = default)
         {
             if (addresses == null || addresses.Count() == 0)
                 throw new ArgumentException("addresses parameter must contain one element at least");
@@ -2732,7 +2746,7 @@ namespace Tatum.Net
         /// <param name="index">In case of XLM or XRP, this is a memo or DestinationTag to search for.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<OffchainDepositAddressState> OffchainAccount_CheckAddress(BlockchainType chain, string address, int? index = null, CancellationToken ct = default) => OffchainAccount_CheckAddress_Async(chain, address, index, ct).Result;
+        public virtual WebCallResult<OffchainDepositAddressState> OffchainAccount_CheckAddress(BlockchainType chain, string address, int? index = null, CancellationToken ct = default) => OffchainAccount_CheckAddress_Async(chain, address, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Check, if deposit address is assigned<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -2744,7 +2758,7 @@ namespace Tatum.Net
         /// <param name="index">In case of XLM or XRP, this is a memo or DestinationTag to search for.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<OffchainDepositAddressState>> OffchainAccount_CheckAddress_Async(BlockchainType chain, string address, int? index = null, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<OffchainDepositAddressState>> OffchainAccount_CheckAddress_Async(BlockchainType chain, string address, int? index = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("index", index);
@@ -2765,7 +2779,7 @@ namespace Tatum.Net
         /// <param name="address">Blockchain address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> OffchainAccount_RemoveAddressFromAccount(string account, string address, CancellationToken ct = default) => OffchainAccount_RemoveAddressFromAccount_Async(account, address, ct).Result;
+        public virtual WebCallResult<bool> OffchainAccount_RemoveAddressFromAccount(string account, string address, CancellationToken ct = default) => OffchainAccount_RemoveAddressFromAccount_Async(account, address, ct).Result;
         /// <summary>
         /// <b>Title:</b> Remove address for account<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -2776,7 +2790,7 @@ namespace Tatum.Net
         /// <param name="address">Blockchain address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> OffchainAccount_RemoveAddressFromAccount_Async(string account, string address, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> OffchainAccount_RemoveAddressFromAccount_Async(string account, string address, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Offchain_Account_RemoveAddress, account, address));
@@ -2796,7 +2810,7 @@ namespace Tatum.Net
         /// <param name="address">Blockchain address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<OffchainDepositAddress>> OffchainAccount_AssignAddressToAccount(string account, string address, CancellationToken ct = default) => OffchainAccount_AssignAddressToAccount_Async(account, address, ct).Result;
+        public virtual WebCallResult<IEnumerable<OffchainDepositAddress>> OffchainAccount_AssignAddressToAccount(string account, string address, CancellationToken ct = default) => OffchainAccount_AssignAddressToAccount_Async(account, address, ct).Result;
         /// <summary>
         /// <b>Title:</b> Assign address for account<br />
         /// <b>Credits:</b> 2 credits for API call and 5 credits for each address registered for scanning every day.<br />
@@ -2807,7 +2821,7 @@ namespace Tatum.Net
         /// <param name="address">Blockchain address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<OffchainDepositAddress>>> OffchainAccount_AssignAddressToAccount_Async(string account, string address, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<OffchainDepositAddress>>> OffchainAccount_AssignAddressToAccount_Async(string account, string address, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Offchain_Account_AssignAddress, account, address));
@@ -2816,7 +2830,7 @@ namespace Tatum.Net
         #endregion
 
         #region Off-chain / Blockchain
-        internal async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_Send_Async(
+        protected virtual async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_Send_Async(
             BlockchainType chain,
             string senderAccountId, string to_address, decimal amount, bool? compliant = null, decimal? fee = null,
             IEnumerable<decimal> multipleAmounts = null,
@@ -2902,7 +2916,7 @@ namespace Tatum.Net
         /// <param name="senderNote">Note visible to owner of withdrawing account</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendBitcoin(
+        public virtual WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendBitcoin(
             string senderAccountId, string to_address, decimal amount, bool? compliant = null, decimal? fee = null,
             IEnumerable<decimal> multipleAmounts = null, IEnumerable<OffchainAddressPrivateKeyPair> keyPairs = null,
             string attr = null, string mnemonic = null, string signatureId = null,
@@ -2941,7 +2955,7 @@ namespace Tatum.Net
         /// <param name="senderNote">Note visible to owner of withdrawing account</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendBitcoin_Async(
+        public virtual async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendBitcoin_Async(
             string senderAccountId, string to_address, decimal amount, bool? compliant = null, decimal? fee = null,
             IEnumerable<decimal> multipleAmounts = null, IEnumerable<OffchainAddressPrivateKeyPair> keyPairs = null,
             string attr = null, string mnemonic = null, string signatureId = null,
@@ -2981,7 +2995,7 @@ namespace Tatum.Net
         /// <param name="senderNote">Note visible to owner of withdrawing account</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendBitcoinCash(
+        public virtual WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendBitcoinCash(
             string senderAccountId, string to_address, decimal amount, bool? compliant = null, decimal? fee = null,
             IEnumerable<decimal> multipleAmounts = null, IEnumerable<OffchainAddressPrivateKeyPair> keyPairs = null,
             string attr = null, string mnemonic = null, string signatureId = null,
@@ -3020,7 +3034,7 @@ namespace Tatum.Net
         /// <param name="senderNote">Note visible to owner of withdrawing account</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendBitcoinCash_Async(
+        public virtual async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendBitcoinCash_Async(
             string senderAccountId, string to_address, decimal amount, bool? compliant = null, decimal? fee = null,
             IEnumerable<decimal> multipleAmounts = null, IEnumerable<OffchainAddressPrivateKeyPair> keyPairs = null,
             string attr = null, string mnemonic = null, string signatureId = null,
@@ -3060,7 +3074,7 @@ namespace Tatum.Net
         /// <param name="senderNote">Note visible to owner of withdrawing account</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendLitecoin(
+        public virtual WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendLitecoin(
             string senderAccountId, string to_address, decimal amount, bool? compliant = null, decimal? fee = null,
             IEnumerable<decimal> multipleAmounts = null, IEnumerable<OffchainAddressPrivateKeyPair> keyPairs = null,
             string attr = null, string mnemonic = null, string signatureId = null,
@@ -3099,7 +3113,7 @@ namespace Tatum.Net
         /// <param name="senderNote">Note visible to owner of withdrawing account</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendLitecoin_Async(
+        public virtual async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendLitecoin_Async(
             string senderAccountId, string to_address, decimal amount, bool? compliant = null, decimal? fee = null,
             IEnumerable<decimal> multipleAmounts = null, IEnumerable<OffchainAddressPrivateKeyPair> keyPairs = null,
             string attr = null, string mnemonic = null, string signatureId = null,
@@ -3131,7 +3145,7 @@ namespace Tatum.Net
         /// <param name="senderNote">Note visible to owner of withdrawing account</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendEthereum(
+        public virtual WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendEthereum(
             string senderAccountId, string to_address, decimal amount, string currency = null, long? nonce = null,
             bool? compliant = null, string privateKey = null, string signatureId = null, int? index = null, string mnemonic = null,
             string paymentId = null, string senderNote = null,
@@ -3164,7 +3178,7 @@ namespace Tatum.Net
         /// <param name="senderNote">Note visible to owner of withdrawing account</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendEthereum_Async(
+        public virtual async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendEthereum_Async(
             string senderAccountId, string to_address, decimal amount, string currency = null, long? nonce = null,
             bool? compliant = null, string privateKey = null, string signatureId = null, int? index = null, string mnemonic = null,
             string paymentId = null, string senderNote = null,
@@ -3221,7 +3235,7 @@ namespace Tatum.Net
         /// <param name="address">Address on Ethereum blockchain, where all initial supply will be stored. Either xpub and derivationIndex, or address must be present, not both.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<OffchainAccountIdAddressPair> OffchainBlockchain_CreateERC20Token(
+        public virtual WebCallResult<OffchainAccountIdAddressPair> OffchainBlockchain_CreateERC20Token(
             string symbol, string supply, string description, string basePair,
             LedgerCustomerOptions customer = null, string accountingCurrency = null, int? derivationIndex = null,
             string xpub = null, string address = null,
@@ -3256,7 +3270,7 @@ namespace Tatum.Net
         /// <param name="address">Address on Ethereum blockchain, where all initial supply will be stored. Either xpub and derivationIndex, or address must be present, not both.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<OffchainAccountIdAddressPair>> OffchainBlockchain_CreateERC20Token_Async(
+        public virtual async Task<WebCallResult<OffchainAccountIdAddressPair>> OffchainBlockchain_CreateERC20Token_Async(
             string symbol, string supply, string description, string basePair,
             LedgerCustomerOptions customer = null, string accountingCurrency = null, int? derivationIndex = null,
             string xpub = null, string address = null,
@@ -3306,7 +3320,7 @@ namespace Tatum.Net
         /// <param name="nonce">Nonce to be set to Ethereum transaction. If not present, last known nonce will be used.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<OffchainAccountIdTxIdPair> OffchainBlockchain_DeployERC20Token(
+        public virtual WebCallResult<OffchainAccountIdTxIdPair> OffchainBlockchain_DeployERC20Token(
             string symbol, string supply, string description, string basePair,
             LedgerCustomerOptions customer = null, string xpub = null, int? derivationIndex = null, string address = null,
             string mnemonic = null, int? index = null, string privateKey = null, string signatureId = null, long? nonce = null,
@@ -3338,7 +3352,7 @@ namespace Tatum.Net
         /// <param name="nonce">Nonce to be set to Ethereum transaction. If not present, last known nonce will be used.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<OffchainAccountIdTxIdPair>> OffchainBlockchain_DeployERC20Token_Async(
+        public virtual async Task<WebCallResult<OffchainAccountIdTxIdPair>> OffchainBlockchain_DeployERC20Token_Async(
             string symbol, string supply, string description, string basePair,
             LedgerCustomerOptions customer = null, string xpub = null, int? derivationIndex = null, string address = null,
             string mnemonic = null, int? index = null, string privateKey = null, string signatureId = null, long? nonce = null,
@@ -3379,7 +3393,7 @@ namespace Tatum.Net
         /// <param name="symbol">ERC20 symbol name.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> OffchainBlockchain_SetERC20TokenContractAddress(string address, string symbol, CancellationToken ct = default) => OffchainBlockchain_SetERC20TokenContractAddress_Async(address, symbol, ct).Result;
+        public virtual WebCallResult<bool> OffchainBlockchain_SetERC20TokenContractAddress(string address, string symbol, CancellationToken ct = default) => OffchainBlockchain_SetERC20TokenContractAddress_Async(address, symbol, ct).Result;
         /// <summary>
         /// <b>Title:</b> Set ERC20 token contract address<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -3390,7 +3404,7 @@ namespace Tatum.Net
         /// <param name="symbol">ERC20 symbol name.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> OffchainBlockchain_SetERC20TokenContractAddress_Async(string address, string symbol, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> OffchainBlockchain_SetERC20TokenContractAddress_Async(string address, string symbol, CancellationToken ct = default)
         {
             var credits = 2;
             var url = GetUrl(string.Format(Endpoints_Offchain_Blockchain_SetERC20TokenContractAddress, symbol, address));
@@ -3424,7 +3438,7 @@ namespace Tatum.Net
         /// <param name="senderNote">Note visible to owner of withdrawing account</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendERC20Token(
+        public virtual WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendERC20Token(
             string senderAccountId, string to_address, decimal amount, string currency = null, long? nonce = null,
             bool? compliant = null, string privateKey = null, string signatureId = null, int? index = null, string mnemonic = null,
             string paymentId = null, string senderNote = null,
@@ -3457,7 +3471,7 @@ namespace Tatum.Net
         /// <param name="senderNote">Note visible to owner of withdrawing account</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendERC20Token_Async(
+        public virtual async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendERC20Token_Async(
             string senderAccountId, string to_address, decimal amount, string currency = null, long? nonce = null,
             bool? compliant = null, string privateKey = null, string signatureId = null, int? index = null, string mnemonic = null,
             string paymentId = null, string senderNote = null,
@@ -3512,7 +3526,7 @@ namespace Tatum.Net
         /// <param name="token">Asset name. Required only for calls from Tatum Middleware.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendStellar(
+        public virtual WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendStellar(
             string senderAccountId, string fromAccount, string address, decimal amount,
             string secret = null, string signatureId = null, bool? compliant = null, string attr = null, string paymentId = null,
             string senderNote = null, string issuerAccount = null, string token = null,
@@ -3545,7 +3559,7 @@ namespace Tatum.Net
         /// <param name="token">Asset name. Required only for calls from Tatum Middleware.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendStellar_Async(
+        public virtual async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendStellar_Async(
             string senderAccountId, string fromAccount, string address, decimal amount,
             string secret = null, string signatureId = null, bool? compliant = null, string attr = null, string paymentId = null,
             string senderNote = null, string issuerAccount = null, string token = null,
@@ -3587,7 +3601,7 @@ namespace Tatum.Net
         /// <param name="basePair">Base pair for Asset. Transaction value will be calculated according to this base pair. e.g. 1 TOKEN123 is equal to 1 EUR, if basePair is set to EUR.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> OffchainBlockchain_CreateXLMAsset(string issuerAccount, string token, string basePair, CancellationToken ct = default) => OffchainBlockchain_CreateXLMAsset_Async(issuerAccount, token, basePair, ct).Result;
+        public virtual WebCallResult<bool> OffchainBlockchain_CreateXLMAsset(string issuerAccount, string token, string basePair, CancellationToken ct = default) => OffchainBlockchain_CreateXLMAsset_Async(issuerAccount, token, basePair, ct).Result;
         /// <summary>
         /// <b>Title:</b> Create XLM based Asset<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -3599,7 +3613,7 @@ namespace Tatum.Net
         /// <param name="basePair">Base pair for Asset. Transaction value will be calculated according to this base pair. e.g. 1 TOKEN123 is equal to 1 EUR, if basePair is set to EUR.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> OffchainBlockchain_CreateXLMAsset_Async(string issuerAccount, string token, string basePair, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> OffchainBlockchain_CreateXLMAsset_Async(string issuerAccount, string token, string basePair, CancellationToken ct = default)
         {
             var credits = 2;
             var parameters = new Dictionary<string, object>
@@ -3641,7 +3655,7 @@ namespace Tatum.Net
         /// <param name="token">Asset name. Must be 160bit HEX string, e.g. SHA1. Required only for calls from Tatum Middleware.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendRipple(
+        public virtual WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendRipple(
             string senderAccountId, string account, string address, decimal amount,
             bool? compliant = null, string attr = null, int? sourceTag = null, string paymentId = null, string secret = null,
             string signatureId = null, string senderNote = null, string issuerAccount = null, string token = null,
@@ -3675,7 +3689,7 @@ namespace Tatum.Net
         /// <param name="token">Asset name. Must be 160bit HEX string, e.g. SHA1. Required only for calls from Tatum Middleware.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendRipple_Async(
+        public virtual async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendRipple_Async(
             string senderAccountId, string account, string address, decimal amount,
             bool? compliant = null, string attr = null, int? sourceTag = null, string paymentId = null, string secret = null,
             string signatureId = null, string senderNote = null, string issuerAccount = null, string token = null,
@@ -3718,7 +3732,7 @@ namespace Tatum.Net
         /// <param name="basePair">Base pair for Asset. Transaction value will be calculated according to this base pair. e.g. 1 TOKEN123 is equal to 1 EUR, if basePair is set to EUR.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> OffchainBlockchain_CreateXRPAsset(string issuerAccount, string token, string basePair, CancellationToken ct = default) => OffchainBlockchain_CreateXRPAsset_Async(issuerAccount, token, basePair, ct).Result;
+        public virtual WebCallResult<bool> OffchainBlockchain_CreateXRPAsset(string issuerAccount, string token, string basePair, CancellationToken ct = default) => OffchainBlockchain_CreateXRPAsset_Async(issuerAccount, token, basePair, ct).Result;
         /// <summary>
         /// <b>Title:</b> Create XRP based Asset<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -3730,7 +3744,7 @@ namespace Tatum.Net
         /// <param name="basePair">Base pair for Asset. Transaction value will be calculated according to this base pair. e.g. 1 TOKEN123 is equal to 1 EUR, if basePair is set to EUR.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> OffchainBlockchain_CreateXRPAsset_Async(string issuerAccount, string token, string basePair, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> OffchainBlockchain_CreateXRPAsset_Async(string issuerAccount, string token, string basePair, CancellationToken ct = default)
         {
             var credits = 2;
             var parameters = new Dictionary<string, object>
@@ -3768,7 +3782,7 @@ namespace Tatum.Net
         /// <param name="senderNote">Note visible to owner of withdrawing account.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendBNB(
+        public virtual WebCallResult<OffchainTransferResponse> OffchainBlockchain_SendBNB(
             string senderAccountId, string address, decimal amount,
             bool? compliant = null, string attr = null, string paymentId = null,
             string privateKey = null, string signatureId = null, string senderNote = null,
@@ -3798,7 +3812,7 @@ namespace Tatum.Net
         /// <param name="senderNote">Note visible to owner of withdrawing account.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendBNB_Async(
+        public virtual async Task<WebCallResult<OffchainTransferResponse>> OffchainBlockchain_SendBNB_Async(
             string senderAccountId, string address, decimal amount,
             bool? compliant = null, string attr = null, string paymentId = null,
             string privateKey = null, string signatureId = null, string senderNote = null,
@@ -3836,7 +3850,7 @@ namespace Tatum.Net
         /// <param name="basePair">Base pair for Asset. Transaction value will be calculated according to this base pair. e.g. 1 TOKEN123 is equal to 1 EUR, if basePair is set to EUR.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> OffchainBlockchain_CreateBNBAsset(string token, string basePair, CancellationToken ct = default) => OffchainBlockchain_CreateBNBAsset_Async(token, basePair, ct).Result;
+        public virtual WebCallResult<bool> OffchainBlockchain_CreateBNBAsset(string token, string basePair, CancellationToken ct = default) => OffchainBlockchain_CreateBNBAsset_Async(token, basePair, ct).Result;
         /// <summary>
         /// <b>Title:</b> Create BNB based Asset<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -3847,7 +3861,7 @@ namespace Tatum.Net
         /// <param name="basePair">Base pair for Asset. Transaction value will be calculated according to this base pair. e.g. 1 TOKEN123 is equal to 1 EUR, if basePair is set to EUR.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> OffchainBlockchain_CreateBNBAsset_Async(string token, string basePair, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> OffchainBlockchain_CreateBNBAsset_Async(string token, string basePair, CancellationToken ct = default)
         {
             var credits = 2;
             var parameters = new Dictionary<string, object>
@@ -3893,7 +3907,7 @@ namespace Tatum.Net
         /// <param name="senderNote">Note visible to owner of withdrawing account</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<OffchainWithdrawalResponse> OffchainWithdrawal_Request(
+        public virtual WebCallResult<OffchainWithdrawalResponse> OffchainWithdrawal_Request(
             string senderAccountId, string address, decimal amount, string attr = null,
             bool? compliant = null, decimal? fee = null, IEnumerable<string> multipleAmounts = null, string paymentId = null, string senderNote = null,
             CancellationToken ct = default)
@@ -3929,7 +3943,7 @@ namespace Tatum.Net
         /// <param name="senderNote">Note visible to owner of withdrawing account</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<OffchainWithdrawalResponse>> OffchainWithdrawal_Request_Async(
+        public virtual async Task<WebCallResult<OffchainWithdrawalResponse>> OffchainWithdrawal_Request_Async(
             string senderAccountId, string address, decimal amount, string attr = null,
             bool? compliant = null, decimal? fee = null, IEnumerable<string> multipleAmounts = null, string paymentId = null, string senderNote = null,
             CancellationToken ct = default)
@@ -3973,7 +3987,7 @@ namespace Tatum.Net
         /// <param name="txId">Blockchain transaction ID of created withdrawal</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> OffchainWithdrawal_CompleteRequest(string id, string txId, CancellationToken ct = default) => OffchainWithdrawal_CompleteRequest_Async(id, txId, ct).Result;
+        public virtual WebCallResult<bool> OffchainWithdrawal_CompleteRequest(string id, string txId, CancellationToken ct = default) => OffchainWithdrawal_CompleteRequest_Async(id, txId, ct).Result;
         /// <summary>
         /// <b>Title:</b> Complete withdrawal<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -3984,7 +3998,7 @@ namespace Tatum.Net
         /// <param name="txId">Blockchain transaction ID of created withdrawal</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> OffchainWithdrawal_CompleteRequest_Async(string id, string txId, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> OffchainWithdrawal_CompleteRequest_Async(string id, string txId, CancellationToken ct = default)
         {
             var credits = 2;
             var url = GetUrl(string.Format(Endpoints_Offchain_Withdrawal_Complete, id, txId));
@@ -4005,7 +4019,7 @@ namespace Tatum.Net
         /// <param name="revert">Defines whether fee should be reverted to account balance as well as amount. Defaults to true. Revert true would be typically used when withdrawal was not broadcast to blockchain. False is used usually for Ethereum based currencies when gas was consumed but transaction was reverted.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<bool> OffchainWithdrawal_Cancel(string id, bool revert = true, CancellationToken ct = default) => OffchainWithdrawal_Cancel_Async(id, revert, ct).Result;
+        public virtual WebCallResult<bool> OffchainWithdrawal_Cancel(string id, bool revert = true, CancellationToken ct = default) => OffchainWithdrawal_Cancel_Async(id, revert, ct).Result;
         /// <summary>
         /// <b>Title:</b> Cancel withdrawal<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4017,7 +4031,7 @@ namespace Tatum.Net
         /// <param name="revert">Defines whether fee should be reverted to account balance as well as amount. Defaults to true. Revert true would be typically used when withdrawal was not broadcast to blockchain. False is used usually for Ethereum based currencies when gas was consumed but transaction was reverted.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<bool>> OffchainWithdrawal_Cancel_Async(string id, bool revert = true, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<bool>> OffchainWithdrawal_Cancel_Async(string id, bool revert = true, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Offchain_Withdrawal_Cancel, id));
@@ -4039,7 +4053,7 @@ namespace Tatum.Net
         /// <param name="signatureId">ID of prepared payment template to sign. This is should be stored on a client side to retrieve ID of the blockchain transaction, when signing application signs the transaction and broadcasts it to the blockchain.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<OffchainResponse> OffchainWithdrawal_Broadcast(string currency, string txData, string withdrawalId, string signatureId, CancellationToken ct = default) => OffchainWithdrawal_Broadcast_Async(currency, txData, withdrawalId, signatureId, ct).Result;
+        public virtual WebCallResult<OffchainResponse> OffchainWithdrawal_Broadcast(string currency, string txData, string withdrawalId, string signatureId, CancellationToken ct = default) => OffchainWithdrawal_Broadcast_Async(currency, txData, withdrawalId, signatureId, ct).Result;
         /// <summary>
         /// <b>Title:</b> Broadcast signed transaction and complete withdrawal<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -4052,7 +4066,7 @@ namespace Tatum.Net
         /// <param name="signatureId">ID of prepared payment template to sign. This is should be stored on a client side to retrieve ID of the blockchain transaction, when signing application signs the transaction and broadcasts it to the blockchain.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<OffchainResponse>> OffchainWithdrawal_Broadcast_Async(string currency, string txData, string withdrawalId, string signatureId, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<OffchainResponse>> OffchainWithdrawal_Broadcast_Async(string currency, string txData, string withdrawalId, string signatureId, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "currency", currency },
@@ -4071,10 +4085,10 @@ namespace Tatum.Net
         #endregion
 
         #region Blockchain / Shared (Bitcoin, BitcoinCash, Ethereum, Litecoin, Scrypta, VeChain)
-        internal WebCallResult<BlockchainWallet> Blockchain_GenerateWallet(BlockchainType chain, string mnemonics = null, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(chain, new List<string> { mnemonics }, ct).Result;
-        internal WebCallResult<BlockchainWallet> Blockchain_GenerateWallet(BlockchainType chain, IEnumerable<string> mnemonics = null, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(chain, mnemonics, ct).Result;
-        internal async Task<WebCallResult<BlockchainWallet>> Blockchain_GenerateWallet_Async(BlockchainType chain, string mnemonics = null, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(chain, new List<string> { mnemonics }, ct);
-        internal async Task<WebCallResult<BlockchainWallet>> Blockchain_GenerateWallet_Async(BlockchainType chain, IEnumerable<string> mnemonics = null, CancellationToken ct = default)
+        protected virtual WebCallResult<BlockchainWallet> Blockchain_GenerateWallet(BlockchainType chain, string mnemonics = null, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(chain, new List<string> { mnemonics }, ct).Result;
+        protected virtual WebCallResult<BlockchainWallet> Blockchain_GenerateWallet(BlockchainType chain, IEnumerable<string> mnemonics = null, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(chain, mnemonics, ct).Result;
+        protected virtual async Task<WebCallResult<BlockchainWallet>> Blockchain_GenerateWallet_Async(BlockchainType chain, string mnemonics = null, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(chain, new List<string> { mnemonics }, ct);
+        protected virtual async Task<WebCallResult<BlockchainWallet>> Blockchain_GenerateWallet_Async(BlockchainType chain, IEnumerable<string> mnemonics = null, CancellationToken ct = default)
         {
             if (!chain.IsOneOf(
                 BlockchainType.Bitcoin,
@@ -4104,8 +4118,8 @@ namespace Tatum.Net
             return await SendTatumRequest<BlockchainWallet>(url, HttpMethod.Get, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
         }
 
-        internal WebCallResult<TatumAddress> Blockchain_GenerateDepositAddress(BlockchainType chain, string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(chain, xpub, index, ct).Result;
-        internal async Task<WebCallResult<TatumAddress>> Blockchain_GenerateDepositAddress_Async(BlockchainType chain, string xpub, int index, CancellationToken ct = default)
+        protected virtual WebCallResult<TatumAddress> Blockchain_GenerateDepositAddress(BlockchainType chain, string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(chain, xpub, index, ct).Result;
+        protected virtual async Task<WebCallResult<TatumAddress>> Blockchain_GenerateDepositAddress_Async(BlockchainType chain, string xpub, int index, CancellationToken ct = default)
         {
             if (!chain.IsOneOf(
                 BlockchainType.Bitcoin,
@@ -4143,10 +4157,10 @@ namespace Tatum.Net
             }
         }
 
-        internal WebCallResult<TatumKey> Blockchain_GeneratePrivateKey(BlockchainType chain, string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(chain, new List<string> { mnemonics }, index, ct).Result;
-        internal WebCallResult<TatumKey> Blockchain_GeneratePrivateKey(BlockchainType chain, IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(chain, mnemonics, index, ct).Result;
-        internal async Task<WebCallResult<TatumKey>> Blockchain_GeneratePrivateKey_Async(BlockchainType chain, string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(chain, new List<string> { mnemonics }, index, default);
-        internal async Task<WebCallResult<TatumKey>> Blockchain_GeneratePrivateKey_Async(BlockchainType chain, IEnumerable<string> mnemonics, int index, CancellationToken ct = default)
+        protected virtual WebCallResult<TatumKey> Blockchain_GeneratePrivateKey(BlockchainType chain, string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(chain, new List<string> { mnemonics }, index, ct).Result;
+        protected virtual WebCallResult<TatumKey> Blockchain_GeneratePrivateKey(BlockchainType chain, IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(chain, mnemonics, index, ct).Result;
+        protected virtual async Task<WebCallResult<TatumKey>> Blockchain_GeneratePrivateKey_Async(BlockchainType chain, string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(chain, new List<string> { mnemonics }, index, default);
+        protected virtual async Task<WebCallResult<TatumKey>> Blockchain_GeneratePrivateKey_Async(BlockchainType chain, IEnumerable<string> mnemonics, int index, CancellationToken ct = default)
         {
             if (!chain.IsOneOf(
                 BlockchainType.Bitcoin,
@@ -4194,7 +4208,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainWallet> Bitcoin_GenerateWallet(string mnemonics, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.Bitcoin, new List<string> { mnemonics }, ct).Result;
+        public virtual WebCallResult<BlockchainWallet> Bitcoin_GenerateWallet(string mnemonics, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.Bitcoin, new List<string> { mnemonics }, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin wallet<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4209,7 +4223,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainWallet> Bitcoin_GenerateWallet(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.Bitcoin, mnemonics, ct).Result;
+        public virtual WebCallResult<BlockchainWallet> Bitcoin_GenerateWallet(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.Bitcoin, mnemonics, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin wallet<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4224,7 +4238,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainWallet>> Bitcoin_GenerateWallet_Async(string mnemonics, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.Bitcoin, new List<string> { mnemonics }, ct);
+        public virtual async Task<WebCallResult<BlockchainWallet>> Bitcoin_GenerateWallet_Async(string mnemonics, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.Bitcoin, new List<string> { mnemonics }, ct);
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin wallet<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4239,7 +4253,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainWallet>> Bitcoin_GenerateWallet_Async(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.Bitcoin, mnemonics, ct);
+        public virtual async Task<WebCallResult<BlockchainWallet>> Bitcoin_GenerateWallet_Async(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.Bitcoin, mnemonics, ct);
 
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin deposit address from Extended public key<br />
@@ -4251,7 +4265,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of desired address to be generated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumAddress> Bitcoin_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.Bitcoin, xpub, index, ct).Result;
+        public virtual WebCallResult<TatumAddress> Bitcoin_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.Bitcoin, xpub, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin deposit address from Extended public key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4262,7 +4276,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of desired address to be generated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumAddress>> Bitcoin_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.Bitcoin, xpub, index, ct);
+        public virtual async Task<WebCallResult<TatumAddress>> Bitcoin_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.Bitcoin, xpub, index, ct);
 
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin private key<br />
@@ -4275,7 +4289,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumKey> Bitcoin_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Bitcoin, new List<string> { mnemonics }, index, ct).Result;
+        public virtual WebCallResult<TatumKey> Bitcoin_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Bitcoin, new List<string> { mnemonics }, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin private key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4287,7 +4301,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumKey> Bitcoin_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Bitcoin, mnemonics, index, ct).Result;
+        public virtual WebCallResult<TatumKey> Bitcoin_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Bitcoin, mnemonics, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin private key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4299,7 +4313,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumKey>> Bitcoin_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Bitcoin, new List<string> { mnemonics }, index, default);
+        public virtual async Task<WebCallResult<TatumKey>> Bitcoin_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Bitcoin, new List<string> { mnemonics }, index, default);
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin private key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4311,7 +4325,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumKey>> Bitcoin_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Bitcoin, mnemonics, index, default);
+        public virtual async Task<WebCallResult<TatumKey>> Bitcoin_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Bitcoin, mnemonics, index, default);
 
         /// <summary>
         /// <b>Title:</b> Get Blockchain Information<br />
@@ -4321,7 +4335,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BitcoinChainInfo> Bitcoin_GetBlockchainInformation(CancellationToken ct = default) => Bitcoin_GetBlockchainInformation_Async(ct).Result;
+        public virtual WebCallResult<BitcoinChainInfo> Bitcoin_GetBlockchainInformation(CancellationToken ct = default) => Bitcoin_GetBlockchainInformation_Async(ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Blockchain Information<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4330,7 +4344,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BitcoinChainInfo>> Bitcoin_GetBlockchainInformation_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BitcoinChainInfo>> Bitcoin_GetBlockchainInformation_Async(CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Bitcoin_BlockchainInformation));
@@ -4346,7 +4360,7 @@ namespace Tatum.Net
         /// <param name="block_id">The number of blocks preceding a particular block on a block chain.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumHash> Bitcoin_GetBlockHash(long block_id, CancellationToken ct = default) => Bitcoin_GetBlockHash_Async(block_id, ct).Result;
+        public virtual WebCallResult<TatumHash> Bitcoin_GetBlockHash(long block_id, CancellationToken ct = default) => Bitcoin_GetBlockHash_Async(block_id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Block hash<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4356,7 +4370,7 @@ namespace Tatum.Net
         /// <param name="block_id">The number of blocks preceding a particular block on a block chain.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumHash>> Bitcoin_GetBlockHash_Async(long block_id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<TatumHash>> Bitcoin_GetBlockHash_Async(long block_id, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Bitcoin_GetBlockHash, block_id));
@@ -4372,7 +4386,7 @@ namespace Tatum.Net
         /// <param name="hash_height">Block hash or height.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BitcoinBlock> Bitcoin_GetBlock(string hash_height, CancellationToken ct = default) => Bitcoin_GetBlock_Async(hash_height, ct).Result;
+        public virtual WebCallResult<BitcoinBlock> Bitcoin_GetBlock(string hash_height, CancellationToken ct = default) => Bitcoin_GetBlock_Async(hash_height, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Block by hash or height<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4382,7 +4396,7 @@ namespace Tatum.Net
         /// <param name="hash_height">Block hash or height.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BitcoinBlock>> Bitcoin_GetBlock_Async(string hash_height, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BitcoinBlock>> Bitcoin_GetBlock_Async(string hash_height, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Bitcoin_GetBlockByHash, hash_height));
@@ -4398,7 +4412,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BitcoinTransaction> Bitcoin_GetTransactionByHash(string hash, CancellationToken ct = default) => Bitcoin_GetTransactionByHash_Async(hash, ct).Result;
+        public virtual WebCallResult<BitcoinTransaction> Bitcoin_GetTransactionByHash(string hash, CancellationToken ct = default) => Bitcoin_GetTransactionByHash_Async(hash, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Transaction by hash<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4408,7 +4422,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BitcoinTransaction>> Bitcoin_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BitcoinTransaction>> Bitcoin_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Bitcoin_GetTransactionByHash, hash));
@@ -4426,7 +4440,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<BitcoinTransaction>> Bitcoin_GetTransactionsByAddress(string address, int pageSize = 50, int offset = 0, CancellationToken ct = default) => Bitcoin_GetTransactionsByAddress_Async(address, pageSize, offset, ct).Result;
+        public virtual WebCallResult<IEnumerable<BitcoinTransaction>> Bitcoin_GetTransactionsByAddress(string address, int pageSize = 50, int offset = 0, CancellationToken ct = default) => Bitcoin_GetTransactionsByAddress_Async(address, pageSize, offset, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Transactions by address<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4438,7 +4452,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<BitcoinTransaction>>> Bitcoin_GetTransactionsByAddress_Async(string address, int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<BitcoinTransaction>>> Bitcoin_GetTransactionsByAddress_Async(string address, int pageSize = 50, int offset = 0, CancellationToken ct = default)
         {
             pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
 
@@ -4461,7 +4475,7 @@ namespace Tatum.Net
         /// <param name="address">Address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BitcoinBalance> Bitcoin_GetBalance(string address, CancellationToken ct = default) => Bitcoin_GetBalance_Async(address, ct).Result;
+        public virtual WebCallResult<BitcoinBalance> Bitcoin_GetBalance(string address, CancellationToken ct = default) => Bitcoin_GetBalance_Async(address, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Balance of the address<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4471,7 +4485,7 @@ namespace Tatum.Net
         /// <param name="address">Address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BitcoinBalance>> Bitcoin_GetBalance_Async(string address, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BitcoinBalance>> Bitcoin_GetBalance_Async(string address, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Bitcoin_GetBalance, address));
@@ -4492,7 +4506,7 @@ namespace Tatum.Net
         /// <param name="index">Index of tx output to check if spent or not</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BitcoinUTXO> Bitcoin_GetTransactionUTXO(string txhash, long index, CancellationToken ct = default) => Bitcoin_GetTransactionUTXO_Async(txhash, index, ct).Result;
+        public virtual WebCallResult<BitcoinUTXO> Bitcoin_GetTransactionUTXO(string txhash, long index, CancellationToken ct = default) => Bitcoin_GetTransactionUTXO_Async(txhash, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get UTXO of Transaction<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4507,7 +4521,7 @@ namespace Tatum.Net
         /// <param name="index">Index of tx output to check if spent or not</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BitcoinUTXO>> Bitcoin_GetTransactionUTXO_Async(string txhash, long index, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BitcoinUTXO>> Bitcoin_GetTransactionUTXO_Async(string txhash, long index, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Bitcoin_GetTransactionUTXO, txhash, index));
@@ -4537,7 +4551,7 @@ namespace Tatum.Net
         /// <param name="to">Array of addresses and values to send bitcoins to. Values must be set in BTC. Difference between from and to is transaction fee.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Bitcoin_Send(IEnumerable<BitcoinSendOrderFromAddress> fromAddress, IEnumerable<BitcoinSendOrderFromUTXO> fromUTXO, IEnumerable<BitcoinSendOrderTo> to, CancellationToken ct = default) => Bitcoin_Send_Async(fromAddress, fromUTXO, to, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> Bitcoin_Send(IEnumerable<BitcoinSendOrderFromAddress> fromAddress, IEnumerable<BitcoinSendOrderFromUTXO> fromUTXO, IEnumerable<BitcoinSendOrderTo> to, CancellationToken ct = default) => Bitcoin_Send_Async(fromAddress, fromUTXO, to, ct).Result;
         /// <summary>
         /// <b>Title:</b> Send Bitcoin to blockchain addresses<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -4561,7 +4575,7 @@ namespace Tatum.Net
         /// <param name="to">Array of addresses and values to send bitcoins to. Values must be set in BTC. Difference between from and to is transaction fee.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Bitcoin_Send_Async(IEnumerable<BitcoinSendOrderFromAddress> fromAddress, IEnumerable<BitcoinSendOrderFromUTXO> fromUTXO, IEnumerable<BitcoinSendOrderTo> to, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> Bitcoin_Send_Async(IEnumerable<BitcoinSendOrderFromAddress> fromAddress, IEnumerable<BitcoinSendOrderFromUTXO> fromUTXO, IEnumerable<BitcoinSendOrderTo> to, CancellationToken ct = default)
         {
             if ((fromAddress == null || fromAddress.Count() == 0) && (fromUTXO == null || fromUTXO.Count() == 0))
                 throw new ArgumentException("Either fromUTXO or fromAddress must be present.");
@@ -4592,7 +4606,7 @@ namespace Tatum.Net
         /// <param name="signatureId">ID of prepared payment template to sign. Required only, when broadcasting transaction signed by Tatum KMS.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Bitcoin_Broadcast(string txData, string signatureId, CancellationToken ct = default) => Bitcoin_Broadcast_Async(txData, signatureId, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> Bitcoin_Broadcast(string txData, string signatureId = null, CancellationToken ct = default) => Bitcoin_Broadcast_Async(txData, signatureId, ct).Result;
         /// <summary>
         /// <b>Title:</b> Broadcast signed Bitcoin transaction<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -4605,7 +4619,7 @@ namespace Tatum.Net
         /// <param name="signatureId">ID of prepared payment template to sign. Required only, when broadcasting transaction signed by Tatum KMS.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Bitcoin_Broadcast_Async(string txData, string signatureId, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> Bitcoin_Broadcast_Async(string txData, string signatureId = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "txData", txData },
@@ -4641,7 +4655,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainWallet> Ethereum_GenerateWallet(string mnemonics, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.Ethereum, new List<string> { mnemonics }, ct).Result;
+        public virtual WebCallResult<BlockchainWallet> Ethereum_GenerateWallet(string mnemonics, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.Ethereum, new List<string> { mnemonics }, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Ethereum wallet<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4660,7 +4674,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainWallet> Ethereum_GenerateWallet(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.Ethereum, mnemonics, ct).Result;
+        public virtual WebCallResult<BlockchainWallet> Ethereum_GenerateWallet(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.Ethereum, mnemonics, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Ethereum wallet<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4679,7 +4693,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainWallet>> Ethereum_GenerateWallet_Async(string mnemonics, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.Ethereum, new List<string> { mnemonics }, ct);
+        public virtual async Task<WebCallResult<BlockchainWallet>> Ethereum_GenerateWallet_Async(string mnemonics, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.Ethereum, new List<string> { mnemonics }, ct);
         /// <summary>
         /// <b>Title:</b> Generate Ethereum wallet<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4698,7 +4712,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainWallet>> Ethereum_GenerateWallet_Async(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.Ethereum, mnemonics, ct);
+        public virtual async Task<WebCallResult<BlockchainWallet>> Ethereum_GenerateWallet_Async(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.Ethereum, mnemonics, ct);
 
         /// <summary>
         /// <b>Title:</b> Generate Ethereum account address from Extended public key<br />
@@ -4711,7 +4725,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of desired address to be generated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumAddress> Ethereum_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.Ethereum, xpub, index, ct).Result;
+        public virtual WebCallResult<TatumAddress> Ethereum_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.Ethereum, xpub, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Ethereum account address from Extended public key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4723,7 +4737,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of desired address to be generated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumAddress>> Ethereum_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.Ethereum, xpub, index, ct);
+        public virtual async Task<WebCallResult<TatumAddress>> Ethereum_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.Ethereum, xpub, index, ct);
 
         /// <summary>
         /// <b>Title:</b> Generate Ethereum private key<br />
@@ -4736,7 +4750,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumKey> Ethereum_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Ethereum, new List<string> { mnemonics }, index, ct).Result;
+        public virtual WebCallResult<TatumKey> Ethereum_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Ethereum, new List<string> { mnemonics }, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Ethereum private key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4748,7 +4762,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumKey> Ethereum_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Ethereum, mnemonics, index, ct).Result;
+        public virtual WebCallResult<TatumKey> Ethereum_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Ethereum, mnemonics, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Ethereum private key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4760,7 +4774,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumKey>> Ethereum_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Ethereum, new List<string> { mnemonics }, index, default);
+        public virtual async Task<WebCallResult<TatumKey>> Ethereum_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Ethereum, new List<string> { mnemonics }, index, default);
         /// <summary>
         /// <b>Title:</b> Generate Ethereum private key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4772,7 +4786,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumKey>> Ethereum_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Ethereum, mnemonics, index, default);
+        public virtual async Task<WebCallResult<TatumKey>> Ethereum_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Ethereum, mnemonics, index, default);
 
         /// <summary>
         /// <b>Title:</b> Web3 HTTP driver<br />
@@ -4783,7 +4797,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<EthereumDriver> Ethereum_Web3HttpDriver(CancellationToken ct = default) => Ethereum_Web3HttpDriver_Async(ct).Result;
+        public virtual WebCallResult<EthereumDriver> Ethereum_Web3HttpDriver(CancellationToken ct = default) => Ethereum_Web3HttpDriver_Async(ct).Result;
         /// <summary>
         /// <b>Title:</b> Web3 HTTP driver<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -4793,7 +4807,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<EthereumDriver>> Ethereum_Web3HttpDriver_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<EthereumDriver>> Ethereum_Web3HttpDriver_Async(CancellationToken ct = default)
         {
             if (authProvider == null || authProvider.Credentials == null || authProvider.Credentials.Key == null)
                 throw new ArgumentException("No valid API credentials provided. Api Key is needed.");
@@ -4818,7 +4832,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<long> Ethereum_GetCurrentBlockNumber(CancellationToken ct = default) => Ethereum_GetCurrentBlockNumber_Async(ct).Result;
+        public virtual WebCallResult<long> Ethereum_GetCurrentBlockNumber(CancellationToken ct = default) => Ethereum_GetCurrentBlockNumber_Async(ct).Result;
         /// <summary>
         /// <b>Title:</b> Get current block number<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4827,7 +4841,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<long>> Ethereum_GetCurrentBlockNumber_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<long>> Ethereum_GetCurrentBlockNumber_Async(CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Ethereum_CurrentBlockNumber));
@@ -4846,7 +4860,7 @@ namespace Tatum.Net
         /// <param name="hash_height">Block hash or block number</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<EthereumBlock> Ethereum_GetBlock(string hash_height, CancellationToken ct = default) => Ethereum_GetBlock_Async(hash_height, ct).Result;
+        public virtual WebCallResult<EthereumBlock> Ethereum_GetBlock(string hash_height, CancellationToken ct = default) => Ethereum_GetBlock_Async(hash_height, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Ethereum block by hash<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4856,7 +4870,7 @@ namespace Tatum.Net
         /// <param name="hash_height">Block hash or block number</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<EthereumBlock>> Ethereum_GetBlock_Async(string hash_height, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<EthereumBlock>> Ethereum_GetBlock_Async(string hash_height, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Ethereum_GetBlockByHash, hash_height));
@@ -4872,7 +4886,7 @@ namespace Tatum.Net
         /// <param name="address">Account address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<decimal> Ethereum_ETH_GetBalance(string address, CancellationToken ct = default) => Ethereum_ETH_GetBalance_Async(address, ct).Result;
+        public virtual WebCallResult<decimal> Ethereum_ETH_GetBalance(string address, CancellationToken ct = default) => Ethereum_ETH_GetBalance_Async(address, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Ethereum Account balance<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4882,7 +4896,7 @@ namespace Tatum.Net
         /// <param name="address">Account address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<decimal>> Ethereum_ETH_GetBalance_Async(string address, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<decimal>> Ethereum_ETH_GetBalance_Async(string address, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Ethereum_GetETHBalance, address));
@@ -4905,7 +4919,7 @@ namespace Tatum.Net
         /// <param name="decimals">Decimal places for display balance</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<decimal> Ethereum_ERC20_GetBalance(string address, string contractAddress, int decimals = 0, CancellationToken ct = default) => Ethereum_ERC20_GetBalance_Async(address, contractAddress, decimals, ct).Result;
+        public virtual WebCallResult<decimal> Ethereum_ERC20_GetBalance(string address, string contractAddress, int decimals = 0, CancellationToken ct = default) => Ethereum_ERC20_GetBalance_Async(address, contractAddress, decimals, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Ethereum ERC20 Account balance<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4918,7 +4932,7 @@ namespace Tatum.Net
         /// <param name="decimals">Decimal places for display balance</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<decimal>> Ethereum_ERC20_GetBalance_Async(string address, string contractAddress, int decimals = 0, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<decimal>> Ethereum_ERC20_GetBalance_Async(string address, string contractAddress, int decimals = 0, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "contractAddress", contractAddress },
@@ -4941,7 +4955,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<EthereumTransaction> Ethereum_GetTransactionByHash(string hash, CancellationToken ct = default) => Ethereum_GetTransactionByHash_Async(hash, ct).Result;
+        public virtual WebCallResult<EthereumTransaction> Ethereum_GetTransactionByHash(string hash, CancellationToken ct = default) => Ethereum_GetTransactionByHash_Async(hash, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Ethereum Transaction<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4951,7 +4965,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<EthereumTransaction>> Ethereum_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<EthereumTransaction>> Ethereum_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Ethereum_GetTransactionByHash, hash));
@@ -4969,7 +4983,7 @@ namespace Tatum.Net
         /// <param name="address">address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<long> Ethereum_GetOutgoingTransactionsCount(string address, CancellationToken ct = default) => Ethereum_GetOutgoingTransactionsCount_Async(address, ct).Result;
+        public virtual WebCallResult<long> Ethereum_GetOutgoingTransactionsCount(string address, CancellationToken ct = default) => Ethereum_GetOutgoingTransactionsCount_Async(address, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get count of outgoing Ethereum transactions<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -4981,7 +4995,7 @@ namespace Tatum.Net
         /// <param name="address">address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<long>> Ethereum_GetOutgoingTransactionsCount_Async(string address, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<long>> Ethereum_GetOutgoingTransactionsCount_Async(string address, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Ethereum_GetOutgoingTransactionsCount, address));
@@ -5002,7 +5016,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<EthereumTransaction>> Ethereum_GetTransactionsByAddress(string address, int pageSize = 50, int offset = 0, CancellationToken ct = default) => Ethereum_GetTransactionsByAddress_Async(address, pageSize, offset, ct).Result;
+        public virtual WebCallResult<IEnumerable<EthereumTransaction>> Ethereum_GetTransactionsByAddress(string address, int pageSize = 50, int offset = 0, CancellationToken ct = default) => Ethereum_GetTransactionsByAddress_Async(address, pageSize, offset, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Ethereum transactions by address<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -5014,7 +5028,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<EthereumTransaction>>> Ethereum_GetTransactionsByAddress_Async(string address, int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<EthereumTransaction>>> Ethereum_GetTransactionsByAddress_Async(string address, int pageSize = 50, int offset = 0, CancellationToken ct = default)
         {
             pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
             var parameters = new Dictionary<string, object> {
@@ -5050,7 +5064,7 @@ namespace Tatum.Net
         /// <param name="fee">Custom defined fee. If not present, it will be calculated automatically.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Ethereum_Send(
+        public virtual WebCallResult<BlockchainResponse> Ethereum_Send(
             EthereumPredefinedCurrency currency,
             string amount,
             string to,
@@ -5084,7 +5098,7 @@ namespace Tatum.Net
         /// <param name="fee">Custom defined fee. If not present, it will be calculated automatically.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Ethereum_Send_Async(
+        public virtual async Task<WebCallResult<BlockchainResponse>> Ethereum_Send_Async(
             EthereumPredefinedCurrency currency,
             string amount,
             string to,
@@ -5139,7 +5153,7 @@ namespace Tatum.Net
         /// <param name="fee">Custom defined fee. If not present, it will be calculated automatically.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Ethereum_InvokeSmartContractMethod(
+        public virtual WebCallResult<BlockchainResponse> Ethereum_InvokeSmartContractMethod(
             string contractAddress,
             string methodName,
             object methodABI,
@@ -5175,7 +5189,7 @@ namespace Tatum.Net
         /// <param name="fee">Custom defined fee. If not present, it will be calculated automatically.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Ethereum_InvokeSmartContractMethod_Async(
+        public virtual async Task<WebCallResult<BlockchainResponse>> Ethereum_InvokeSmartContractMethod_Async(
             string contractAddress,
             string methodName,
             object methodABI,
@@ -5232,7 +5246,7 @@ namespace Tatum.Net
         /// <param name="fee">Custom defined fee. If not present, it will be calculated automatically.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Ethereum_ERC20_DeploySmartContract(
+        public virtual WebCallResult<BlockchainResponse> Ethereum_ERC20_DeploySmartContract(
             string name,
             string symbol,
             string supply,
@@ -5271,7 +5285,7 @@ namespace Tatum.Net
         /// <param name="fee">Custom defined fee. If not present, it will be calculated automatically.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Ethereum_ERC20_DeploySmartContract_Async(
+        public virtual async Task<WebCallResult<BlockchainResponse>> Ethereum_ERC20_DeploySmartContract_Async(
             string name,
             string symbol,
             string supply,
@@ -5328,7 +5342,7 @@ namespace Tatum.Net
         /// <param name="fee">Custom defined fee. If not present, it will be calculated automatically.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Ethereum_ERC20_Transfer(
+        public virtual WebCallResult<BlockchainResponse> Ethereum_ERC20_Transfer(
             string contractAddress,
             string to,
             string amount,
@@ -5364,7 +5378,7 @@ namespace Tatum.Net
         /// <param name="fee">Custom defined fee. If not present, it will be calculated automatically.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Ethereum_ERC20_Transfer_Async(
+        public virtual async Task<WebCallResult<BlockchainResponse>> Ethereum_ERC20_Transfer_Async(
             string contractAddress,
             string to,
             string amount,
@@ -5418,7 +5432,7 @@ namespace Tatum.Net
         /// <param name="fee">Custom defined fee. If not present, it will be calculated automatically.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Ethereum_ERC721_DeploySmartContract(
+        public virtual WebCallResult<BlockchainResponse> Ethereum_ERC721_DeploySmartContract(
             string name,
             string symbol,
             string signatureId = null,
@@ -5451,7 +5465,7 @@ namespace Tatum.Net
         /// <param name="fee">Custom defined fee. If not present, it will be calculated automatically.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Ethereum_ERC721_DeploySmartContract_Async(
+        public virtual async Task<WebCallResult<BlockchainResponse>> Ethereum_ERC721_DeploySmartContract_Async(
             string name,
             string symbol,
             string signatureId = null,
@@ -5502,7 +5516,7 @@ namespace Tatum.Net
         /// <param name="fee">Custom defined fee. If not present, it will be calculated automatically.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Ethereum_ERC721_Mint(
+        public virtual WebCallResult<BlockchainResponse> Ethereum_ERC721_Mint(
             string contractAddress,
             string tokenId,
             string to,
@@ -5538,7 +5552,7 @@ namespace Tatum.Net
         /// <param name="fee">Custom defined fee. If not present, it will be calculated automatically.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Ethereum_ERC721_Mint_Async(
+        public virtual async Task<WebCallResult<BlockchainResponse>> Ethereum_ERC721_Mint_Async(
             string contractAddress,
             string tokenId,
             string to,
@@ -5592,7 +5606,7 @@ namespace Tatum.Net
         /// <param name="fee">Custom defined fee. If not present, it will be calculated automatically.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Ethereum_ERC721_Transfer(
+        public virtual WebCallResult<BlockchainResponse> Ethereum_ERC721_Transfer(
             string contractAddress,
             string tokenId,
             string to,
@@ -5626,7 +5640,7 @@ namespace Tatum.Net
         /// <param name="fee">Custom defined fee. If not present, it will be calculated automatically.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Ethereum_ERC721_Transfer_Async(
+        public virtual async Task<WebCallResult<BlockchainResponse>> Ethereum_ERC721_Transfer_Async(
             string contractAddress,
             string tokenId,
             string to,
@@ -5677,7 +5691,7 @@ namespace Tatum.Net
         /// <param name="fee">Custom defined fee. If not present, it will be calculated automatically.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Ethereum_ERC721_MintMultiple(
+        public virtual WebCallResult<BlockchainResponse> Ethereum_ERC721_MintMultiple(
             string contractAddress,
             IEnumerable<string> tokenId,
             IEnumerable<string> to,
@@ -5710,7 +5724,7 @@ namespace Tatum.Net
         /// <param name="fee">Custom defined fee. If not present, it will be calculated automatically.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Ethereum_ERC721_MintMultiple_Async(
+        public virtual async Task<WebCallResult<BlockchainResponse>> Ethereum_ERC721_MintMultiple_Async(
             string contractAddress,
             IEnumerable<string> tokenId,
             IEnumerable<string> to,
@@ -5759,7 +5773,7 @@ namespace Tatum.Net
         /// <param name="fee">Custom defined fee. If not present, it will be calculated automatically.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Ethereum_ERC721_Burn(
+        public virtual WebCallResult<BlockchainResponse> Ethereum_ERC721_Burn(
             string contractAddress,
             string tokenId,
             string signatureId = null,
@@ -5789,7 +5803,7 @@ namespace Tatum.Net
         /// <param name="fee">Custom defined fee. If not present, it will be calculated automatically.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Ethereum_ERC721_Burn_Async(
+        public virtual async Task<WebCallResult<BlockchainResponse>> Ethereum_ERC721_Burn_Async(
             string contractAddress,
             string tokenId,
             string signatureId = null,
@@ -5826,7 +5840,7 @@ namespace Tatum.Net
         /// <param name="decimals">Decimal places for display balance</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<decimal> Ethereum_ERC721_GetBalance(string address, string contractAddress, int decimals = 0, CancellationToken ct = default) => Ethereum_GetERC721Balance_Async(address, contractAddress, decimals, ct).Result;
+        public virtual WebCallResult<decimal> Ethereum_ERC721_GetBalance(string address, string contractAddress, int decimals = 0, CancellationToken ct = default) => Ethereum_GetERC721Balance_Async(address, contractAddress, decimals, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Ethereum ERC721 Account balance<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -5838,7 +5852,7 @@ namespace Tatum.Net
         /// <param name="decimals">Decimal places for display balance</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<decimal>> Ethereum_GetERC721Balance_Async(string address, string contractAddress, int decimals = 0, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<decimal>> Ethereum_GetERC721Balance_Async(string address, string contractAddress, int decimals = 0, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Ethereum_ERC721Balance, address, contractAddress));
@@ -5861,7 +5875,7 @@ namespace Tatum.Net
         /// <param name="decimals">Decimal places for display balance</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<decimal> Ethereum_ERC721_GetToken(string address, int index, string contractAddress, int decimals = 0, CancellationToken ct = default) => Ethereum_ERC721_GetToken_Async(address, index, contractAddress, decimals, ct).Result;
+        public virtual WebCallResult<decimal> Ethereum_ERC721_GetToken(string address, int index, string contractAddress, int decimals = 0, CancellationToken ct = default) => Ethereum_ERC721_GetToken_Async(address, index, contractAddress, decimals, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Ethereum ERC721 Token<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -5874,7 +5888,7 @@ namespace Tatum.Net
         /// <param name="decimals">Decimal places for display balance</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<decimal>> Ethereum_ERC721_GetToken_Async(string address, int index, string contractAddress, int decimals = 0, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<decimal>> Ethereum_ERC721_GetToken_Async(string address, int index, string contractAddress, int decimals = 0, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Ethereum_ERC721Token, address, index, contractAddress));
@@ -5896,7 +5910,7 @@ namespace Tatum.Net
         /// <param name="divider">Divider for result to get display balance</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<EthereumData> Ethereum_ERC721_GetTokenMetadata(string token, string contractAddress, decimal divider = 1, CancellationToken ct = default) => Ethereum_ERC721_GetTokenMetadata_Async(token, contractAddress, divider, ct).Result;
+        public virtual WebCallResult<EthereumData> Ethereum_ERC721_GetTokenMetadata(string token, string contractAddress, decimal divider = 1, CancellationToken ct = default) => Ethereum_ERC721_GetTokenMetadata_Async(token, contractAddress, divider, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Ethereum ERC721 Token Metadata<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -5908,7 +5922,7 @@ namespace Tatum.Net
         /// <param name="divider">Divider for result to get display balance</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<EthereumData>> Ethereum_ERC721_GetTokenMetadata_Async(string token, string contractAddress, decimal divider = 1, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<EthereumData>> Ethereum_ERC721_GetTokenMetadata_Async(string token, string contractAddress, decimal divider = 1, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Ethereum_ERC721TokenMetadata, token, contractAddress));
@@ -5926,7 +5940,7 @@ namespace Tatum.Net
         /// <param name="divider">Divider for result to get display balance</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<EthereumData> Ethereum_ERC721_GetTokenOwner(string token, string contractAddress, decimal divider = 1, CancellationToken ct = default) => Ethereum_ERC721_GetTokenOwner_Async(token, contractAddress, divider, ct).Result;
+        public virtual WebCallResult<EthereumData> Ethereum_ERC721_GetTokenOwner(string token, string contractAddress, decimal divider = 1, CancellationToken ct = default) => Ethereum_ERC721_GetTokenOwner_Async(token, contractAddress, divider, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Ethereum ERC721 Token owner<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -5938,7 +5952,7 @@ namespace Tatum.Net
         /// <param name="divider">Divider for result to get display balance</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<EthereumData>> Ethereum_ERC721_GetTokenOwner_Async(string token, string contractAddress, decimal divider = 1, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<EthereumData>> Ethereum_ERC721_GetTokenOwner_Async(string token, string contractAddress, decimal divider = 1, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Ethereum_ERC721TokenOwner, token, contractAddress));
@@ -5957,7 +5971,7 @@ namespace Tatum.Net
         /// <param name="signatureId">ID of prepared payment template to sign. Required only, when broadcasting transaction signed by Tatum KMS.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Ethereum_Broadcast(string txData, string signatureId, CancellationToken ct = default) => Ethereum_Broadcast_Async(txData, signatureId, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> Ethereum_Broadcast(string txData, string signatureId = null, CancellationToken ct = default) => Ethereum_Broadcast_Async(txData, signatureId, ct).Result;
         /// <summary>
         /// <b>Title:</b> Broadcast signed Ethereum transaction<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -5970,7 +5984,7 @@ namespace Tatum.Net
         /// <param name="signatureId">ID of prepared payment template to sign. Required only, when broadcasting transaction signed by Tatum KMS.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Ethereum_Broadcast_Async(string txData, string signatureId, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> Ethereum_Broadcast_Async(string txData, string signatureId = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "txData", txData },
@@ -6005,7 +6019,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainWallet> BitcoinCash_GenerateWallet(string mnemonics, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.BitcoinCash, new List<string> { mnemonics }, ct).Result;
+        public virtual WebCallResult<BlockchainWallet> BitcoinCash_GenerateWallet(string mnemonics, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.BitcoinCash, new List<string> { mnemonics }, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin Cash wallet<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6024,7 +6038,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainWallet> BitcoinCash_GenerateWallet(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.BitcoinCash, mnemonics, ct).Result;
+        public virtual WebCallResult<BlockchainWallet> BitcoinCash_GenerateWallet(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.BitcoinCash, mnemonics, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin Cash wallet<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6043,7 +6057,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainWallet>> BitcoinCash_GenerateWallet_Async(string mnemonics, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.BitcoinCash, new List<string> { mnemonics }, ct);
+        public virtual async Task<WebCallResult<BlockchainWallet>> BitcoinCash_GenerateWallet_Async(string mnemonics, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.BitcoinCash, new List<string> { mnemonics }, ct);
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin Cash wallet<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6062,7 +6076,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainWallet>> BitcoinCash_GenerateWallet_Async(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.BitcoinCash, mnemonics, ct);
+        public virtual async Task<WebCallResult<BlockchainWallet>> BitcoinCash_GenerateWallet_Async(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.BitcoinCash, mnemonics, ct);
 
         /// <summary>
         /// <b>Title:</b> Get Bitcoin Cash Blockchain Information<br />
@@ -6072,7 +6086,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BitcoinCashChainInfo> BitcoinCash_GetBlockchainInformation(CancellationToken ct = default) => BitcoinCash_GetBlockchainInformation_Async(ct).Result;
+        public virtual WebCallResult<BitcoinCashChainInfo> BitcoinCash_GetBlockchainInformation(CancellationToken ct = default) => BitcoinCash_GetBlockchainInformation_Async(ct).Result;
         /// <b>Title:</b> Get Bitcoin Cash Blockchain Information<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
         /// <b>Description:</b>
@@ -6080,7 +6094,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BitcoinCashChainInfo>> BitcoinCash_GetBlockchainInformation_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BitcoinCashChainInfo>> BitcoinCash_GetBlockchainInformation_Async(CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_BitcoinCash_BlockchainInformation));
@@ -6096,7 +6110,7 @@ namespace Tatum.Net
         /// <param name="block_id">Block hash or height</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumHash> BitcoinCash_GetBlockHash(long block_id, CancellationToken ct = default) => BitcoinCash_GetBlockHash_Async(block_id, ct).Result;
+        public virtual WebCallResult<TatumHash> BitcoinCash_GetBlockHash(long block_id, CancellationToken ct = default) => BitcoinCash_GetBlockHash_Async(block_id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Bitcoin Cash Block hash<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6106,7 +6120,7 @@ namespace Tatum.Net
         /// <param name="block_id">Block hash or height</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumHash>> BitcoinCash_GetBlockHash_Async(long block_id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<TatumHash>> BitcoinCash_GetBlockHash_Async(long block_id, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_BitcoinCash_GetBlockHash, block_id));
@@ -6122,7 +6136,7 @@ namespace Tatum.Net
         /// <param name="hash_height"></param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BitcoinCashBlock> BitcoinCash_GetBlock(string hash_height, CancellationToken ct = default) => BitcoinCash_GetBlock_Async(hash_height, ct).Result;
+        public virtual WebCallResult<BitcoinCashBlock> BitcoinCash_GetBlock(string hash_height, CancellationToken ct = default) => BitcoinCash_GetBlock_Async(hash_height, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Bitcoin Cash Block by hash<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6132,7 +6146,7 @@ namespace Tatum.Net
         /// <param name="hash_height"></param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BitcoinCashBlock>> BitcoinCash_GetBlock_Async(string hash_height, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BitcoinCashBlock>> BitcoinCash_GetBlock_Async(string hash_height, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_BitcoinCash_GetBlockByHash, hash_height));
@@ -6148,7 +6162,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BitcoinCashTransaction> BitcoinCash_GetTransactionByHash(string hash, CancellationToken ct = default) => BitcoinCash_GetTransactionByHash_Async(hash, ct).Result;
+        public virtual WebCallResult<BitcoinCashTransaction> BitcoinCash_GetTransactionByHash(string hash, CancellationToken ct = default) => BitcoinCash_GetTransactionByHash_Async(hash, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Bitcoin Cash Transaction by hash<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6158,7 +6172,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BitcoinCashTransaction>> BitcoinCash_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BitcoinCashTransaction>> BitcoinCash_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_BitcoinCash_GetTransactionByHash, hash));
@@ -6175,7 +6189,7 @@ namespace Tatum.Net
         /// <param name="skip">Define, how much transactions should be skipped to obtain another page.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<BitcoinCashTransaction>> BitcoinCash_GetTransactionsByAddress(string address, int skip = 0, CancellationToken ct = default) => BitcoinCash_GetTransactionsByAddress_Async(address, skip, ct).Result;
+        public virtual WebCallResult<IEnumerable<BitcoinCashTransaction>> BitcoinCash_GetTransactionsByAddress(string address, int skip = 0, CancellationToken ct = default) => BitcoinCash_GetTransactionsByAddress_Async(address, skip, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Bitcoin Cash Transactions by address<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6186,7 +6200,7 @@ namespace Tatum.Net
         /// <param name="skip">Define, how much transactions should be skipped to obtain another page.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<BitcoinCashTransaction>>> BitcoinCash_GetTransactionsByAddress_Async(string address, int skip = 0, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<BitcoinCashTransaction>>> BitcoinCash_GetTransactionsByAddress_Async(string address, int skip = 0, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "skip", skip },
@@ -6209,7 +6223,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of desired address to be generated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumAddress> BitcoinCash_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.BitcoinCash, xpub, index, ct).Result;
+        public virtual WebCallResult<TatumAddress> BitcoinCash_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.BitcoinCash, xpub, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin Cash deposit address from Extended public key<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6222,7 +6236,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of desired address to be generated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumAddress>> BitcoinCash_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.BitcoinCash, xpub, index, ct);
+        public virtual async Task<WebCallResult<TatumAddress>> BitcoinCash_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.BitcoinCash, xpub, index, ct);
 
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin Cash private key<br />
@@ -6235,7 +6249,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumKey> BitcoinCash_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.BitcoinCash, new List<string> { mnemonics }, index, ct).Result;
+        public virtual WebCallResult<TatumKey> BitcoinCash_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.BitcoinCash, new List<string> { mnemonics }, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin Cash private key<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6247,7 +6261,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumKey> BitcoinCash_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.BitcoinCash, mnemonics, index, ct).Result;
+        public virtual WebCallResult<TatumKey> BitcoinCash_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.BitcoinCash, mnemonics, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin Cash private key<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6259,7 +6273,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumKey>> BitcoinCash_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.BitcoinCash, new List<string> { mnemonics }, index, default);
+        public virtual async Task<WebCallResult<TatumKey>> BitcoinCash_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.BitcoinCash, new List<string> { mnemonics }, index, default);
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin Cash private key<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6271,7 +6285,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumKey>> BitcoinCash_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.BitcoinCash, mnemonics, index, default);
+        public virtual async Task<WebCallResult<TatumKey>> BitcoinCash_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.BitcoinCash, mnemonics, index, default);
 
         /// <summary>
         /// <b>Title:</b> Send Bitcoin Cash to blockchain addresses<br />
@@ -6296,7 +6310,7 @@ namespace Tatum.Net
         /// <param name="to">Array of addresses and values to send bitcoins to. Values must be set in BCH. Difference between from and to is transaction fee.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> BitcoinCash_Send(IEnumerable<BitcoinCashSendOrderFromUTXO> fromUTXO, IEnumerable<BitcoinCashSendOrderTo> to, CancellationToken ct = default) => BitcoinCash_Send_Async(fromUTXO, to, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> BitcoinCash_Send(IEnumerable<BitcoinCashSendOrderFromUTXO> fromUTXO, IEnumerable<BitcoinCashSendOrderTo> to, CancellationToken ct = default) => BitcoinCash_Send_Async(fromUTXO, to, ct).Result;
         /// <summary>
         /// <b>Title:</b> Send Bitcoin Cash to blockchain addresses<br />
         /// <b>Credits:</b> 10 credits per API call.<br />
@@ -6320,7 +6334,7 @@ namespace Tatum.Net
         /// <param name="to">Array of addresses and values to send bitcoins to. Values must be set in BCH. Difference between from and to is transaction fee.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> BitcoinCash_Send_Async(IEnumerable<BitcoinCashSendOrderFromUTXO> fromUTXO, IEnumerable<BitcoinCashSendOrderTo> to, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> BitcoinCash_Send_Async(IEnumerable<BitcoinCashSendOrderFromUTXO> fromUTXO, IEnumerable<BitcoinCashSendOrderTo> to, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "fromUTXO", fromUTXO },
@@ -6347,7 +6361,7 @@ namespace Tatum.Net
         /// <param name="signatureId">ID of prepared payment template to sign. Required only, when broadcasting transaction signed by Tatum KMS.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> BitcoinCash_Broadcast(string txData, string signatureId, CancellationToken ct = default) => BitcoinCash_Broadcast_Async(txData, signatureId, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> BitcoinCash_Broadcast(string txData, string signatureId = null, CancellationToken ct = default) => BitcoinCash_Broadcast_Async(txData, signatureId, ct).Result;
         /// <summary>
         /// <b>Title:</b> Broadcast signed Bitcoin Cash transaction<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6360,7 +6374,7 @@ namespace Tatum.Net
         /// <param name="signatureId">ID of prepared payment template to sign. Required only, when broadcasting transaction signed by Tatum KMS.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> BitcoinCash_Broadcast_Async(string txData, string signatureId, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> BitcoinCash_Broadcast_Async(string txData, string signatureId = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "txData", txData },
@@ -6395,7 +6409,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainWallet> Litecoin_GenerateWallet(string mnemonics, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.Litecoin, new List<string> { mnemonics }, ct).Result;
+        public virtual WebCallResult<BlockchainWallet> Litecoin_GenerateWallet(string mnemonics, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.Litecoin, new List<string> { mnemonics }, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Litecoin wallet<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6414,7 +6428,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainWallet> Litecoin_GenerateWallet(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.Litecoin, mnemonics, ct).Result;
+        public virtual WebCallResult<BlockchainWallet> Litecoin_GenerateWallet(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.Litecoin, mnemonics, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Litecoin wallet<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6433,7 +6447,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainWallet>> Litecoin_GenerateWallet_Async(string mnemonics, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.Litecoin, new List<string> { mnemonics }, ct);
+        public virtual async Task<WebCallResult<BlockchainWallet>> Litecoin_GenerateWallet_Async(string mnemonics, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.Litecoin, new List<string> { mnemonics }, ct);
         /// <summary>
         /// <b>Title:</b> Generate Litecoin wallet<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6452,7 +6466,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainWallet>> Litecoin_GenerateWallet_Async(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.Litecoin, mnemonics, ct);
+        public virtual async Task<WebCallResult<BlockchainWallet>> Litecoin_GenerateWallet_Async(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.Litecoin, mnemonics, ct);
 
         /// <summary>
         /// <b>Title:</b> Get Litecoin Blockchain Information<br />
@@ -6462,7 +6476,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<LitecoinChainInfo> Litecoin_GetBlockchainInformation(CancellationToken ct = default) => Litecoin_GetBlockchainInformation_Async(ct).Result;
+        public virtual WebCallResult<LitecoinChainInfo> Litecoin_GetBlockchainInformation(CancellationToken ct = default) => Litecoin_GetBlockchainInformation_Async(ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Litecoin Blockchain Information<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6471,7 +6485,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<LitecoinChainInfo>> Litecoin_GetBlockchainInformation_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<LitecoinChainInfo>> Litecoin_GetBlockchainInformation_Async(CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Litecoin_BlockchainInformation));
@@ -6487,7 +6501,7 @@ namespace Tatum.Net
         /// <param name="block_id">The number of blocks preceding a particular block on a block chain.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumHash> Litecoin_GetBlockHash(long block_id, CancellationToken ct = default) => Litecoin_GetBlockHash_Async(block_id, ct).Result;
+        public virtual WebCallResult<TatumHash> Litecoin_GetBlockHash(long block_id, CancellationToken ct = default) => Litecoin_GetBlockHash_Async(block_id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Litecoin Block hash<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6497,7 +6511,7 @@ namespace Tatum.Net
         /// <param name="block_id">The number of blocks preceding a particular block on a block chain.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumHash>> Litecoin_GetBlockHash_Async(long block_id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<TatumHash>> Litecoin_GetBlockHash_Async(long block_id, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Litecoin_GetBlockHash, block_id));
@@ -6513,7 +6527,7 @@ namespace Tatum.Net
         /// <param name="hash_height">Block hash or height.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<LitecoinBlock> Litecoin_GetBlock(string hash_height, CancellationToken ct = default) => Litecoin_GetBlock_Async(hash_height, ct).Result;
+        public virtual WebCallResult<LitecoinBlock> Litecoin_GetBlock(string hash_height, CancellationToken ct = default) => Litecoin_GetBlock_Async(hash_height, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Litecoin Block by hash or height<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6523,7 +6537,7 @@ namespace Tatum.Net
         /// <param name="hash_height">Block hash or height.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<LitecoinBlock>> Litecoin_GetBlock_Async(string hash_height, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<LitecoinBlock>> Litecoin_GetBlock_Async(string hash_height, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Litecoin_GetBlockByHash, hash_height));
@@ -6539,7 +6553,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<LitecoinTransaction> Litecoin_GetTransactionByHash(string hash, CancellationToken ct = default) => Litecoin_GetTransactionByHash_Async(hash, ct).Result;
+        public virtual WebCallResult<LitecoinTransaction> Litecoin_GetTransactionByHash(string hash, CancellationToken ct = default) => Litecoin_GetTransactionByHash_Async(hash, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Litecoin Transaction by hash<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6549,7 +6563,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<LitecoinTransaction>> Litecoin_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<LitecoinTransaction>> Litecoin_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Litecoin_GetTransactionByHash, hash));
@@ -6567,7 +6581,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<LitecoinTransaction>> Litecoin_GetTransactionsByAddress(string address, int pageSize = 50, int offset = 0, CancellationToken ct = default) => Litecoin_GetTransactionsByAddress_Async(address, pageSize, offset, ct).Result;
+        public virtual WebCallResult<IEnumerable<LitecoinTransaction>> Litecoin_GetTransactionsByAddress(string address, int pageSize = 50, int offset = 0, CancellationToken ct = default) => Litecoin_GetTransactionsByAddress_Async(address, pageSize, offset, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Litecoin Transactions by address<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6579,7 +6593,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<LitecoinTransaction>>> Litecoin_GetTransactionsByAddress_Async(string address, int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<LitecoinTransaction>>> Litecoin_GetTransactionsByAddress_Async(string address, int pageSize = 50, int offset = 0, CancellationToken ct = default)
         {
             pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
 
@@ -6602,7 +6616,7 @@ namespace Tatum.Net
         /// <param name="address">Address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<LitecoinBalance> Litecoin_GetBalance(string address, CancellationToken ct = default) => Litecoin_GetBalance_Async(address, ct).Result;
+        public virtual WebCallResult<LitecoinBalance> Litecoin_GetBalance(string address, CancellationToken ct = default) => Litecoin_GetBalance_Async(address, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Litecoin Balance of the address<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6612,7 +6626,7 @@ namespace Tatum.Net
         /// <param name="address">Address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<LitecoinBalance>> Litecoin_GetBalance_Async(string address, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<LitecoinBalance>> Litecoin_GetBalance_Async(string address, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Litecoin_GetBalance, address));
@@ -6634,7 +6648,7 @@ namespace Tatum.Net
         /// <param name="index">Index of tx output to check if spent or not</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<LitecoinUTXO> Litecoin_GetTransactionUTXO(string txhash, long index, CancellationToken ct = default) => Litecoin_GetTransactionUTXO_Async(txhash, index, ct).Result;
+        public virtual WebCallResult<LitecoinUTXO> Litecoin_GetTransactionUTXO(string txhash, long index, CancellationToken ct = default) => Litecoin_GetTransactionUTXO_Async(txhash, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Litecoin UTXO of Transaction<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6650,7 +6664,7 @@ namespace Tatum.Net
         /// <param name="index">Index of tx output to check if spent or not</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<LitecoinUTXO>> Litecoin_GetTransactionUTXO_Async(string txhash, long index, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<LitecoinUTXO>> Litecoin_GetTransactionUTXO_Async(string txhash, long index, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Litecoin_GetTransactionUTXO, txhash, index));
@@ -6668,7 +6682,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of desired address to be generated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumAddress> Litecoin_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.Litecoin, xpub, index, ct).Result;
+        public virtual WebCallResult<TatumAddress> Litecoin_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.Litecoin, xpub, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Litecoin deposit address from Extended public key<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6680,7 +6694,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of desired address to be generated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumAddress>> Litecoin_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.Litecoin, xpub, index, ct);
+        public virtual async Task<WebCallResult<TatumAddress>> Litecoin_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.Litecoin, xpub, index, ct);
 
         /// <summary>
         /// <b>Title:</b> Generate Litecoin private key<br />
@@ -6693,7 +6707,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumKey> Litecoin_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Litecoin, new List<string> { mnemonics }, index, ct).Result;
+        public virtual WebCallResult<TatumKey> Litecoin_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Litecoin, new List<string> { mnemonics }, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Litecoin private key<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6705,7 +6719,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumKey> Litecoin_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Litecoin, mnemonics, index, ct).Result;
+        public virtual WebCallResult<TatumKey> Litecoin_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Litecoin, mnemonics, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Litecoin private key<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6717,7 +6731,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumKey>> Litecoin_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Litecoin, new List<string> { mnemonics }, index, default);
+        public virtual async Task<WebCallResult<TatumKey>> Litecoin_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Litecoin, new List<string> { mnemonics }, index, default);
         /// <summary>
         /// <b>Title:</b> Generate Litecoin private key<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6729,7 +6743,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumKey>> Litecoin_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Litecoin, mnemonics, index, default);
+        public virtual async Task<WebCallResult<TatumKey>> Litecoin_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Litecoin, mnemonics, index, default);
 
         /// <summary>
         /// <b>Title:</b> Send Litecoin to blockchain addresses<br />
@@ -6747,7 +6761,7 @@ namespace Tatum.Net
         /// <param name="to">Array of addresses and values to send Litecoins to. Values must be set in LTC. Difference between from and to is transaction fee.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Litecoin_Send(IEnumerable<LitecoinSendOrderFromAddress> fromAddress, IEnumerable<LitecoinSendOrderFromUTXO> fromUTXO, IEnumerable<LitecoinSendOrderTo> to, CancellationToken ct = default) => Litecoin_Send_Async(fromAddress, fromUTXO, to, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> Litecoin_Send(IEnumerable<LitecoinSendOrderFromAddress> fromAddress, IEnumerable<LitecoinSendOrderFromUTXO> fromUTXO, IEnumerable<LitecoinSendOrderTo> to, CancellationToken ct = default) => Litecoin_Send_Async(fromAddress, fromUTXO, to, ct).Result;
         /// <summary>
         /// <b>Title:</b> Send Litecoin to blockchain addresses<br />
         /// <b>Credits:</b> 10 credits per API call.<br />
@@ -6764,7 +6778,7 @@ namespace Tatum.Net
         /// <param name="to">Array of addresses and values to send Litecoins to. Values must be set in LTC. Difference between from and to is transaction fee.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Litecoin_Send_Async(IEnumerable<LitecoinSendOrderFromAddress> fromAddress, IEnumerable<LitecoinSendOrderFromUTXO> fromUTXO, IEnumerable<LitecoinSendOrderTo> to, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> Litecoin_Send_Async(IEnumerable<LitecoinSendOrderFromAddress> fromAddress, IEnumerable<LitecoinSendOrderFromUTXO> fromUTXO, IEnumerable<LitecoinSendOrderTo> to, CancellationToken ct = default)
         {
             if ((fromAddress == null || fromAddress.Count() == 0) && (fromUTXO == null || fromUTXO.Count() == 0))
                 throw new ArgumentException("Either fromUTXO or fromAddress must be present.");
@@ -6793,7 +6807,7 @@ namespace Tatum.Net
         /// <param name="signatureId">ID of prepared payment template to sign. Required only, when broadcasting transaction signed by Tatum KMS.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Litecoin_Broadcast(string txData, string signatureId, CancellationToken ct = default) => Litecoin_Broadcast_Async(txData, signatureId, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> Litecoin_Broadcast(string txData, string signatureId = null, CancellationToken ct = default) => Litecoin_Broadcast_Async(txData, signatureId, ct).Result;
         /// <summary>
         /// <b>Title:</b> Broadcast signed Litecoin transaction<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6804,7 +6818,7 @@ namespace Tatum.Net
         /// <param name="signatureId">ID of prepared payment template to sign. Required only, when broadcasting transaction signed by Tatum KMS.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Litecoin_Broadcast_Async(string txData, string signatureId, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> Litecoin_Broadcast_Async(string txData, string signatureId = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "txData", txData },
@@ -6830,7 +6844,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<RippleAddressSecret> Ripple_GenerateAccount(CancellationToken ct = default) => Ripple_GenerateAccount_Async(ct).Result;
+        public virtual WebCallResult<RippleAddressSecret> Ripple_GenerateAccount(CancellationToken ct = default) => Ripple_GenerateAccount_Async(ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate XRP account<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6839,7 +6853,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<RippleAddressSecret>> Ripple_GenerateAccount_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<RippleAddressSecret>> Ripple_GenerateAccount_Async(CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Ripple_GenerateAccount));
@@ -6854,7 +6868,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<RippleChainInfo> Ripple_GetBlockchainInformation(CancellationToken ct = default) => Ripple_GetBlockchainInformation_Async(ct).Result;
+        public virtual WebCallResult<RippleChainInfo> Ripple_GetBlockchainInformation(CancellationToken ct = default) => Ripple_GetBlockchainInformation_Async(ct).Result;
         /// <summary>
         /// <b>Title:</b> Get XRP Blockchain Information<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6863,7 +6877,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<RippleChainInfo>> Ripple_GetBlockchainInformation_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<RippleChainInfo>> Ripple_GetBlockchainInformation_Async(CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Ripple_BlockchainInformation));
@@ -6878,7 +6892,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<RippleChainFee> Ripple_GetBlockchainFee(CancellationToken ct = default) => Ripple_GetBlockchainFee_Async(ct).Result;
+        public virtual WebCallResult<RippleChainFee> Ripple_GetBlockchainFee(CancellationToken ct = default) => Ripple_GetBlockchainFee_Async(ct).Result;
         /// <summary>
         /// <b>Title:</b> Get actual Blockchain fee<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6887,7 +6901,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<RippleChainFee>> Ripple_GetBlockchainFee_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<RippleChainFee>> Ripple_GetBlockchainFee_Async(CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Ripple_BlockchainFee));
@@ -6905,7 +6919,7 @@ namespace Tatum.Net
         /// <param name="marker">Marker from the last paginated request. It is stringified JSON from previous response.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<RippleAccountTransactions> Ripple_GetTransactionsByAccount(string account, int? min = null, RippleMarker marker = null, CancellationToken ct = default) => Ripple_GetTransactionsByAccount_Async(account, min, marker, ct).Result;
+        public virtual WebCallResult<RippleAccountTransactions> Ripple_GetTransactionsByAccount(string account, int? min = null, RippleMarker marker = null, CancellationToken ct = default) => Ripple_GetTransactionsByAccount_Async(account, min, marker, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Account transactions<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6917,7 +6931,7 @@ namespace Tatum.Net
         /// <param name="marker">Marker from the last paginated request. It is stringified JSON from previous response.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<RippleAccountTransactions>> Ripple_GetTransactionsByAccount_Async(string account, int? min = null, RippleMarker marker = null, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<RippleAccountTransactions>> Ripple_GetTransactionsByAccount_Async(string account, int? min = null, RippleMarker marker = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("min", min);
@@ -6937,7 +6951,7 @@ namespace Tatum.Net
         /// <param name="index">Sequence of XRP ledger.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<RippleLedger> Ripple_GetLedger(long index, CancellationToken ct = default) => Ripple_GetLedger_Async(index, ct).Result;
+        public virtual WebCallResult<RippleLedger> Ripple_GetLedger(long index, CancellationToken ct = default) => Ripple_GetLedger_Async(index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Ledger<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6947,7 +6961,7 @@ namespace Tatum.Net
         /// <param name="index">Sequence of XRP ledger.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<RippleLedger>> Ripple_GetLedger_Async(long index, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<RippleLedger>> Ripple_GetLedger_Async(long index, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Ripple_GetLedger, index));
@@ -6963,7 +6977,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<RippleTransactionData> Ripple_GetTransactionByHash(string hash, CancellationToken ct = default) => Ripple_GetTransactionByHash_Async(hash, ct).Result;
+        public virtual WebCallResult<RippleTransactionData> Ripple_GetTransactionByHash(string hash, CancellationToken ct = default) => Ripple_GetTransactionByHash_Async(hash, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get XRP Transaction by hash<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6973,7 +6987,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<RippleTransactionData>> Ripple_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<RippleTransactionData>> Ripple_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Ripple_GetTransactionByHash, hash));
@@ -6989,7 +7003,7 @@ namespace Tatum.Net
         /// <param name="account">Account address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<RippleAccount> Ripple_GetAccountInfo(string account, CancellationToken ct = default) => Ripple_GetAccountInfo_Async(account, ct).Result;
+        public virtual WebCallResult<RippleAccount> Ripple_GetAccountInfo(string account, CancellationToken ct = default) => Ripple_GetAccountInfo_Async(account, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Account info<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -6999,7 +7013,7 @@ namespace Tatum.Net
         /// <param name="account">Account address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<RippleAccount>> Ripple_GetAccountInfo_Async(string account, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<RippleAccount>> Ripple_GetAccountInfo_Async(string account, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Ripple_AccountInfo, account));
@@ -7015,7 +7029,7 @@ namespace Tatum.Net
         /// <param name="account">Account address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<RippleBalance> Ripple_GetBalance(string account, CancellationToken ct = default) => Ripple_GetBalance_Async(account, ct).Result;
+        public virtual WebCallResult<RippleBalance> Ripple_GetBalance(string account, CancellationToken ct = default) => Ripple_GetBalance_Async(account, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Account Balance<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -7025,7 +7039,7 @@ namespace Tatum.Net
         /// <param name="account">Account address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<RippleBalance>> Ripple_GetBalance_Async(string account, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<RippleBalance>> Ripple_GetBalance_Async(string account, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Ripple_GetBalance, account));
@@ -7051,7 +7065,7 @@ namespace Tatum.Net
         /// <param name="token">Asset name. Must be 160bit HEX string, e.g. SHA1.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Ripple_Send(
+        public virtual WebCallResult<BlockchainResponse> Ripple_Send(
             string fromAccount,
             string to,
             string amount,
@@ -7082,7 +7096,7 @@ namespace Tatum.Net
         /// <param name="token">Asset name. Must be 160bit HEX string, e.g. SHA1.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Ripple_Send_Async(
+        public virtual async Task<WebCallResult<BlockchainResponse>> Ripple_Send_Async(
             string fromAccount,
             string to,
             string amount,
@@ -7133,7 +7147,7 @@ namespace Tatum.Net
         /// <param name="fee">Fee to be paid, in XRP. If omitted, current fee will be calculated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Ripple_TrustLine(
+        public virtual WebCallResult<BlockchainResponse> Ripple_TrustLine(
             string fromAccount,
             string issuerAccount,
             string limit,
@@ -7159,7 +7173,7 @@ namespace Tatum.Net
         /// <param name="fee">Fee to be paid, in XRP. If omitted, current fee will be calculated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Ripple_TrustLine_Async(
+        public virtual async Task<WebCallResult<BlockchainResponse>> Ripple_TrustLine_Async(
             string fromAccount,
             string issuerAccount,
             string limit,
@@ -7202,7 +7216,7 @@ namespace Tatum.Net
         /// <param name="requireDestinationTag">Should be true, if an account should support off-chain processing.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Ripple_ModifyAccountSettings(
+        public virtual WebCallResult<BlockchainResponse> Ripple_ModifyAccountSettings(
             string fromAccount,
             string fromSecret = null,
             string signatureId = null,
@@ -7225,7 +7239,7 @@ namespace Tatum.Net
         /// <param name="requireDestinationTag">Should be true, if an account should support off-chain processing.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Ripple_ModifyAccountSettings_Async(
+        public virtual async Task<WebCallResult<BlockchainResponse>> Ripple_ModifyAccountSettings_Async(
             string fromAccount,
             string fromSecret = null,
             string signatureId = null,
@@ -7261,7 +7275,7 @@ namespace Tatum.Net
         /// <param name="signatureId">ID of prepared payment template to sign. Required only, when broadcasting transaction signed by Tatum KMS.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Ripple_Broadcast(string txData, string signatureId, CancellationToken ct = default) => Ripple_Broadcast_Async(txData, signatureId, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> Ripple_Broadcast(string txData, string signatureId = null, CancellationToken ct = default) => Ripple_Broadcast_Async(txData, signatureId, ct).Result;
         /// <summary>
         /// <b>Title:</b> Broadcast signed XRP transaction<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -7272,7 +7286,7 @@ namespace Tatum.Net
         /// <param name="signatureId">ID of prepared payment template to sign. Required only, when broadcasting transaction signed by Tatum KMS.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Ripple_Broadcast_Async(string txData, string signatureId, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> Ripple_Broadcast_Async(string txData, string signatureId = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "txData", txData },
@@ -7298,7 +7312,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<StellarAddressSecret> Stellar_GenerateAccount(CancellationToken ct = default) => Stellar_GenerateAccount_Async(ct).Result;
+        public virtual WebCallResult<StellarAddressSecret> Stellar_GenerateAccount(CancellationToken ct = default) => Stellar_GenerateAccount_Async(ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate XLM account<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -7307,7 +7321,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<StellarAddressSecret>> Stellar_GenerateAccount_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<StellarAddressSecret>> Stellar_GenerateAccount_Async(CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Stellar_GenerateAccount));
@@ -7322,7 +7336,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<StellarChainInfo> Stellar_GetBlockchainInformation(CancellationToken ct = default) => Stellar_GetBlockchainInformation_Async(ct).Result;
+        public virtual WebCallResult<StellarChainInfo> Stellar_GetBlockchainInformation(CancellationToken ct = default) => Stellar_GetBlockchainInformation_Async(ct).Result;
         /// <summary>
         /// <b>Title:</b> Get XLM Blockchain Information<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -7331,7 +7345,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<StellarChainInfo>> Stellar_GetBlockchainInformation_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<StellarChainInfo>> Stellar_GetBlockchainInformation_Async(CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Stellar_BlockchainInformation));
@@ -7347,7 +7361,7 @@ namespace Tatum.Net
         /// <param name="sequence">Sequence of the ledger.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<StellarChainInfo> Stellar_GetLedger(long sequence, CancellationToken ct = default) => Stellar_GetLedger_Async(sequence, ct).Result;
+        public virtual WebCallResult<StellarChainInfo> Stellar_GetLedger(long sequence, CancellationToken ct = default) => Stellar_GetLedger_Async(sequence, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get XLM Blockchain Ledger by sequence<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -7357,7 +7371,7 @@ namespace Tatum.Net
         /// <param name="sequence">Sequence of the ledger.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<StellarChainInfo>> Stellar_GetLedger_Async(long sequence, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<StellarChainInfo>> Stellar_GetLedger_Async(long sequence, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Stellar_GetLedger, sequence));
@@ -7373,7 +7387,7 @@ namespace Tatum.Net
         /// <param name="sequence">Sequence of the ledger.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<StellarTransaction>> Stellar_GetTransactionsInLedger(long sequence, CancellationToken ct = default) => Stellar_GetTransactionsInLedger_Async(sequence, ct).Result;
+        public virtual WebCallResult<IEnumerable<StellarTransaction>> Stellar_GetTransactionsInLedger(long sequence, CancellationToken ct = default) => Stellar_GetTransactionsInLedger_Async(sequence, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get XLM Blockchain Transactions in Ledger<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -7383,7 +7397,7 @@ namespace Tatum.Net
         /// <param name="sequence">Sequence of the ledger.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<StellarTransaction>>> Stellar_GetTransactionsInLedger_Async(long sequence, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<StellarTransaction>>> Stellar_GetTransactionsInLedger_Async(long sequence, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Stellar_GetTransactionsInLedger, sequence));
@@ -7398,7 +7412,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<decimal> Stellar_GetBlockchainFee(CancellationToken ct = default) => Stellar_GetBlockchainFee_Async(ct).Result;
+        public virtual WebCallResult<decimal> Stellar_GetBlockchainFee(CancellationToken ct = default) => Stellar_GetBlockchainFee_Async(ct).Result;
         /// <summary>
         /// <b>Title:</b> Get actual XLM fee<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -7407,7 +7421,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<decimal>> Stellar_GetBlockchainFee_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<decimal>> Stellar_GetBlockchainFee_Async(CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Stellar_BlockchainFee));
@@ -7426,7 +7440,7 @@ namespace Tatum.Net
         /// <param name="account">Address of XLM account.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<StellarTransaction>> Stellar_GetTransactionsByAccount(string account, CancellationToken ct = default) => Stellar_GetTransactionsByAccount_Async(account, ct).Result;
+        public virtual WebCallResult<IEnumerable<StellarTransaction>> Stellar_GetTransactionsByAccount(string account, CancellationToken ct = default) => Stellar_GetTransactionsByAccount_Async(account, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get XLM Account transactions<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -7436,7 +7450,7 @@ namespace Tatum.Net
         /// <param name="account">Address of XLM account.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<StellarTransaction>>> Stellar_GetTransactionsByAccount_Async(string account, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<StellarTransaction>>> Stellar_GetTransactionsByAccount_Async(string account, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Stellar_GetTransactionsByAccount, account));
@@ -7452,7 +7466,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<StellarTransaction> Stellar_GetTransactionByHash(string hash, CancellationToken ct = default) => Stellar_GetTransactionByHash_Async(hash, ct).Result;
+        public virtual WebCallResult<StellarTransaction> Stellar_GetTransactionByHash(string hash, CancellationToken ct = default) => Stellar_GetTransactionByHash_Async(hash, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get XLM Transaction by hash<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -7462,7 +7476,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<StellarTransaction>> Stellar_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<StellarTransaction>> Stellar_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Stellar_GetTransactionByHash, hash));
@@ -7478,7 +7492,7 @@ namespace Tatum.Net
         /// <param name="account">Account address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<StellarAccountInfo> Stellar_GetAccountInfo(string account, CancellationToken ct = default) => Stellar_GetAccountInfo_Async(account, ct).Result;
+        public virtual WebCallResult<StellarAccountInfo> Stellar_GetAccountInfo(string account, CancellationToken ct = default) => Stellar_GetAccountInfo_Async(account, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get XLM Account info<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -7488,7 +7502,7 @@ namespace Tatum.Net
         /// <param name="account">Account address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<StellarAccountInfo>> Stellar_GetAccountInfo_Async(string account, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<StellarAccountInfo>> Stellar_GetAccountInfo_Async(string account, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Stellar_AccountInfo, account));
@@ -7513,7 +7527,7 @@ namespace Tatum.Net
         /// <param name="initialize">Set to true, if the destination address is not yet initialized and should be funded for the first time.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Stellar_Send(
+        public virtual WebCallResult<BlockchainResponse> Stellar_Send(
             string fromAccount,
             string to,
             string amount,
@@ -7542,7 +7556,7 @@ namespace Tatum.Net
         /// <param name="initialize">Set to true, if the destination address is not yet initialized and should be funded for the first time.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Stellar_Send_Async(
+        public virtual async Task<WebCallResult<BlockchainResponse>> Stellar_Send_Async(
             string fromAccount,
             string to,
             string amount,
@@ -7589,7 +7603,7 @@ namespace Tatum.Net
         /// <param name="limit">Amount of the assets to be permitted to send over this trust line. 0 means deletion of the trust line. When no limit is specified, maximum amount available is permitted.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Stellar_TrustLine(
+        public virtual WebCallResult<BlockchainResponse> Stellar_TrustLine(
             string fromAccount,
             string issuerAccount,
             string token,
@@ -7612,7 +7626,7 @@ namespace Tatum.Net
         /// <param name="limit">Amount of the assets to be permitted to send over this trust line. 0 means deletion of the trust line. When no limit is specified, maximum amount available is permitted.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Stellar_TrustLine_Async(
+        public virtual async Task<WebCallResult<BlockchainResponse>> Stellar_TrustLine_Async(
             string fromAccount,
             string issuerAccount,
             string token,
@@ -7648,7 +7662,7 @@ namespace Tatum.Net
         /// <param name="signatureId">ID of prepared payment template to sign. Required only, when broadcasting transaction signed by Tatum KMS.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Stellar_Broadcast(string txData, string signatureId, CancellationToken ct = default) => Stellar_Broadcast_Async(txData, signatureId, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> Stellar_Broadcast(string txData, string signatureId = null, CancellationToken ct = default) => Stellar_Broadcast_Async(txData, signatureId, ct).Result;
         /// <summary>
         /// <b>Title:</b> Broadcast signed XLM transaction<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -7659,7 +7673,7 @@ namespace Tatum.Net
         /// <param name="signatureId">ID of prepared payment template to sign. Required only, when broadcasting transaction signed by Tatum KMS.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Stellar_Broadcast_Async(string txData, string signatureId, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> Stellar_Broadcast_Async(string txData, string signatureId = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "txData", txData },
@@ -7691,7 +7705,7 @@ namespace Tatum.Net
         /// <param name="nonce">Nonce to be set to Ethereum transaction. If not present, last known nonce will be used.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Records_SetData(BlockchainType chain, string data, string fromPrivateKey = null, string to = null, long? nonce = null, CancellationToken ct = default) => Records_SetData_Async(chain, data, fromPrivateKey, to, nonce, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> Records_SetData(BlockchainType chain, string data, string fromPrivateKey = null, string to = null, long? nonce = null, CancellationToken ct = default) => Records_SetData_Async(chain, data, fromPrivateKey, to, nonce, ct).Result;
         /// <summary>
         /// <b>Title:</b> Store log record<br />
         /// <b>Credits:</b> 2 credits per API call. Additional credits are debited based on the size of the data, which are being stored and type of blockchain.<br />
@@ -7707,7 +7721,7 @@ namespace Tatum.Net
         /// <param name="nonce">Nonce to be set to Ethereum transaction. If not present, last known nonce will be used.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Records_SetData_Async(BlockchainType chain, string data, string fromPrivateKey = null, string to = null, long? nonce = null, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> Records_SetData_Async(BlockchainType chain, string data, string fromPrivateKey = null, string to = null, long? nonce = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "chain", JsonConvert.SerializeObject(chain, new BlockchainTypeConverter(false)) },
@@ -7735,7 +7749,7 @@ namespace Tatum.Net
         /// <param name="id">ID of log record / transaction on blockchain</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumData> Records_GetData(BlockchainType chain, string id, CancellationToken ct = default) => Records_GetData_Async(chain, id, ct).Result;
+        public virtual WebCallResult<TatumData> Records_GetData(BlockchainType chain, string id, CancellationToken ct = default) => Records_GetData_Async(chain, id, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get log record<br />
         /// <b>Credits:</b> 1 credits per API call.<br />
@@ -7746,7 +7760,7 @@ namespace Tatum.Net
         /// <param name="id">ID of log record / transaction on blockchain</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumData>> Records_GetData_Async(BlockchainType chain, string id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<TatumData>> Records_GetData_Async(BlockchainType chain, string id, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "chain", JsonConvert.SerializeObject(chain, new BlockchainTypeConverter(false)) },
@@ -7768,7 +7782,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BinanceAddress> Binance_GenerateAccount(CancellationToken ct = default) => Binance_GenerateAccount_Async(ct).Result;
+        public virtual WebCallResult<BinanceAddress> Binance_GenerateAccount(CancellationToken ct = default) => Binance_GenerateAccount_Async(ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Binance wallet<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -7777,7 +7791,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BinanceAddress>> Binance_GenerateAccount_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BinanceAddress>> Binance_GenerateAccount_Async(CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Binance_GenerateAccount));
@@ -7792,7 +7806,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<long> Binance_GetCurrentBlock(CancellationToken ct = default) => Binance_GetCurrentBlock_Async(ct).Result;
+        public virtual WebCallResult<long> Binance_GetCurrentBlock(CancellationToken ct = default) => Binance_GetCurrentBlock_Async(ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Binance current block<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -7801,7 +7815,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<long>> Binance_GetCurrentBlock_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<long>> Binance_GetCurrentBlock_Async(CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Binance_CurrentBlock));
@@ -7820,7 +7834,7 @@ namespace Tatum.Net
         /// <param name="height">Block height</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BinanceBlockTransactions> Binance_GetTransactionsInBlock(long height, CancellationToken ct = default) => Binance_GetTransactionsInBlock_Async(height, ct).Result;
+        public virtual WebCallResult<BinanceBlockTransactions> Binance_GetTransactionsInBlock(long height, CancellationToken ct = default) => Binance_GetTransactionsInBlock_Async(height, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Binance Transactions in Block<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -7830,7 +7844,7 @@ namespace Tatum.Net
         /// <param name="height">Block height</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BinanceBlockTransactions>> Binance_GetTransactionsInBlock_Async(long height, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BinanceBlockTransactions>> Binance_GetTransactionsInBlock_Async(long height, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Binance_GetTransactionsInBlock, height));
@@ -7846,7 +7860,7 @@ namespace Tatum.Net
         /// <param name="account">Account address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BinanceAccount> Binance_GetAccountInfo(string account, CancellationToken ct = default) => Binance_GetAccountInfo_Async(account, ct).Result;
+        public virtual WebCallResult<BinanceAccount> Binance_GetAccountInfo(string account, CancellationToken ct = default) => Binance_GetAccountInfo_Async(account, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Binance Account<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -7856,7 +7870,7 @@ namespace Tatum.Net
         /// <param name="account">Account address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BinanceAccount>> Binance_GetAccountInfo_Async(string account, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BinanceAccount>> Binance_GetAccountInfo_Async(string account, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Binance_AccountInfo, account));
@@ -7872,7 +7886,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BinanceTransaction> Binance_GetTransaction(string hash, CancellationToken ct = default) => Binance_GetTransaction_Async(hash, ct).Result;
+        public virtual WebCallResult<BinanceTransaction> Binance_GetTransaction(string hash, CancellationToken ct = default) => Binance_GetTransaction_Async(hash, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Binance Transaction<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -7882,7 +7896,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BinanceTransaction>> Binance_GetTransaction_Async(string hash, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BinanceTransaction>> Binance_GetTransaction_Async(string hash, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_Binance_GetTransaction, hash));
@@ -7904,7 +7918,7 @@ namespace Tatum.Net
         /// <param name="message">Message to recipient.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Binance_Send(
+        public virtual WebCallResult<BlockchainResponse> Binance_Send(
             string to,
             string currency,
             string amount,
@@ -7927,7 +7941,7 @@ namespace Tatum.Net
         /// <param name="message">Message to recipient.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Stellar_Send_Async(
+        public virtual async Task<WebCallResult<BlockchainResponse>> Stellar_Send_Async(
             string to,
             string currency,
             string amount,
@@ -7962,7 +7976,7 @@ namespace Tatum.Net
         /// <param name="txData">Raw signed transaction to be published to network.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Binance_Broadcast(string txData, CancellationToken ct = default) => Binance_Broadcast_Async(txData, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> Binance_Broadcast(string txData, CancellationToken ct = default) => Binance_Broadcast_Async(txData, ct).Result;
         /// <summary>
         /// <b>Title:</b> Broadcast signed BNB transaction<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -7972,7 +7986,7 @@ namespace Tatum.Net
         /// <param name="txData">Raw signed transaction to be published to network.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Binance_Broadcast_Async(string txData, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> Binance_Broadcast_Async(string txData, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "txData", txData },
@@ -8002,7 +8016,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainWallet> VeChain_GenerateWallet(string mnemonics, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.VeChain, new List<string> { mnemonics }, ct).Result;
+        public virtual WebCallResult<BlockchainWallet> VeChain_GenerateWallet(string mnemonics, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.VeChain, new List<string> { mnemonics }, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate VeChain wallet<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8017,7 +8031,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainWallet> VeChain_GenerateWallet(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.VeChain, mnemonics, ct).Result;
+        public virtual WebCallResult<BlockchainWallet> VeChain_GenerateWallet(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.VeChain, mnemonics, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate VeChain wallet<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8032,7 +8046,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainWallet>> VeChain_GenerateWallet_Async(string mnemonics, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.VeChain, new List<string> { mnemonics }, ct);
+        public virtual async Task<WebCallResult<BlockchainWallet>> VeChain_GenerateWallet_Async(string mnemonics, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.VeChain, new List<string> { mnemonics }, ct);
         /// <summary>
         /// <b>Title:</b> Generate VeChain wallet<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8047,7 +8061,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainWallet>> VeChain_GenerateWallet_Async(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.VeChain, mnemonics, ct);
+        public virtual async Task<WebCallResult<BlockchainWallet>> VeChain_GenerateWallet_Async(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.VeChain, mnemonics, ct);
 
         /// <summary>
         /// <b>Title:</b> Generate VeChain account address from Extended public key<br />
@@ -8059,7 +8073,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of desired address to be generated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumAddress> VeChain_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.VeChain, xpub, index, ct).Result;
+        public virtual WebCallResult<TatumAddress> VeChain_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.VeChain, xpub, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate VeChain wallet<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8074,7 +8088,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to use for generation of extended public and private keys.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumAddress>> VeChain_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.VeChain, xpub, index, ct);
+        public virtual async Task<WebCallResult<TatumAddress>> VeChain_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.VeChain, xpub, index, ct);
 
         /// <summary>
         /// <b>Title:</b> Generate VeChain private key<br />
@@ -8086,7 +8100,7 @@ namespace Tatum.Net
         /// <param name="index"></param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumKey> VeChain_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.VeChain, new List<string> { mnemonics }, index, ct).Result;
+        public virtual WebCallResult<TatumKey> VeChain_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.VeChain, new List<string> { mnemonics }, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate VeChain private key<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8097,7 +8111,7 @@ namespace Tatum.Net
         /// <param name="index"></param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumKey> VeChain_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.VeChain, mnemonics, index, ct).Result;
+        public virtual WebCallResult<TatumKey> VeChain_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.VeChain, mnemonics, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate VeChain private key<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8108,7 +8122,7 @@ namespace Tatum.Net
         /// <param name="index"></param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumKey>> VeChain_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.VeChain, new List<string> { mnemonics }, index, default);
+        public virtual async Task<WebCallResult<TatumKey>> VeChain_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.VeChain, new List<string> { mnemonics }, index, default);
         /// <summary>
         /// <b>Title:</b> Generate VeChain private key<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8119,7 +8133,7 @@ namespace Tatum.Net
         /// <param name="index"></param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumKey>> VeChain_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.VeChain, mnemonics, index, default);
+        public virtual async Task<WebCallResult<TatumKey>> VeChain_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.VeChain, mnemonics, index, default);
 
         /// <summary>
         /// <b>Title:</b> Get VeChain current block<br />
@@ -8129,7 +8143,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<long> VeChain_GetCurrentBlock(CancellationToken ct = default) => VeChain_GetCurrentBlock_Async(ct).Result;
+        public virtual WebCallResult<long> VeChain_GetCurrentBlock(CancellationToken ct = default) => VeChain_GetCurrentBlock_Async(ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate VeChain private key<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8140,7 +8154,7 @@ namespace Tatum.Net
         /// <param name="index"></param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<long>> VeChain_GetCurrentBlock_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<long>> VeChain_GetCurrentBlock_Async(CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_VeChain_CurrentBlock));
@@ -8159,7 +8173,7 @@ namespace Tatum.Net
         /// <param name="hash_height">Block hash or block number</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<VeChainBlock> VeChain_GetBlock(string hash_height, CancellationToken ct = default) => VeChain_GetBlock_Async(hash_height, ct).Result;
+        public virtual WebCallResult<VeChainBlock> VeChain_GetBlock(string hash_height, CancellationToken ct = default) => VeChain_GetBlock_Async(hash_height, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get VeChain Block by hash<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8169,7 +8183,7 @@ namespace Tatum.Net
         /// <param name="hash_height">Block hash or block number</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<VeChainBlock>> VeChain_GetBlock_Async(string hash_height, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<VeChainBlock>> VeChain_GetBlock_Async(string hash_height, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_VeChain_GetBlockByHash, hash_height));
@@ -8185,7 +8199,7 @@ namespace Tatum.Net
         /// <param name="address">Account address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<VeChainBalance> VeChain_GetBalance(string address, CancellationToken ct = default) => VeChain_GetBalance_Async(address, ct).Result;
+        public virtual WebCallResult<VeChainBalance> VeChain_GetBalance(string address, CancellationToken ct = default) => VeChain_GetBalance_Async(address, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get VeChain Account balance<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8195,7 +8209,7 @@ namespace Tatum.Net
         /// <param name="address">Account address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<VeChainBalance>> VeChain_GetBalance_Async(string address, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<VeChainBalance>> VeChain_GetBalance_Async(string address, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_VeChain_GetBalance, address));
@@ -8211,7 +8225,7 @@ namespace Tatum.Net
         /// <param name="address">Account address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<VeChainEnergy> VeChain_GetEnergy(string address, CancellationToken ct = default) => VeChain_GetEnergy_Async(address, ct).Result;
+        public virtual WebCallResult<VeChainEnergy> VeChain_GetEnergy(string address, CancellationToken ct = default) => VeChain_GetEnergy_Async(address, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get VeChain Account energy (VTHO)<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8221,7 +8235,7 @@ namespace Tatum.Net
         /// <param name="address">Account address</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<VeChainEnergy>> VeChain_GetEnergy_Async(string address, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<VeChainEnergy>> VeChain_GetEnergy_Async(string address, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_VeChain_GetEnergy, address));
@@ -8237,7 +8251,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<VeChainTransaction> VeChain_GetTransactionByHash(string hash, CancellationToken ct = default) => VeChain_GetTransactionByHash_Async(hash, ct).Result;
+        public virtual WebCallResult<VeChainTransaction> VeChain_GetTransactionByHash(string hash, CancellationToken ct = default) => VeChain_GetTransactionByHash_Async(hash, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get VeChain Transaction<br />
         /// <b>Credits:</b> 10 credits per API call.<br />
@@ -8247,7 +8261,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<VeChainTransaction>> VeChain_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<VeChainTransaction>> VeChain_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
         {
             var credits = 10;
             var url = GetUrl(string.Format(Endpoints_VeChain_GetTransactionByHash, hash));
@@ -8263,7 +8277,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<VeChainTransactionReceipt> VeChain_GetTransactionReceipt(string hash, CancellationToken ct = default) => VeChain_GetTransactionReceipt_Async(hash, ct).Result;
+        public virtual WebCallResult<VeChainTransactionReceipt> VeChain_GetTransactionReceipt(string hash, CancellationToken ct = default) => VeChain_GetTransactionReceipt_Async(hash, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get VeChain Transaction Receipt<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8273,7 +8287,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<VeChainTransactionReceipt>> VeChain_GetTransactionReceipt_Async(string hash, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<VeChainTransactionReceipt>> VeChain_GetTransactionReceipt_Async(string hash, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_VeChain_GetTransactionReceipt, hash));
@@ -8295,7 +8309,7 @@ namespace Tatum.Net
         /// <param name="fee">Custom defined fee. If not present, it will be calculated automatically.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> VeChain_Send(string to, decimal amount, string fromPrivateKey = null, string signatureId = null, string data = null, VeChainFee fee = null, CancellationToken ct = default) => VeChain_Send_Async(to, amount, fromPrivateKey, signatureId, data, fee, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> VeChain_Send(string to, decimal amount, string fromPrivateKey = null, string signatureId = null, string data = null, VeChainFee fee = null, CancellationToken ct = default) => VeChain_Send_Async(to, amount, fromPrivateKey, signatureId, data, fee, ct).Result;
         /// <summary>
         /// <b>Title:</b> Send VeChain from account to account<br />
         /// <b>Credits:</b> 10 credits per API call.<br />
@@ -8311,7 +8325,7 @@ namespace Tatum.Net
         /// <param name="fee">Custom defined fee. If not present, it will be calculated automatically.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> VeChain_Send_Async(string to, decimal amount, string fromPrivateKey = null, string signatureId = null, string data = null, VeChainFee fee = null, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> VeChain_Send_Async(string to, decimal amount, string fromPrivateKey = null, string signatureId = null, string data = null, VeChainFee fee = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                  { "to", to },
@@ -8343,7 +8357,7 @@ namespace Tatum.Net
         /// <param name="nonce">Nonce</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<decimal> VeChain_EstimateGasForTransaction(string from, string to, decimal value, string data = null, long? nonce = null, CancellationToken ct = default) => VeChain_EstimateGasForTransaction_Async(from, to, value, data, nonce, ct).Result;
+        public virtual WebCallResult<decimal> VeChain_EstimateGasForTransaction(string from, string to, decimal value, string data = null, long? nonce = null, CancellationToken ct = default) => VeChain_EstimateGasForTransaction_Async(from, to, value, data, nonce, ct).Result;
         /// <summary>
         /// <b>Title:</b> Estimate VeChain Gas for transaction<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8357,7 +8371,7 @@ namespace Tatum.Net
         /// <param name="nonce">Nonce</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<decimal>> VeChain_EstimateGasForTransaction_Async(string from, string to, decimal value, string data = null, long? nonce = null, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<decimal>> VeChain_EstimateGasForTransaction_Async(string from, string to, decimal value, string data = null, long? nonce = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                  { "from", from },
@@ -8385,7 +8399,7 @@ namespace Tatum.Net
         /// <param name="signatureId">ID of prepared payment template to sign. Required only, when broadcasting transaction signed by Tatum KMS.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> VeChain_Broadcast(string txData, string signatureId, CancellationToken ct = default) => Bitcoin_Broadcast_Async(txData, signatureId, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> VeChain_Broadcast(string txData, string signatureId = null, CancellationToken ct = default) => Bitcoin_Broadcast_Async(txData, signatureId, ct).Result;
         /// <summary>
         /// <b>Title:</b> Broadcast signed VeChain transaction<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8396,7 +8410,7 @@ namespace Tatum.Net
         /// <param name="signatureId">ID of prepared payment template to sign. Required only, when broadcasting transaction signed by Tatum KMS.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> VeChain_Broadcast_Async(string txData, string signatureId, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> VeChain_Broadcast_Async(string txData, string signatureId = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                  { "txData", txData },
@@ -8421,7 +8435,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<NeoAccount> Neo_GenerateAccount(CancellationToken ct = default) => Neo_GenerateAccount_Async(ct).Result;
+        public virtual WebCallResult<NeoAccount> Neo_GenerateAccount(CancellationToken ct = default) => Neo_GenerateAccount_Async(ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate NEO account<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8430,7 +8444,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<NeoAccount>> Neo_GenerateAccount_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<NeoAccount>> Neo_GenerateAccount_Async(CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_NEO_GenerateAccount));
@@ -8445,7 +8459,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<long> Neo_GetCurrentBlock(CancellationToken ct = default) => Neo_GetCurrentBlock_Async(ct).Result;
+        public virtual WebCallResult<long> Neo_GetCurrentBlock(CancellationToken ct = default) => Neo_GetCurrentBlock_Async(ct).Result;
         /// <summary>
         /// <b>Title:</b> Get current NEO block<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8454,7 +8468,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<long>> Neo_GetCurrentBlock_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<long>> Neo_GetCurrentBlock_Async(CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_NEO_CurrentBlock));
@@ -8473,7 +8487,7 @@ namespace Tatum.Net
         /// <param name="hash_height">Block hash or height.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<NeoBlock> Neo_GetBlock(string hash_height, CancellationToken ct = default) => Neo_GetBlock_Async(hash_height, ct).Result;
+        public virtual WebCallResult<NeoBlock> Neo_GetBlock(string hash_height, CancellationToken ct = default) => Neo_GetBlock_Async(hash_height, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get NEO block<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8483,7 +8497,7 @@ namespace Tatum.Net
         /// <param name="hash_height">Block hash or height.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<NeoBlock>> Neo_GetBlock_Async(string hash_height, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<NeoBlock>> Neo_GetBlock_Async(string hash_height, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_NEO_GetBlock, hash_height));
@@ -8499,7 +8513,7 @@ namespace Tatum.Net
         /// <param name="address">Address to get balance</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<NeoBalance> Neo_GetBalance(string address, CancellationToken ct = default) => Neo_GetBalance_Async(address, ct).Result;
+        public virtual WebCallResult<NeoBalance> Neo_GetBalance(string address, CancellationToken ct = default) => Neo_GetBalance_Async(address, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get NEO Account balance<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8509,7 +8523,7 @@ namespace Tatum.Net
         /// <param name="address">Address to get balance</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<NeoBalance>> Neo_GetBalance_Async(string address, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<NeoBalance>> Neo_GetBalance_Async(string address, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_NEO_GetBalance, address));
@@ -8525,7 +8539,7 @@ namespace Tatum.Net
         /// <param name="asset">Asset ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<NeoAsset> Neo_GetAssetInfo(string asset, CancellationToken ct = default) => Neo_GetAssetInfo_Async(asset, ct).Result;
+        public virtual WebCallResult<NeoAsset> Neo_GetAssetInfo(string asset, CancellationToken ct = default) => Neo_GetAssetInfo_Async(asset, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Neo Asset details<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8535,7 +8549,7 @@ namespace Tatum.Net
         /// <param name="asset">Asset ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<NeoAsset>> Neo_GetAssetInfo_Async(string asset, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<NeoAsset>> Neo_GetAssetInfo_Async(string asset, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_NEO_GetAssetInfo, asset));
@@ -8552,7 +8566,7 @@ namespace Tatum.Net
         /// <param name="index">Index of output.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<NeoTransactionOutput> Neo_GetUnspentTransactionOutputs(string txId, long index, CancellationToken ct = default) => Neo_GetUnspentTransactionOutputs_Async(txId, index, ct).Result;
+        public virtual WebCallResult<NeoTransactionOutput> Neo_GetUnspentTransactionOutputs(string txId, long index, CancellationToken ct = default) => Neo_GetUnspentTransactionOutputs_Async(txId, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get NEO unspent transaction outputs<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8563,7 +8577,7 @@ namespace Tatum.Net
         /// <param name="index">Index of output.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<NeoTransactionOutput>> Neo_GetUnspentTransactionOutputs_Async(string txId, long index, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<NeoTransactionOutput>> Neo_GetUnspentTransactionOutputs_Async(string txId, long index, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_NEO_GetUnspentTransactionOutputs, txId, index));
@@ -8579,7 +8593,7 @@ namespace Tatum.Net
         /// <param name="address">Example: AKL19WwiJ2fiTDkAnYQ7GJSTUBoJPTQKhn</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<NeoAccountTransaction>> Neo_GetTransactionsByAccount(string address, CancellationToken ct = default) => Neo_GetTransactionsByAccount_Async(address, ct).Result;
+        public virtual WebCallResult<IEnumerable<NeoAccountTransaction>> Neo_GetTransactionsByAccount(string address, CancellationToken ct = default) => Neo_GetTransactionsByAccount_Async(address, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get NEO Account transactions<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8589,7 +8603,7 @@ namespace Tatum.Net
         /// <param name="address">Example: AKL19WwiJ2fiTDkAnYQ7GJSTUBoJPTQKhn</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<NeoAccountTransaction>>> Neo_GetTransactionsByAccount_Async(string address, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<NeoAccountTransaction>>> Neo_GetTransactionsByAccount_Async(string address, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_NEO_GetTransactionsByAccount, address));
@@ -8605,7 +8619,7 @@ namespace Tatum.Net
         /// <param name="scriptHash">Hash of smart contract</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<NeoContract> Neo_GetContractInfo(string scriptHash, CancellationToken ct = default) => Neo_GetContractInfo_Async(scriptHash, ct).Result;
+        public virtual WebCallResult<NeoContract> Neo_GetContractInfo(string scriptHash, CancellationToken ct = default) => Neo_GetContractInfo_Async(scriptHash, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get NEO contract details<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8615,7 +8629,7 @@ namespace Tatum.Net
         /// <param name="scriptHash">Hash of smart contract</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<NeoContract>> Neo_GetContractInfo_Async(string scriptHash, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<NeoContract>> Neo_GetContractInfo_Async(string scriptHash, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_NEO_GetContractInfo, scriptHash));
@@ -8631,7 +8645,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<NeoTransaction> Neo_GetTransactionByHash(string hash, CancellationToken ct = default) => Neo_GetTransactionByHash_Async(hash, ct).Result;
+        public virtual WebCallResult<NeoTransaction> Neo_GetTransactionByHash(string hash, CancellationToken ct = default) => Neo_GetTransactionByHash_Async(hash, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get NEO transaction by hash<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8641,7 +8655,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<NeoTransaction>> Neo_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<NeoTransaction>> Neo_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_NEO_GetTransactionByHash, hash));
@@ -8661,7 +8675,7 @@ namespace Tatum.Net
         /// <param name="fromPrivateKey">Private key of address to send assets from.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Neo_Send(string to, decimal NEO_Amount, decimal GAS_Amount, string fromPrivateKey, CancellationToken ct = default) => Neo_Send_Async(to, NEO_Amount, GAS_Amount, fromPrivateKey, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> Neo_Send(string to, decimal NEO_Amount, decimal GAS_Amount, string fromPrivateKey, CancellationToken ct = default) => Neo_Send_Async(to, NEO_Amount, GAS_Amount, fromPrivateKey, ct).Result;
         /// <summary>
         /// <b>Title:</b> Send NEO assets<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8675,7 +8689,7 @@ namespace Tatum.Net
         /// <param name="fromPrivateKey">Private key of address to send assets from.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Neo_Send_Async(string to, decimal NEO_Amount, decimal GAS_Amount, string fromPrivateKey, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> Neo_Send_Async(string to, decimal NEO_Amount, decimal GAS_Amount, string fromPrivateKey, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "to", to },
@@ -8701,7 +8715,7 @@ namespace Tatum.Net
         /// <param name="privateKey">Private key of address to claim for GAS.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Neo_ClaimGAS(string privateKey, CancellationToken ct = default) => Neo_ClaimGAS_Async(privateKey, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> Neo_ClaimGAS(string privateKey, CancellationToken ct = default) => Neo_ClaimGAS_Async(privateKey, ct).Result;
         /// <summary>
         /// <b>Title:</b> Claim GAS<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8712,7 +8726,7 @@ namespace Tatum.Net
         /// <param name="privateKey">Private key of address to claim for GAS.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Neo_ClaimGAS_Async(string privateKey, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> Neo_ClaimGAS_Async(string privateKey, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "privateKey", privateKey },
@@ -8741,7 +8755,7 @@ namespace Tatum.Net
         /// <param name="additionalInvocationGas">Additional GAS to be paid for smart contract invocation.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Neo_SendToken(string scriptHash, decimal amount, int numOfDecimals, string fromPrivateKey, string to, decimal additionalInvocationGas = 0, CancellationToken ct = default) => Neo_SendToken_Async(scriptHash, amount, numOfDecimals, fromPrivateKey, to, additionalInvocationGas, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> Neo_SendToken(string scriptHash, decimal amount, int numOfDecimals, string fromPrivateKey, string to, decimal additionalInvocationGas = 0, CancellationToken ct = default) => Neo_SendToken_Async(scriptHash, amount, numOfDecimals, fromPrivateKey, to, additionalInvocationGas, ct).Result;
         /// <summary>
         /// <b>Title:</b> Send NEO smart contract tokens<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8757,7 +8771,7 @@ namespace Tatum.Net
         /// <param name="additionalInvocationGas">Additional GAS to be paid for smart contract invocation.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Neo_SendToken_Async(string scriptHash, decimal amount, int numOfDecimals, string fromPrivateKey, string to, decimal additionalInvocationGas = 0, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> Neo_SendToken_Async(string scriptHash, decimal amount, int numOfDecimals, string fromPrivateKey, string to, decimal additionalInvocationGas = 0, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "scriptHash", scriptHash },
@@ -8785,7 +8799,7 @@ namespace Tatum.Net
         /// <param name="txData">Raw signed transaction to be published to network.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Neo_Broadcast(string txData, CancellationToken ct = default) => Neo_Broadcast_Async(txData, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> Neo_Broadcast(string txData, CancellationToken ct = default) => Neo_Broadcast_Async(txData, ct).Result;
         /// <summary>
         /// <b>Title:</b> Broadcast NEO transaction<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8795,7 +8809,7 @@ namespace Tatum.Net
         /// <param name="txData">Raw signed transaction to be published to network.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Neo_Broadcast_Async(string txData, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> Neo_Broadcast_Async(string txData, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "txData", txData },
@@ -8823,7 +8837,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TronWallet> Tron_GenerateAccount(CancellationToken ct = default) => Tron_GenerateAccount_Async(ct).Result;
+        public virtual WebCallResult<TronWallet> Tron_GenerateAccount(CancellationToken ct = default) => Tron_GenerateAccount_Async(ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Tron wallet<br />
         /// <b>Credits:</b> 5 credit per API call.<br />
@@ -8832,7 +8846,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TronWallet>> Tron_GenerateAccount_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<TronWallet>> Tron_GenerateAccount_Async(CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_TRON_GenerateAccount));
@@ -8846,7 +8860,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TronCurrentBlock> Tron_GetCurrentBlock(CancellationToken ct = default) => Tron_GetCurrentBlock_Async(ct).Result;
+        public virtual WebCallResult<TronCurrentBlock> Tron_GetCurrentBlock(CancellationToken ct = default) => Tron_GetCurrentBlock_Async(ct).Result;
         /// <summary>
         /// <b>Title:</b> XXXXXXXXXXXX<br />
         /// <b>Credits:</b> XXXXXXXXXXXX<br />
@@ -8854,7 +8868,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TronCurrentBlock>> Tron_GetCurrentBlock_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<TronCurrentBlock>> Tron_GetCurrentBlock_Async(CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_TRON_CurrentBlock));
@@ -8870,7 +8884,7 @@ namespace Tatum.Net
         /// <param name="hash_height">Block hash or height.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TronBlock> Tron_GetBlock(string hash_height, CancellationToken ct = default) => Tron_GetBlock_Async(hash_height, ct).Result;
+        public virtual WebCallResult<TronBlock> Tron_GetBlock(string hash_height, CancellationToken ct = default) => Tron_GetBlock_Async(hash_height, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get current Tron block<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8880,7 +8894,7 @@ namespace Tatum.Net
         /// <param name="hash_height">Block hash or height.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TronBlock>> Tron_GetBlock_Async(string hash_height, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<TronBlock>> Tron_GetBlock_Async(string hash_height, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_TRON_GetBlock, hash_height));
@@ -8896,7 +8910,7 @@ namespace Tatum.Net
         /// <param name="address">Address to get transactions for.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TronAccountTransactions> Tron_GetTransactionsByAccount(string address, CancellationToken ct = default) => Tron_GetTransactionsByAccount_Async(address, ct).Result;
+        public virtual WebCallResult<TronAccountTransactions> Tron_GetTransactionsByAccount(string address, CancellationToken ct = default) => Tron_GetTransactionsByAccount_Async(address, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Tron Account transactions<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8906,7 +8920,7 @@ namespace Tatum.Net
         /// <param name="address">Address to get transactions for.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TronAccountTransactions>> Tron_GetTransactionsByAccount_Async(string address, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<TronAccountTransactions>> Tron_GetTransactionsByAccount_Async(string address, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_TRON_GetTransactionsByAccount, address));
@@ -8922,7 +8936,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TronTransaction> Tron_GetTransactionByHash(string hash, CancellationToken ct = default) => Tron_GetTransactionByHash_Async(hash, ct).Result;
+        public virtual WebCallResult<TronTransaction> Tron_GetTransactionByHash(string hash, CancellationToken ct = default) => Tron_GetTransactionByHash_Async(hash, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Tron transaction by hash<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8932,7 +8946,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TronTransaction>> Tron_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<TronTransaction>> Tron_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
         {
             var credits = 5;
             var url = GetUrl(string.Format(Endpoints_TRON_GetTransactionByHash, hash));
@@ -8951,7 +8965,7 @@ namespace Tatum.Net
         /// <param name="amount">Amount to be sent in TRX.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Tron_Send(string fromPrivateKey, string to, decimal amount, CancellationToken ct = default) => Tron_Send_Async(fromPrivateKey, to, amount, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> Tron_Send(string fromPrivateKey, string to, decimal amount, CancellationToken ct = default) => Tron_Send_Async(fromPrivateKey, to, amount, ct).Result;
         /// <summary>
         /// <b>Title:</b> Send Tron transaction<br />
         /// <b>Credits:</b> 10 credits per API call.<br />
@@ -8964,7 +8978,7 @@ namespace Tatum.Net
         /// <param name="amount">Amount to be sent in TRX.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Tron_Send_Async(string fromPrivateKey, string to, decimal amount, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> Tron_Send_Async(string fromPrivateKey, string to, decimal amount, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "fromPrivateKey", fromPrivateKey },
@@ -8989,7 +9003,7 @@ namespace Tatum.Net
         /// <param name="txData">Raw signed transaction to be published to network.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Tron_Broadcast(string txData, CancellationToken ct = default) => Tron_Broadcast_Async(txData, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> Tron_Broadcast(string txData, CancellationToken ct = default) => Tron_Broadcast_Async(txData, ct).Result;
         /// <summary>
         /// <b>Title:</b> Broadcast Tron transaction<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -8999,7 +9013,7 @@ namespace Tatum.Net
         /// <param name="txData">Raw signed transaction to be published to network.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Tron_Broadcast_Async(string txData, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> Tron_Broadcast_Async(string txData, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "txData", txData },
@@ -9013,6 +9027,275 @@ namespace Tatum.Net
             return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
         }
 
+        /// <summary>
+        /// <b>Title:</b> Freeze Tron balance<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Freeze Tron assets on the address. By freezing assets, you can obtain energy or bandwith to perform transactions.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds. In this method, it is possible to enter privateKey. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, it is possible to use the Tatum client library for supported languages or Tatum Middleware with a custom key management system.
+        /// </summary>
+        /// <param name="fromPrivateKey">Private key of the address, from which the TRX will be sent.</param>
+        /// <param name="receiver">Recipient address of frozen BANDWIDTH or ENERGY.</param>
+        /// <param name="duration">Duration of frozen funds, in days.</param>
+        /// <param name="resource">Resource to obtain, BANDWIDTH or ENERGY.</param>
+        /// <param name="amount">Amount to be frozen in TRX.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public virtual WebCallResult<BlockchainResponse> Tron_FreezeBalance(string fromPrivateKey, string receiver, int duration, string resource, decimal amount, CancellationToken ct = default) => Tron_FreezeBalance_Async(fromPrivateKey, receiver, duration, resource, amount, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Freeze Tron balance<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Freeze Tron assets on the address. By freezing assets, you can obtain energy or bandwith to perform transactions.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds. In this method, it is possible to enter privateKey. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, it is possible to use the Tatum client library for supported languages or Tatum Middleware with a custom key management system.
+        /// </summary>
+        /// <param name="fromPrivateKey">Private key of the address, from which the TRX will be sent.</param>
+        /// <param name="receiver">Recipient address of frozen BANDWIDTH or ENERGY.</param>
+        /// <param name="duration">Duration of frozen funds, in days.</param>
+        /// <param name="resource">Resource to obtain, BANDWIDTH or ENERGY.</param>
+        /// <param name="amount">Amount to be frozen in TRX.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public virtual async Task<WebCallResult<BlockchainResponse>> Tron_FreezeBalance_Async(string fromPrivateKey, string receiver, int duration, string resource, decimal amount, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object> {
+                { "fromPrivateKey", fromPrivateKey },
+                { "receiver", receiver },
+                { "duration", duration },
+                { "resource", resource },
+                { "amount", amount.ToString(CultureInfo.InvariantCulture) },
+            };
+
+            var credits = 10;
+            var url = GetUrl(string.Format(Endpoints_TRON_Freeze));
+            var result = await SendTatumRequest<BlockchainResponse>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success || result.Data.Failed) return WebCallResult<BlockchainResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Get Tron TRC10 token detail<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get Tron TRC10 token details.
+        /// </summary>
+        /// <param name="id">TRC10 token ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public virtual WebCallResult<TronTRC10Token> Tron_TRC10GetTokenDetails(long id, CancellationToken ct = default) => Tron_TRC10GetTokenDetails_Async(id, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Get Tron TRC10 token detail<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get Tron TRC10 token details.
+        /// </summary>
+        /// <param name="id">TRC10 token ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public virtual async Task<WebCallResult<TronTRC10Token>> Tron_TRC10GetTokenDetails_Async(long id, CancellationToken ct = default)
+        {
+            var credits = 5;
+            var url = GetUrl(string.Format(Endpoints_TRON_TRC10GetToken, id));
+            return await SendTatumRequest<TronTRC10Token>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Create Tron TRC10 token<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Create Tron TRC10 token. 1 account can create only 1 token. All supply of the tokens are transfered to the issuer account 100 seconds after the creation.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds. In this method, it is possible to enter privateKey. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, it is possible to use the Tatum client library for supported languages or Tatum Middleware with a custom key management system.
+        /// </summary>
+        /// <param name="fromPrivateKey">Private key of the address, from which the TRX will be sent.</param>
+        /// <param name="recipient">Recipient address of created TRC20 tokens.</param>
+        /// <param name="name">Name of the token.</param>
+        /// <param name="abbreviation">Abbreviation of the token.</param>
+        /// <param name="description">Description of the token.</param>
+        /// <param name="url">URL of the token.</param>
+        /// <param name="totalSupply">Total supply of the tokens.</param>
+        /// <param name="decimals">Number of decimal places of the token.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public virtual WebCallResult<BlockchainResponse> Tron_TRC10CreateToken(string fromPrivateKey, string recipient, string name, string abbreviation, string description, string url, long totalSupply, int decimals, CancellationToken ct = default) => Tron_TRC10CreateToken_Async(fromPrivateKey, recipient, name, abbreviation, description, url, totalSupply, decimals, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Create Tron TRC10 token<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Create Tron TRC10 token. 1 account can create only 1 token. All supply of the tokens are transfered to the issuer account 100 seconds after the creation.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds. In this method, it is possible to enter privateKey. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, it is possible to use the Tatum client library for supported languages or Tatum Middleware with a custom key management system.
+        /// </summary>
+        /// <param name="fromPrivateKey">Private key of the address, from which the TRX will be sent.</param>
+        /// <param name="recipient">Recipient address of created TRC20 tokens.</param>
+        /// <param name="name">Name of the token.</param>
+        /// <param name="abbreviation">Abbreviation of the token.</param>
+        /// <param name="description">Description of the token.</param>
+        /// <param name="url">URL of the token.</param>
+        /// <param name="totalSupply">Total supply of the tokens.</param>
+        /// <param name="decimals">Number of decimal places of the token.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public virtual async Task<WebCallResult<BlockchainResponse>> Tron_TRC10CreateToken_Async(string fromPrivateKey, string recipient, string name, string abbreviation, string description, string url, long totalSupply, int decimals, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object> {
+                { "fromPrivateKey", fromPrivateKey },
+                { "recipient", recipient },
+                { "name", name },
+                { "abbreviation", abbreviation },
+                { "description", description },
+                { "url", url },
+                { "totalSupply", totalSupply },
+                { "decimals", decimals },
+            };
+
+            var credits = 10;
+            var url_ = GetUrl(string.Format(Endpoints_TRON_TRC10CreateToken));
+            var result = await SendTatumRequest<BlockchainResponse>(url_, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success || result.Data.Failed) return WebCallResult<BlockchainResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Send Tron TRC10 transaction<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send Tron TRC10 transaction from address to address.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds. In this method, it is possible to enter privateKey. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, it is possible to use the Tatum client library for supported languages or Tatum Middleware with a custom key management system.
+        /// </summary>
+        /// <param name="fromPrivateKey">Private key of the address, from which the TRX will be sent.</param>
+        /// <param name="to">Recipient address of TRON account in Base58 format.</param>
+        /// <param name="tokenId">ID of the token to transfer.</param>
+        /// <param name="amount">Amount to be sent in TRX.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public virtual WebCallResult<BlockchainResponse> Tron_TRC10Send(string fromPrivateKey, string to, long tokenId, decimal amount, CancellationToken ct = default) => Tron_TRC10Send_Async(fromPrivateKey, to, tokenId, amount, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Send Tron TRC10 transaction<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send Tron TRC10 transaction from address to address.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds. In this method, it is possible to enter privateKey. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, it is possible to use the Tatum client library for supported languages or Tatum Middleware with a custom key management system.
+        /// </summary>
+        /// <param name="fromPrivateKey">Private key of the address, from which the TRX will be sent.</param>
+        /// <param name="to">Recipient address of TRON account in Base58 format.</param>
+        /// <param name="tokenId">ID of the token to transfer.</param>
+        /// <param name="amount">Amount to be sent in TRX.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public virtual async Task<WebCallResult<BlockchainResponse>> Tron_TRC10Send_Async(string fromPrivateKey, string to, long tokenId, decimal amount, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object> {
+                { "fromPrivateKey", fromPrivateKey },
+                { "to", to },
+                { "tokenId", tokenId.ToString(CultureInfo.InvariantCulture) },
+                { "amount", amount.ToString(CultureInfo.InvariantCulture) },
+            };
+
+            var credits = 10;
+            var url_ = GetUrl(string.Format(Endpoints_TRON_TRC10Send));
+            var result = await SendTatumRequest<BlockchainResponse>(url_, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success || result.Data.Failed) return WebCallResult<BlockchainResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Create Tron TRC20 token<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Create Tron TRC20 token. 1 account can create only 1 token. All supply of the tokens are transfered to the issuer account 100 seconds after the creation.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds. In this method, it is possible to enter privateKey. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, it is possible to use the Tatum client library for supported languages or Tatum Middleware with a custom key management system.
+        /// </summary>
+        /// <param name="fromPrivateKey">Private key of the address, from which the TRX will be sent.</param>
+        /// <param name="recipient">Recipient address of created TRC20 tokens.</param>
+        /// <param name="name">Name of the token.</param>
+        /// <param name="symbol">Symbol of the token.</param>
+        /// <param name="totalSupply">Total supply of the tokens.</param>
+        /// <param name="decimals">Number of decimal places of the token.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public virtual WebCallResult<BlockchainResponse> Tron_TRC20CreateToken(string fromPrivateKey, string recipient, string name, string symbol, long totalSupply, int decimals, CancellationToken ct = default) => Tron_TRC20CreateToken_Async(fromPrivateKey, recipient, name, symbol, totalSupply, decimals, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Create Tron TRC20 token<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Create Tron TRC20 token. 1 account can create only 1 token. All supply of the tokens are transfered to the issuer account 100 seconds after the creation.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds. In this method, it is possible to enter privateKey. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, it is possible to use the Tatum client library for supported languages or Tatum Middleware with a custom key management system.
+        /// </summary>
+        /// <param name="fromPrivateKey">Private key of the address, from which the TRX will be sent.</param>
+        /// <param name="recipient">Recipient address of created TRC20 tokens.</param>
+        /// <param name="name">Name of the token.</param>
+        /// <param name="symbol">Symbol of the token.</param>
+        /// <param name="totalSupply">Total supply of the tokens.</param>
+        /// <param name="decimals">Number of decimal places of the token.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public virtual async Task<WebCallResult<BlockchainResponse>> Tron_TRC20CreateToken_Async(string fromPrivateKey, string recipient, string name, string symbol, long totalSupply, int decimals, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object> {
+                { "fromPrivateKey", fromPrivateKey },
+                { "recipient", recipient },
+                { "name", name },
+                { "symbol", symbol },
+                { "totalSupply", totalSupply },
+                { "decimals", decimals },
+            };
+
+            var credits = 10;
+            var url_ = GetUrl(string.Format(Endpoints_TRON_TRC20CreateToken));
+            var result = await SendTatumRequest<BlockchainResponse>(url_, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success || result.Data.Failed) return WebCallResult<BlockchainResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Send Tron TRC20 transaction<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send Tron TRC20 transaction from address to address.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds. In this method, it is possible to enter privateKey. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, it is possible to use the Tatum client library for supported languages or Tatum Middleware with a custom key management system.
+        /// </summary>
+        /// <param name="fromPrivateKey">Private key of the address, from which the TRX will be sent.</param>
+        /// <param name="to">Recipient address of TRON account in Base58 format.</param>
+        /// <param name="tokenAddress">Address of the TRC20 token to transfer.</param>
+        /// <param name="amount">Fee in TRX to be paid.</param>
+        /// <param name="feeLimit">Amount to be sent in TRX.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public virtual WebCallResult<BlockchainResponse> Tron_TRC20Send(string fromPrivateKey, string to, string tokenAddress, decimal amount, decimal feeLimit, CancellationToken ct = default) => Tron_TRC20Send_Async(fromPrivateKey, to, tokenAddress, amount, feeLimit, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Send Tron TRC20 transaction<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send Tron TRC20 transaction from address to address.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds. In this method, it is possible to enter privateKey. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, it is possible to use the Tatum client library for supported languages or Tatum Middleware with a custom key management system.
+        /// </summary>
+        /// <param name="fromPrivateKey">Private key of the address, from which the TRX will be sent.</param>
+        /// <param name="to">Recipient address of TRON account in Base58 format.</param>
+        /// <param name="tokenAddress">Address of the TRC20 token to transfer.</param>
+        /// <param name="amount">Fee in TRX to be paid.</param>
+        /// <param name="feeLimit">Amount to be sent in TRX.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public virtual async Task<WebCallResult<BlockchainResponse>> Tron_TRC20Send_Async(string fromPrivateKey, string to, string tokenAddress, decimal amount, decimal feeLimit, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object> {
+                { "fromPrivateKey", fromPrivateKey },
+                { "to", to },
+                { "tokenAddress", tokenAddress },
+                { "feeLimit", feeLimit },
+                { "amount", amount.ToString(CultureInfo.InvariantCulture) },
+            };
+
+            var credits = 10;
+            var url_ = GetUrl(string.Format(Endpoints_TRON_TRC20Send));
+            var result = await SendTatumRequest<BlockchainResponse>(url_, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success || result.Data.Failed) return WebCallResult<BlockchainResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
+        }
         #endregion
 
         #region Blockchain / Scrypta
@@ -9030,7 +9313,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to generate private key from.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainWallet> Scrypta_GenerateWallet(string mnemonics, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.Scrypta, new List<string> { mnemonics }, ct).Result;
+        public virtual WebCallResult<BlockchainWallet> Scrypta_GenerateWallet(string mnemonics, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.Scrypta, new List<string> { mnemonics }, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Scrypta wallet<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -9045,7 +9328,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to generate private key from.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainWallet> Scrypta_GenerateWallet(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.Scrypta, mnemonics, ct).Result;
+        public virtual WebCallResult<BlockchainWallet> Scrypta_GenerateWallet(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => Blockchain_GenerateWallet_Async(BlockchainType.Scrypta, mnemonics, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Scrypta wallet<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -9060,7 +9343,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to generate private key from.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainWallet>> Scrypta_GenerateWallet_Async(string mnemonics, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.Scrypta, new List<string> { mnemonics }, ct);
+        public virtual async Task<WebCallResult<BlockchainWallet>> Scrypta_GenerateWallet_Async(string mnemonics, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.Scrypta, new List<string> { mnemonics }, ct);
         /// <summary>
         /// <b>Title:</b> Generate Scrypta wallet<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -9075,7 +9358,7 @@ namespace Tatum.Net
         /// <param name="mnemonics">Mnemonic to generate private key from.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainWallet>> Scrypta_GenerateWallet_Async(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.Scrypta, mnemonics, ct);
+        public virtual async Task<WebCallResult<BlockchainWallet>> Scrypta_GenerateWallet_Async(IEnumerable<string> mnemonics = null, CancellationToken ct = default) => await Blockchain_GenerateWallet_Async(BlockchainType.Scrypta, mnemonics, ct);
 
         /// <summary>
         /// <b>Title:</b> Generate Scrypta private key<br />
@@ -9087,7 +9370,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumKey> Scrypta_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Scrypta, new List<string> { mnemonics }, index, ct).Result;
+        public virtual WebCallResult<TatumKey> Scrypta_GeneratePrivateKey(string mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Scrypta, new List<string> { mnemonics }, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Scrypta private key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -9098,7 +9381,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumKey> Scrypta_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Scrypta, mnemonics, index, ct).Result;
+        public virtual WebCallResult<TatumKey> Scrypta_GeneratePrivateKey(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => Blockchain_GeneratePrivateKey_Async(BlockchainType.Scrypta, mnemonics, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Scrypta private key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -9109,7 +9392,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumKey>> Scrypta_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Scrypta, new List<string> { mnemonics }, index, default);
+        public virtual async Task<WebCallResult<TatumKey>> Scrypta_GeneratePrivateKey_Async(string mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Scrypta, new List<string> { mnemonics }, index, default);
         /// <summary>
         /// <b>Title:</b> Generate Scrypta private key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -9120,7 +9403,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of private key to generate.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumKey>> Scrypta_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Scrypta, mnemonics, index, default);
+        public virtual async Task<WebCallResult<TatumKey>> Scrypta_GeneratePrivateKey_Async(IEnumerable<string> mnemonics, int index, CancellationToken ct = default) => await Blockchain_GeneratePrivateKey_Async(BlockchainType.Scrypta, mnemonics, index, default);
 
         /// <summary>
         /// <b>Title:</b> Get Block hash<br />
@@ -9131,8 +9414,8 @@ namespace Tatum.Net
         /// <param name="block_id">The number of blocks preceding a particular block on a block chain.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<string> Scrypta_GetBlockHash(long block_id, CancellationToken ct = default) => Scrypta_GetBlockHash_Async(block_id, ct).Result;
-        public async Task<WebCallResult<string>> Scrypta_GetBlockHash_Async(long block_id, CancellationToken ct = default)
+        public virtual WebCallResult<string> Scrypta_GetBlockHash(long block_id, CancellationToken ct = default) => Scrypta_GetBlockHash_Async(block_id, ct).Result;
+        public virtual async Task<WebCallResult<string>> Scrypta_GetBlockHash_Async(long block_id, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Scrypta_GetBlockHash, block_id));
@@ -9148,7 +9431,7 @@ namespace Tatum.Net
         /// <param name="hash_height">Block hash or height.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<ScryptaBlock> Scrypta_GetBlock(string hash_height, CancellationToken ct = default) => Scrypta_GetBlock_Async(hash_height, ct).Result;
+        public virtual WebCallResult<ScryptaBlock> Scrypta_GetBlock(string hash_height, CancellationToken ct = default) => Scrypta_GetBlock_Async(hash_height, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Block by hash or height<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -9158,7 +9441,7 @@ namespace Tatum.Net
         /// <param name="hash_height">Block hash or height.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<ScryptaBlock>> Scrypta_GetBlock_Async(string hash_height, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<ScryptaBlock>> Scrypta_GetBlock_Async(string hash_height, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Scrypta_GetBlockByHash, hash_height));
@@ -9181,7 +9464,7 @@ namespace Tatum.Net
         /// <param name="to">Array of addresses and values to send bitcoins to. Values must be set in BTC. Difference between from and to is transaction fee.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Scrypta_Send(IEnumerable<ScryptaSendOrderFromAddress> fromAddress, IEnumerable<ScryptaSendOrderFromUTXO> fromUTXO, IEnumerable<ScryptaSendOrderTo> to, CancellationToken ct = default) => Scrypta_Send_Async(fromAddress, fromUTXO, to, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> Scrypta_Send(IEnumerable<ScryptaSendOrderFromAddress> fromAddress, IEnumerable<ScryptaSendOrderFromUTXO> fromUTXO, IEnumerable<ScryptaSendOrderTo> to, CancellationToken ct = default) => Scrypta_Send_Async(fromAddress, fromUTXO, to, ct).Result;
         /// <summary>
         /// <b>Title:</b> Send LYRA to blockchain addresses<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -9198,7 +9481,7 @@ namespace Tatum.Net
         /// <param name="to">Array of addresses and values to send bitcoins to. Values must be set in BTC. Difference between from and to is transaction fee.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Scrypta_Send_Async(IEnumerable<ScryptaSendOrderFromAddress> fromAddress, IEnumerable<ScryptaSendOrderFromUTXO> fromUTXO, IEnumerable<ScryptaSendOrderTo> to, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> Scrypta_Send_Async(IEnumerable<ScryptaSendOrderFromAddress> fromAddress, IEnumerable<ScryptaSendOrderFromUTXO> fromUTXO, IEnumerable<ScryptaSendOrderTo> to, CancellationToken ct = default)
         {
             if ((fromAddress == null || fromAddress.Count() == 0) && (fromUTXO == null || fromUTXO.Count() == 0))
                 throw new ArgumentException("Either fromUTXO or fromAddress must be present.");
@@ -9226,7 +9509,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<ScryptaTransaction> Scrypta_GetTransactionByHash(string hash, CancellationToken ct = default) => Scrypta_GetTransactionByHash_Async(hash, ct).Result;
+        public virtual WebCallResult<ScryptaTransaction> Scrypta_GetTransactionByHash(string hash, CancellationToken ct = default) => Scrypta_GetTransactionByHash_Async(hash, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Scrypta Transaction by hash<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -9236,7 +9519,7 @@ namespace Tatum.Net
         /// <param name="hash">Transaction hash</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<ScryptaTransaction>> Scrypta_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<ScryptaTransaction>> Scrypta_GetTransactionByHash_Async(string hash, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Scrypta_GetTransactionByHash, hash));
@@ -9254,7 +9537,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<ScryptaTransaction>> Scrypta_GetTransactionsByAddress(string address, int pageSize = 50, int offset = 0, CancellationToken ct = default) => Scrypta_GetTransactionsByAddress_Async(address, pageSize, offset, ct).Result;
+        public virtual WebCallResult<IEnumerable<ScryptaTransaction>> Scrypta_GetTransactionsByAddress(string address, int pageSize = 50, int offset = 0, CancellationToken ct = default) => Scrypta_GetTransactionsByAddress_Async(address, pageSize, offset, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Transactions by address<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -9266,7 +9549,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<ScryptaTransaction>>> Scrypta_GetTransactionsByAddress_Async(string address, int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<ScryptaTransaction>>> Scrypta_GetTransactionsByAddress_Async(string address, int pageSize = 50, int offset = 0, CancellationToken ct = default)
         {
             pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
 
@@ -9291,7 +9574,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<ScryptaUTXO>> Scrypta_GetSpendableUTXO(string address, int pageSize = 50, int offset = 0, CancellationToken ct = default) => Scrypta_GetSpendableUTXO_Async(address, pageSize, offset, ct).Result;
+        public virtual WebCallResult<IEnumerable<ScryptaUTXO>> Scrypta_GetSpendableUTXO(string address, int pageSize = 50, int offset = 0, CancellationToken ct = default) => Scrypta_GetSpendableUTXO_Async(address, pageSize, offset, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Scrypta spendable UTXO<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -9303,7 +9586,7 @@ namespace Tatum.Net
         /// <param name="offset">Offset to obtain next page of the data.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<ScryptaUTXO>>> Scrypta_GetSpendableUTXO_Async(string address, int pageSize = 50, int offset = 0, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<ScryptaUTXO>>> Scrypta_GetSpendableUTXO_Async(string address, int pageSize = 50, int offset = 0, CancellationToken ct = default)
         {
             pageSize.ValidateIntBetween(nameof(pageSize), 1, 50);
 
@@ -9329,7 +9612,7 @@ namespace Tatum.Net
         /// <param name="index">Index of tx output to check if spent or not</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<ScryptaUTXO> Scrypta_GetTransactionUTXO(string txhash, long index, CancellationToken ct = default) => Scrypta_GetTransactionUTXO_Async(txhash, index, ct).Result;
+        public virtual WebCallResult<ScryptaUTXO> Scrypta_GetTransactionUTXO(string txhash, long index, CancellationToken ct = default) => Scrypta_GetTransactionUTXO_Async(txhash, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get UTXO of Transaction<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -9342,7 +9625,7 @@ namespace Tatum.Net
         /// <param name="index">Index of tx output to check if spent or not</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<ScryptaUTXO>> Scrypta_GetTransactionUTXO_Async(string txhash, long index, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<ScryptaUTXO>> Scrypta_GetTransactionUTXO_Async(string txhash, long index, CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Scrypta_GetTransactionUTXO, txhash, index));
@@ -9359,7 +9642,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of desired address to be generated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<TatumAddress> Scrypta_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.Scrypta, xpub, index, ct).Result;
+        public virtual WebCallResult<TatumAddress> Scrypta_GenerateDepositAddress(string xpub, int index, CancellationToken ct = default) => Blockchain_GenerateDepositAddress_Async(BlockchainType.Scrypta, xpub, index, ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Scrypta deposit address from Extended public key<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -9370,7 +9653,7 @@ namespace Tatum.Net
         /// <param name="index">Derivation index of desired address to be generated.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<TatumAddress>> Scrypta_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.Scrypta, xpub, index, ct);
+        public virtual async Task<WebCallResult<TatumAddress>> Scrypta_GenerateDepositAddress_Async(string xpub, int index, CancellationToken ct = default) => await Blockchain_GenerateDepositAddress_Async(BlockchainType.Scrypta, xpub, index, ct);
 
         /// <summary>
         /// <b>Title:</b> Get Blockchain Information<br />
@@ -9380,7 +9663,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<ScryptaChainInfo> Scrypta_GetBlockchainInformation(CancellationToken ct = default) => Scrypta_GetBlockchainInformation_Async(ct).Result;
+        public virtual WebCallResult<ScryptaChainInfo> Scrypta_GetBlockchainInformation(CancellationToken ct = default) => Scrypta_GetBlockchainInformation_Async(ct).Result;
         /// <summary>
         /// <b>Title:</b> Get Blockchain Information<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -9389,7 +9672,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<ScryptaChainInfo>> Scrypta_GetBlockchainInformation_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<ScryptaChainInfo>> Scrypta_GetBlockchainInformation_Async(CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Scrypta_BlockchainInformation));
@@ -9406,7 +9689,7 @@ namespace Tatum.Net
         /// <param name="signatureId">ID of prepared payment template to sign. Required only, when broadcasting transaction signed by Tatum KMS.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<BlockchainResponse> Scrypta_Broadcast(string txData, string signatureId, CancellationToken ct = default) => Scrypta_Broadcast_Async(txData, signatureId, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> Scrypta_Broadcast(string txData, string signatureId = null, CancellationToken ct = default) => Scrypta_Broadcast_Async(txData, signatureId, ct).Result;
         /// <summary>
         /// <b>Title:</b> Broadcast signed Scrypta transaction<br />
         /// <b>Credits:</b> 2 credits per API call.<br />
@@ -9417,7 +9700,7 @@ namespace Tatum.Net
         /// <param name="signatureId">ID of prepared payment template to sign. Required only, when broadcasting transaction signed by Tatum KMS.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<BlockchainResponse>> Scrypta_Broadcast_Async(string txData, string signatureId, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> Scrypta_Broadcast_Async(string txData, string signatureId = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "txData", txData },
@@ -9442,7 +9725,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<IEnumerable<ServiceUsage>> Service_GetConsumptions(CancellationToken ct = default) => Service_GetConsumptions_Async(ct).Result;
+        public virtual WebCallResult<IEnumerable<ServiceUsage>> Service_GetConsumptions(CancellationToken ct = default) => Service_GetConsumptions_Async(ct).Result;
         /// <summary>
         /// <b>Title:</b> List credit consumption for last month<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -9451,7 +9734,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<ServiceUsage>>> Service_GetConsumptions_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<IEnumerable<ServiceUsage>>> Service_GetConsumptions_Async(CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Service_Consumption));
@@ -9469,7 +9752,7 @@ namespace Tatum.Net
         /// <param name="basePair">FIAT to convert as a basePair</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<ServiceExchangeRate> Service_GetExchangeRates(string currency, string basePair, CancellationToken ct = default) => Service_GetExchangeRates_Async(currency, basePair, ct).Result;
+        public virtual WebCallResult<ServiceExchangeRate> Service_GetExchangeRates(string currency, string basePair, CancellationToken ct = default) => Service_GetExchangeRates_Async(currency, basePair, ct).Result;
         /// <summary>
         /// <b>Title:</b> Get currenct exchange rate of the supported FIAT / crypto asset<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -9481,7 +9764,7 @@ namespace Tatum.Net
         /// <param name="basePair">FIAT to convert as a basePair</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<ServiceExchangeRate>> Service_GetExchangeRates_Async(string currency, string basePair, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<ServiceExchangeRate>> Service_GetExchangeRates_Async(string currency, string basePair, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "basePair", basePair },
@@ -9500,7 +9783,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public WebCallResult<ServiceVersion> Service_GetVersion(CancellationToken ct = default) => Service_GetVersion_Async(ct).Result;
+        public virtual WebCallResult<ServiceVersion> Service_GetVersion(CancellationToken ct = default) => Service_GetVersion_Async(ct).Result;
         /// <summary>
         /// <b>Title:</b> Get API version<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -9509,7 +9792,7 @@ namespace Tatum.Net
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<WebCallResult<ServiceVersion>> Service_GetVersion_Async(CancellationToken ct = default)
+        public virtual async Task<WebCallResult<ServiceVersion>> Service_GetVersion_Async(CancellationToken ct = default)
         {
             var credits = 1;
             var url = GetUrl(string.Format(Endpoints_Service_Version));
@@ -9520,21 +9803,12 @@ namespace Tatum.Net
         #endregion
 
         #region Protected Methods
-
-        protected override Error ParseErrorResponse(JToken error)
-        {
-            if (error["statusCode"] == null || error["message"] == null)
-                return new TatumError(error.ToString());
-
-            return new TatumError((int)error["statusCode"], (string)error["message"]);
-        }
-
-        protected Uri GetUrl(string endpoint, int apiversion = Endpoints_Version)
+        protected virtual Uri GetUrl(string endpoint, int apiversion = Endpoints_Version)
         {
             return new Uri($"{BaseAddress.TrimEnd('/')}/v{apiversion}/{endpoint}");
         }
 
-        protected async Task<WebCallResult<T>> SendTatumRequest<T>(
+        protected virtual async Task<WebCallResult<T>> SendTatumRequest<T>(
             Uri uri,
             HttpMethod method,
             CancellationToken cancellationToken,
@@ -9547,6 +9821,20 @@ namespace Tatum.Net
         {
             return await SendRequest<T>(uri, method, cancellationToken, parameters, signed, checkResult, postPosition, arraySerialization, credits);
         }
+
+        protected override Error ParseErrorResponse(JToken error)
+        {
+            return this.TatumParseErrorResponse(error);
+        }
+
+        protected virtual Error TatumParseErrorResponse(JToken error)
+        {
+            if (error["statusCode"] == null || error["message"] == null)
+                return new TatumError(error.ToString());
+
+            return new TatumError((int)error["statusCode"], (string)error["message"]);
+        }
+
         #endregion
 
     }

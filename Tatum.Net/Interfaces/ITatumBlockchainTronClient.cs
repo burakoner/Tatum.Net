@@ -9,6 +9,8 @@ namespace Tatum.Net.Interfaces
     {
         WebCallResult<BlockchainResponse> Tron_Broadcast(string txData, CancellationToken ct = default);
         Task<WebCallResult<BlockchainResponse>> Tron_Broadcast_Async(string txData, CancellationToken ct = default);
+        WebCallResult<BlockchainResponse> Tron_FreezeBalance(string fromPrivateKey, string receiver, int duration, string resource, decimal amount, CancellationToken ct = default);
+        Task<WebCallResult<BlockchainResponse>> Tron_FreezeBalance_Async(string fromPrivateKey, string receiver, int duration, string resource, decimal amount, CancellationToken ct = default);
         WebCallResult<TronWallet> Tron_GenerateAccount(CancellationToken ct = default);
         Task<WebCallResult<TronWallet>> Tron_GenerateAccount_Async(CancellationToken ct = default);
         WebCallResult<TronBlock> Tron_GetBlock(string hash_height, CancellationToken ct = default);
@@ -21,5 +23,15 @@ namespace Tatum.Net.Interfaces
         Task<WebCallResult<TronAccountTransactions>> Tron_GetTransactionsByAccount_Async(string address, CancellationToken ct = default);
         WebCallResult<BlockchainResponse> Tron_Send(string fromPrivateKey, string to, decimal amount, CancellationToken ct = default);
         Task<WebCallResult<BlockchainResponse>> Tron_Send_Async(string fromPrivateKey, string to, decimal amount, CancellationToken ct = default);
+        WebCallResult<BlockchainResponse> Tron_TRC10CreateToken(string fromPrivateKey, string recipient, string name, string abbreviation, string description, string url, long totalSupply, int decimals, CancellationToken ct = default);
+        Task<WebCallResult<BlockchainResponse>> Tron_TRC10CreateToken_Async(string fromPrivateKey, string recipient, string name, string abbreviation, string description, string url, long totalSupply, int decimals, CancellationToken ct = default);
+        WebCallResult<TronTRC10Token> Tron_TRC10GetTokenDetails(long id, CancellationToken ct = default);
+        Task<WebCallResult<TronTRC10Token>> Tron_TRC10GetTokenDetails_Async(long id, CancellationToken ct = default);
+        WebCallResult<BlockchainResponse> Tron_TRC10Send(string fromPrivateKey, string to, long tokenId, decimal amount, CancellationToken ct = default);
+        Task<WebCallResult<BlockchainResponse>> Tron_TRC10Send_Async(string fromPrivateKey, string to, long tokenId, decimal amount, CancellationToken ct = default);
+        WebCallResult<BlockchainResponse> Tron_TRC20CreateToken(string fromPrivateKey, string recipient, string name, string symbol, long totalSupply, int decimals, CancellationToken ct = default);
+        Task<WebCallResult<BlockchainResponse>> Tron_TRC20CreateToken_Async(string fromPrivateKey, string recipient, string name, string symbol, long totalSupply, int decimals, CancellationToken ct = default);
+        WebCallResult<BlockchainResponse> Tron_TRC20Send(string fromPrivateKey, string to, string tokenAddress, decimal amount, decimal feeLimit, CancellationToken ct = default);
+        Task<WebCallResult<BlockchainResponse>> Tron_TRC20Send_Async(string fromPrivateKey, string to, string tokenAddress, decimal amount, decimal feeLimit, CancellationToken ct = default);
     }
 }

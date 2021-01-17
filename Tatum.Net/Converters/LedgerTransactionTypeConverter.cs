@@ -4,7 +4,7 @@ using Tatum.Net.Enums;
 
 namespace Tatum.Net.Converters
 {
-    internal class LedgerTransactionTypeConverter : BaseConverter<LedgerTransactionType>
+    public class LedgerTransactionTypeConverter : BaseConverter<LedgerTransactionType>
     {
         public LedgerTransactionTypeConverter() : this(true) { }
         public LedgerTransactionTypeConverter(bool quotes) : base(quotes) { }

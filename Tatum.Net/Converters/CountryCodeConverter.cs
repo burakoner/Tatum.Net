@@ -5,7 +5,7 @@ using Tatum.Net.Enums;
 
 namespace Tatum.Net.Converters
 {
-    internal class CountryCodeConverter : BaseConverter<CountryCode>
+    public class CountryCodeConverter : BaseConverter<CountryCode>
     {
         public CountryCodeConverter() : this(true) { }
         public CountryCodeConverter(bool quotes) : base(quotes) { }

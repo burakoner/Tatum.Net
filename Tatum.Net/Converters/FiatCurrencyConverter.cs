@@ -5,7 +5,7 @@ using Tatum.Net.Enums;
 
 namespace Tatum.Net.Converters
 {
-    internal class FiatCurrencyConverter : BaseConverter<FiatCurrency>
+    public class FiatCurrencyConverter : BaseConverter<FiatCurrency>
     {
         public FiatCurrencyConverter() : this(true) { }
         public FiatCurrencyConverter(bool quotes) : base(quotes) { }

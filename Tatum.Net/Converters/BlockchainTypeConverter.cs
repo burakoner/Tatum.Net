@@ -6,7 +6,7 @@ using Tatum.Net.Helpers;
 
 namespace Tatum.Net.Converters
 {
-    internal class BlockchainTypeConverter : BaseConverter<BlockchainType>
+    public class BlockchainTypeConverter : BaseConverter<BlockchainType>
     {
         public BlockchainTypeConverter() : this(true) { }
         public BlockchainTypeConverter(bool quotes) : base(quotes) { }

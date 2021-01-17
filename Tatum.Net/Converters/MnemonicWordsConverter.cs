@@ -5,7 +5,7 @@ using Tatum.Net.Enums;
 
 namespace Tatum.Net.Converters
 {
-    internal class MnemonicWordsConverter : BaseConverter<MnemonicWords>
+    public class MnemonicWordsConverter : BaseConverter<MnemonicWords>
     {
         public MnemonicWordsConverter() : this(true) { }
         public MnemonicWordsConverter(bool quotes) : base(quotes) { }
