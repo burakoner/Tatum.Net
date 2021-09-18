@@ -9815,11 +9815,14 @@ namespace Tatum.Net
             Dictionary<string, object> parameters = null,
             bool signed = false,
             bool checkResult = true,
-            PostParameters? postPosition = null,
+            HttpMethodParameterPosition? postPosition = null,
             ArrayParametersSerialization? arraySerialization = null,
-            int credits = 1) where T : class
+            int credits = 1,
+            JsonSerializer deserializer = null,
+            Dictionary<string, string> additionalHeaders = null
+            ) where T : class
         {
-            return await SendRequest<T>(uri, method, cancellationToken, parameters, signed, checkResult, postPosition, arraySerialization, credits);
+            return await SendRequestAsync<T>(uri, method, cancellationToken, parameters, signed, checkResult, postPosition, arraySerialization, credits, deserializer, additionalHeaders);
         }
 
         protected override Error ParseErrorResponse(JToken error)

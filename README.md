@@ -523,6 +523,9 @@ var service_03 = api.Service_GetVersion();
 ```
 
 ## Release Notes
+* Version 2.5.0 - 18 Sep 2021
+    * Synced with CryptoExchange.Net v4.1.0
+
 * Version 2.0.1 - 01 Feb 2021
     * Updated CryptoExchange.Net to 3.6.0
 

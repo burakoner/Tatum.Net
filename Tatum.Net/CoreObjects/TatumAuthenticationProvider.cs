@@ -15,7 +15,7 @@ namespace Tatum.Net.CoreObjects
                 throw new ArgumentException("No valid API credentials provided. Api Key is mandatory.");
         }
 
-        public override Dictionary<string, string> AddAuthenticationToHeaders(string uri, HttpMethod method, Dictionary<string, object> parameters, bool signed, PostParameters postParameterPosition, ArrayParametersSerialization arraySerialization)
+        public override Dictionary<string, string> AddAuthenticationToHeaders(string uri, HttpMethod method, Dictionary<string, object> parameters, bool signed, HttpMethodParameterPosition postParameterPosition, ArrayParametersSerialization arraySerialization)
         {
             if (Credentials.Key == null || Credentials.Secret == null)
                 throw new ArgumentException("No valid API credentials provided. Api Key is mandatory.");
