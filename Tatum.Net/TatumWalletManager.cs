@@ -189,7 +189,7 @@ namespace Tatum.Net
                 else if (assetOptions.BlockchainType == BlockchainType.TRON)
                 {
                     // Generate Account
-                    var r01 = Tron.GenerateAccount();
+                    var r01 = TRON.GenerateAccount();
                     if (!r01.Success) return new WalletResponse<WalletDepositAddress>(new WalletError(r01.Error));
 
                     // Return
@@ -681,7 +681,7 @@ namespace Tatum.Net
                 else if (assetOptions.BlockchainType == BlockchainType.TRON)
                 {
                     // Send
-                    var r01 = Tron.Send(wallet.PrivateKey, recepientAddress, amount);
+                    var r01 = TRON.Send(wallet.PrivateKey, recepientAddress, amount);
                     if (!r01.Success || r01.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r01.Error));
 
                     // Return Data
@@ -692,7 +692,7 @@ namespace Tatum.Net
                     // Broadcast
                     if (triggerBroadcasting)
                     {
-                        var r02 = Tron.Broadcast(r01.Data.TransactionId);
+                        var r02 = TRON.Broadcast(r01.Data.TransactionId);
                         if (!r02.Success || r02.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r02.Error));
 
                         // Return Data

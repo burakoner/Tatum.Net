@@ -42,7 +42,7 @@ namespace Tatum.Net
         public SecurityClient Security { get; protected set; }
         public ServiceClient Service { get; protected set; }
         public StellarClient Stellar { get; protected set; }
-        public TronClient Tron { get; protected set; }
+        public TronClient TRON { get; protected set; }
         public VeChainClient VeChain { get; protected set; }
         #endregion
 
@@ -105,7 +105,7 @@ namespace Tatum.Net
             Security = new SecurityClient(this);
             Service = new ServiceClient(this);
             Stellar = new StellarClient(this);
-            Tron = new TronClient(this);
+            TRON = new TronClient(this);
             VeChain = new VeChainClient(this);
         }
 
