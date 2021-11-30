@@ -8,11 +8,11 @@ namespace Tatum.Net.Interfaces
 {
     public interface ITatumServiceClient
     {
-        WebCallResult<IEnumerable<ServiceUsage>> Service_GetConsumptions(CancellationToken ct = default);
-        Task<WebCallResult<IEnumerable<ServiceUsage>>> Service_GetConsumptions_Async(CancellationToken ct = default);
-        WebCallResult<ServiceExchangeRate> Service_GetExchangeRates(string currency, string basePair, CancellationToken ct = default);
-        Task<WebCallResult<ServiceExchangeRate>> Service_GetExchangeRates_Async(string currency, string basePair, CancellationToken ct = default);
-        WebCallResult<ServiceVersion> Service_GetVersion(CancellationToken ct = default);
-        Task<WebCallResult<ServiceVersion>> Service_GetVersion_Async(CancellationToken ct = default);
+        WebCallResult<IEnumerable<ServiceUsage>> GetConsumptions(CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<ServiceUsage>>> GetConsumptionsAsync(CancellationToken ct = default);
+        WebCallResult<ServiceExchangeRate> GetExchangeRates(string currency, string basePair, CancellationToken ct = default);
+        Task<WebCallResult<ServiceExchangeRate>> GetExchangeRatesAsync(string currency, string basePair, CancellationToken ct = default);
+        WebCallResult<ServiceVersion> GetVersion(CancellationToken ct = default);
+        Task<WebCallResult<ServiceVersion>> GetVersionAsync(CancellationToken ct = default);
     }
 }

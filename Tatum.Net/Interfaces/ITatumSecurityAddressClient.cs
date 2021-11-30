@@ -7,7 +7,7 @@ namespace Tatum.Net.Interfaces
 {
     public interface ITatumSecurityAddressClient
     {
-        WebCallResult<SecurityStatus> Security_CheckMalicousAddress(string address, CancellationToken ct = default);
-        Task<WebCallResult<SecurityStatus>> Security_CheckMalicousAddress_Async(string address, CancellationToken ct = default);
+        WebCallResult<SecurityStatus> CheckMalicousAddress(string address, CancellationToken ct = default);
+        Task<WebCallResult<SecurityStatus>> CheckMalicousAddressAsync(string address, CancellationToken ct = default);
     }
 }

@@ -36,7 +36,7 @@ namespace Tatum.Net.Enums
 
         [BlockchainOptions("XLM", "xlm", true, true, true)]
         Stellar,
-        
+
         [BlockchainOptions("TRX", "tron", true, true, false)]
         TRON,
 

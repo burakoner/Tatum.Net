@@ -11,7 +11,7 @@ namespace Tatum.Net.WalletObjects
         public BlockchainType BlockchainType { get; set; }
         public BlockchainManager BlockchainManager { get; set; }
         public TokenType TokenType { get; set; }
-        
+
         /// <summary>
         /// Token Id for ERC721
         /// </summary>

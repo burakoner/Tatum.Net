@@ -1,7 +1,7 @@
 ﻿using CryptoExchange.Net.Interfaces;
-using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.RateLimiter;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -24,7 +24,7 @@ namespace Tatum.Net
         public TatumWalletManager(string apikey, TatumClientOptions options, IEnumerable<WalletAssetOptions> assets) : base(apikey, options)
         {
             Assets = new Dictionary<string, WalletAssetOptions>();
-            if (assets != null) this.LoadAssets(assets);
+            if (assets != null) LoadAssets(assets);
         }
 
         protected static TatumClientOptions ConstructTatumClientOptions(int rateLimiterPerSecond = 5)
@@ -32,7 +32,7 @@ namespace Tatum.Net
             return new TatumClientOptions
             {
 #if DEBUG
-                LogVerbosity = LogVerbosity.Debug,
+                LogLevel = LogLevel.Debug,
 #endif
                 RateLimiters = new List<IRateLimiter> { new RateLimiterCredit(rateLimiterPerSecond, TimeSpan.FromMilliseconds(1000)), },
                 RateLimitingBehaviour = RateLimitingBehaviour.Wait,
@@ -51,7 +51,7 @@ namespace Tatum.Net
         public virtual void LoadAssets(IEnumerable<WalletAssetOptions> assets)
         {
             foreach (var asset in assets)
-                this.AddAsset(asset);
+                AddAsset(asset);
         }
 
         public virtual List<string> GenerateMnemonics(int length)
@@ -81,7 +81,7 @@ namespace Tatum.Net
 
             if (assetOptions.BlockchainManager == BlockchainManager.Tatum)
             {
-                var resp = this.LedgerAccount_Create(assetOptions.BlockchainType, accountOptions);
+                var resp = Ledger.Account.Create(assetOptions.BlockchainType, accountOptions);
                 if (resp.Success) new WalletResponse<LedgerAccount>(resp.Data);
                 else new WalletResponse<LedgerAccount>(new WalletError(resp.Error));
             }
@@ -114,15 +114,15 @@ namespace Tatum.Net
                     BlockchainType.VeChain))
                 {
                     // Generate Wallet
-                    var r01 = this.Blockchain_GenerateWallet(assetOptions.BlockchainType, mnemonics);
+                    var r01 = Blockchain_GenerateWallet(assetOptions.BlockchainType, mnemonics);
                     if (!r01.Success) return new WalletResponse<WalletDepositAddress>(new WalletError(r01.Error));
 
                     // Get Address
-                    var r02 = this.Blockchain_GenerateDepositAddress(assetOptions.BlockchainType, r01.Data.ExtendedPublicKey, index);
+                    var r02 = Blockchain_GenerateDepositAddress(assetOptions.BlockchainType, r01.Data.ExtendedPublicKey, index);
                     if (!r02.Success) return new WalletResponse<WalletDepositAddress>(new WalletError(r02.Error));
 
                     // Generate Private Key
-                    var r03 = this.Blockchain_GeneratePrivateKey(assetOptions.BlockchainType, r01.Data.Mnemonics, index);
+                    var r03 = Blockchain_GeneratePrivateKey(assetOptions.BlockchainType, r01.Data.Mnemonics, index);
                     if (!r03.Success) return new WalletResponse<WalletDepositAddress>(new WalletError(r02.Error));
 
                     // Return
@@ -137,7 +137,7 @@ namespace Tatum.Net
                 else if (assetOptions.BlockchainType == BlockchainType.Ripple)
                 {
                     // Generate Account
-                    var r01 = this.Ripple_GenerateAccount();
+                    var r01 = Ripple.GenerateAccount();
                     if (!r01.Success) return new WalletResponse<WalletDepositAddress>(new WalletError(r01.Error));
 
                     // Return
@@ -149,7 +149,7 @@ namespace Tatum.Net
                 else if (assetOptions.BlockchainType == BlockchainType.Stellar)
                 {
                     // Generate Account
-                    var r01 = this.Stellar_GenerateAccount();
+                    var r01 = Stellar.GenerateAccount();
                     if (!r01.Success) return new WalletResponse<WalletDepositAddress>(new WalletError(r01.Error));
 
                     // Return
@@ -161,7 +161,7 @@ namespace Tatum.Net
                 else if (assetOptions.BlockchainType == BlockchainType.BinanceChain)
                 {
                     // Generate Account
-                    var r01 = this.Binance_GenerateAccount();
+                    var r01 = Binance.GenerateAccount();
                     if (!r01.Success) return new WalletResponse<WalletDepositAddress>(new WalletError(r01.Error));
 
                     // Return
@@ -173,7 +173,7 @@ namespace Tatum.Net
                 else if (assetOptions.BlockchainType == BlockchainType.NEO)
                 {
                     // Generate Account
-                    var r01 = this.Neo_GenerateAccount();
+                    var r01 = NEO.GenerateAccount();
                     if (!r01.Success) return new WalletResponse<WalletDepositAddress>(new WalletError(r01.Error));
 
                     // Return
@@ -189,7 +189,7 @@ namespace Tatum.Net
                 else if (assetOptions.BlockchainType == BlockchainType.TRON)
                 {
                     // Generate Account
-                    var r01 = this.Tron_GenerateAccount();
+                    var r01 = Tron.GenerateAccount();
                     if (!r01.Success) return new WalletResponse<WalletDepositAddress>(new WalletError(r01.Error));
 
                     // Return
@@ -221,7 +221,7 @@ namespace Tatum.Net
                 if (assetOptions.BlockchainType == BlockchainType.Bitcoin)
                 {
                     // Get Balance
-                    var r01 = this.Bitcoin_GetBalance(address);
+                    var r01 = Bitcoin.GetBalance(address);
                     if (!r01.Success) return new WalletResponse<WalletBalance>(new WalletError(r01.Error));
 
                     // Return
@@ -241,7 +241,7 @@ namespace Tatum.Net
                     if (assetOptions.AssetType == AssetType.Coin)
                     {
                         // Get Balance
-                        var r01 = this.Ethereum_ETH_GetBalance(address);
+                        var r01 = Ethereum.ETH_GetBalance(address);
                         if (!r01.Success) return new WalletResponse<WalletBalance>(new WalletError(r01.Error));
 
                         // Return
@@ -257,7 +257,7 @@ namespace Tatum.Net
                         if (assetOptions.TokenType == TokenType.ERC20)
                         {
                             // Get Balance
-                            var r01 = this.Ethereum_ERC20_GetBalance(address, assetOptions.TokenContract, assetOptions.ChainDecimals);
+                            var r01 = Ethereum.ERC20_GetBalance(address, assetOptions.TokenContract, assetOptions.ChainDecimals);
                             if (!r01.Success) return new WalletResponse<WalletBalance>(new WalletError(r01.Error));
 
                             // Return
@@ -270,7 +270,7 @@ namespace Tatum.Net
                         else if (assetOptions.TokenType == TokenType.ERC721)
                         {
                             // Get Balance
-                            var r01 = this.Ethereum_ERC721_GetBalance(address, assetOptions.TokenContract, assetOptions.ChainDecimals);
+                            var r01 = Ethereum.ERC721_GetBalance(address, assetOptions.TokenContract, assetOptions.ChainDecimals);
                             if (!r01.Success) return new WalletResponse<WalletBalance>(new WalletError(r01.Error));
 
                             // Return
@@ -283,7 +283,7 @@ namespace Tatum.Net
                 else if (assetOptions.BlockchainType == BlockchainType.Litecoin)
                 {
                     // Get Balance
-                    var r01 = this.Litecoin_GetBalance(address);
+                    var r01 = Litecoin.GetBalance(address);
                     if (!r01.Success) return new WalletResponse<WalletBalance>(new WalletError(r01.Error));
 
                     // Return
@@ -300,7 +300,7 @@ namespace Tatum.Net
                 else if (assetOptions.BlockchainType == BlockchainType.VeChain)
                 {
                     // Get Balance
-                    var r01 = this.VeChain_GetBalance(address);
+                    var r01 = VeChain.GetBalance(address);
                     if (!r01.Success) return new WalletResponse<WalletBalance>(new WalletError(r01.Error));
 
                     // Return
@@ -311,7 +311,7 @@ namespace Tatum.Net
                 else if (assetOptions.BlockchainType == BlockchainType.Ripple)
                 {
                     // Get Balance
-                    var r01 = this.Ripple_GetBalance(address);
+                    var r01 = Ripple.GetBalance(address);
                     if (!r01.Success) return new WalletResponse<WalletBalance>(new WalletError(r01.Error));
 
                     // Return
@@ -330,7 +330,7 @@ namespace Tatum.Net
                 else if (assetOptions.BlockchainType == BlockchainType.NEO)
                 {
                     // Get Balance
-                    var r01 = this.Neo_GetBalance(address);
+                    var r01 = NEO.GetBalance(address);
                     if (!r01.Success) return new WalletResponse<WalletBalance>(new WalletError(r01.Error));
                     if (r01.Data.Assets == null ||
                         r01.Data.Assets.Data == null ||
@@ -363,7 +363,7 @@ namespace Tatum.Net
             throw new NotImplementedException();
         }
 
-        public virtual WalletResponse<WalletWithdrawResponse> WithdrawAndBroadcast(string assetCode, WalletDepositAddress wallet, decimal amount, string recepientAddress, string recepientTagOrMemo = null) => this.Withdraw(assetCode, wallet, amount, recepientAddress, recepientTagOrMemo, true);
+        public virtual WalletResponse<WalletWithdrawResponse> WithdrawAndBroadcast(string assetCode, WalletDepositAddress wallet, decimal amount, string recepientAddress, string recepientTagOrMemo = null) => Withdraw(assetCode, wallet, amount, recepientAddress, recepientTagOrMemo, true);
         public virtual WalletResponse<WalletWithdrawResponse> Withdraw(string assetCode, WalletDepositAddress wallet, decimal amount, string recepientAddress, string recepientTagOrMemo = null, bool triggerBroadcasting = false)
         {
             var assetOptions = Assets.Values.Where(x => x.AssetCode == assetCode).FirstOrDefault();
@@ -376,7 +376,7 @@ namespace Tatum.Net
                     // Send
                     var btc_fromAddress = new List<BitcoinSendOrderFromAddress> { new BitcoinSendOrderFromAddress { Address = wallet.Address, PrivateKey = wallet.PrivateKey } };
                     var btc_to = new List<BitcoinSendOrderTo> { new BitcoinSendOrderTo { Address = recepientAddress, Value = amount } };
-                    var r01 = this.Bitcoin_Send(btc_fromAddress, null, btc_to);
+                    var r01 = Bitcoin.Send(btc_fromAddress, null, btc_to);
                     if (!r01.Success || r01.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r01.Error));
 
                     // Return Data
@@ -387,7 +387,7 @@ namespace Tatum.Net
                     // Broadcast
                     if (triggerBroadcasting)
                     {
-                        var r02 = this.Bitcoin_Broadcast(r01.Data.TransactionId);
+                        var r02 = Bitcoin.Broadcast(r01.Data.TransactionId);
                         if (!r02.Success || r02.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r02.Error));
 
                         // Return Data
@@ -410,7 +410,7 @@ namespace Tatum.Net
                         // Send
                         var btc_fromAddress = new List<BitcoinSendOrderFromAddress> { new BitcoinSendOrderFromAddress { Address = wallet.Address, PrivateKey = wallet.PrivateKey } };
                         var btc_to = new List<BitcoinSendOrderTo> { new BitcoinSendOrderTo { Address = recepientAddress, Value = amount } };
-                        var r01 = this.Ethereum_Send(EthereumPredefinedCurrency.ETH, amount.ToString(ci), recepientAddress, fromPrivateKey: wallet.PrivateKey);
+                        var r01 = Ethereum.Send(EthereumPredefinedCurrency.ETH, amount.ToString(ci), recepientAddress, fromPrivateKey: wallet.PrivateKey);
                         if (!r01.Success || r01.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r01.Error));
 
                         // Return Data
@@ -421,7 +421,7 @@ namespace Tatum.Net
                         // Broadcast
                         if (triggerBroadcasting)
                         {
-                            var r02 = this.Ethereum_Broadcast(r01.Data.TransactionId);
+                            var r02 = Ethereum.Broadcast(r01.Data.TransactionId);
                             if (!r02.Success || r02.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r02.Error));
 
                             // Return Data
@@ -442,7 +442,7 @@ namespace Tatum.Net
                             // Send
                             var btc_fromAddress = new List<BitcoinSendOrderFromAddress> { new BitcoinSendOrderFromAddress { Address = wallet.Address, PrivateKey = wallet.PrivateKey } };
                             var btc_to = new List<BitcoinSendOrderTo> { new BitcoinSendOrderTo { Address = recepientAddress, Value = amount } };
-                            var r01 = this.Ethereum_ERC20_Transfer(assetOptions.TokenContract, recepientAddress, amount.ToString(ci), assetOptions.ChainDecimals, fromPrivateKey: wallet.PrivateKey);
+                            var r01 = Ethereum.ERC20_Transfer(assetOptions.TokenContract, recepientAddress, amount.ToString(ci), assetOptions.ChainDecimals, fromPrivateKey: wallet.PrivateKey);
                             if (!r01.Success || r01.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r01.Error));
 
                             // Return Data
@@ -453,7 +453,7 @@ namespace Tatum.Net
                             // Broadcast
                             if (triggerBroadcasting)
                             {
-                                var r02 = this.Ethereum_Broadcast(r01.Data.TransactionId);
+                                var r02 = Ethereum.Broadcast(r01.Data.TransactionId);
                                 if (!r02.Success || r02.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r02.Error));
 
                                 // Return Data
@@ -471,7 +471,7 @@ namespace Tatum.Net
                             // Send
                             var btc_fromAddress = new List<BitcoinSendOrderFromAddress> { new BitcoinSendOrderFromAddress { Address = wallet.Address, PrivateKey = wallet.PrivateKey } };
                             var btc_to = new List<BitcoinSendOrderTo> { new BitcoinSendOrderTo { Address = recepientAddress, Value = amount } };
-                            var r01 = this.Ethereum_ERC721_Transfer(assetOptions.TokenContract, assetOptions.TokenId, recepientAddress, fromPrivateKey: wallet.PrivateKey);
+                            var r01 = Ethereum.ERC721_Transfer(assetOptions.TokenContract, assetOptions.TokenId, recepientAddress, fromPrivateKey: wallet.PrivateKey);
                             if (!r01.Success || r01.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r01.Error));
 
                             // Return Data
@@ -482,7 +482,7 @@ namespace Tatum.Net
                             // Broadcast
                             if (triggerBroadcasting)
                             {
-                                var r02 = this.Ethereum_Broadcast(r01.Data.TransactionId);
+                                var r02 = Ethereum.Broadcast(r01.Data.TransactionId);
                                 if (!r02.Success || r02.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r02.Error));
 
                                 // Return Data
@@ -500,7 +500,7 @@ namespace Tatum.Net
                     // Send
                     var ltc_fromAddress = new List<LitecoinSendOrderFromAddress> { new LitecoinSendOrderFromAddress { Address = wallet.Address, PrivateKey = wallet.PrivateKey } };
                     var ltc_to = new List<LitecoinSendOrderTo> { new LitecoinSendOrderTo { Address = recepientAddress, Value = amount } };
-                    var r01 = this.Litecoin_Send(ltc_fromAddress, null, ltc_to);
+                    var r01 = Litecoin.Send(ltc_fromAddress, null, ltc_to);
                     if (!r01.Success || r01.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r01.Error));
 
                     // Return Data
@@ -511,7 +511,7 @@ namespace Tatum.Net
                     // Broadcast
                     if (triggerBroadcasting)
                     {
-                        var r02 = this.Litecoin_Broadcast(r01.Data.TransactionId);
+                        var r02 = Litecoin.Broadcast(r01.Data.TransactionId);
                         if (!r02.Success || r02.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r02.Error));
 
                         // Return Data
@@ -527,7 +527,7 @@ namespace Tatum.Net
                     // Send
                     var lyra_fromAddress = new List<ScryptaSendOrderFromAddress> { new ScryptaSendOrderFromAddress { Address = wallet.Address, PrivateKey = wallet.PrivateKey } };
                     var lyra_to = new List<ScryptaSendOrderTo> { new ScryptaSendOrderTo { Address = recepientAddress, Value = amount } };
-                    var r01 = this.Scrypta_Send(lyra_fromAddress, null, lyra_to);
+                    var r01 = Scrypta.Send(lyra_fromAddress, null, lyra_to);
                     if (!r01.Success || r01.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r01.Error));
 
                     // Return Data
@@ -538,7 +538,7 @@ namespace Tatum.Net
                     // Broadcast
                     if (triggerBroadcasting)
                     {
-                        var r02 = this.Scrypta_Broadcast(r01.Data.TransactionId);
+                        var r02 = Scrypta.Broadcast(r01.Data.TransactionId);
                         if (!r02.Success || r02.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r02.Error));
 
                         // Return Data
@@ -552,7 +552,7 @@ namespace Tatum.Net
                 else if (assetOptions.BlockchainType == BlockchainType.VeChain)
                 {
                     // Send
-                    var r01 = this.VeChain_Send(recepientAddress, amount, fromPrivateKey: wallet.PrivateKey);
+                    var r01 = VeChain.Send(recepientAddress, amount, fromPrivateKey: wallet.PrivateKey);
                     if (!r01.Success || r01.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r01.Error));
 
                     // Return Data
@@ -563,7 +563,7 @@ namespace Tatum.Net
                     // Broadcast
                     if (triggerBroadcasting)
                     {
-                        var r02 = this.VeChain_Broadcast(r01.Data.TransactionId);
+                        var r02 = VeChain.Broadcast(r01.Data.TransactionId);
                         if (!r02.Success || r02.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r02.Error));
 
                         // Return Data
@@ -577,7 +577,7 @@ namespace Tatum.Net
                 else if (assetOptions.BlockchainType == BlockchainType.Ripple)
                 {
                     // Send
-                    var r01 = this.Ripple_Send(wallet.Address, recepientAddress, amount.ToString(ci), fromSecret: wallet.PrivateKey, sourceTag: wallet.Tag, destinationTag: recepientTagOrMemo);
+                    var r01 = Ripple.Send(wallet.Address, recepientAddress, amount.ToString(ci), fromSecret: wallet.PrivateKey, sourceTag: wallet.Tag, destinationTag: recepientTagOrMemo);
                     if (!r01.Success || r01.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r01.Error));
 
                     // Return Data
@@ -588,7 +588,7 @@ namespace Tatum.Net
                     // Broadcast
                     if (triggerBroadcasting)
                     {
-                        var r02 = this.Ripple_Broadcast(r01.Data.TransactionId);
+                        var r02 = Ripple.Broadcast(r01.Data.TransactionId);
                         if (!r02.Success || r02.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r02.Error));
 
                         // Return Data
@@ -602,7 +602,7 @@ namespace Tatum.Net
                 else if (assetOptions.BlockchainType == BlockchainType.Stellar)
                 {
                     // Send
-                    var r01 = this.Stellar_Send(wallet.Address, recepientAddress, amount.ToString(ci), fromSecret: wallet.PrivateKey);
+                    var r01 = Stellar.Send(wallet.Address, recepientAddress, amount.ToString(ci), fromSecret: wallet.PrivateKey);
                     if (!r01.Success || r01.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r01.Error));
 
                     // Return Data
@@ -613,7 +613,7 @@ namespace Tatum.Net
                     // Broadcast
                     if (triggerBroadcasting)
                     {
-                        var r02 = this.Stellar_Broadcast(r01.Data.TransactionId);
+                        var r02 = Stellar.Broadcast(r01.Data.TransactionId);
                         if (!r02.Success || r02.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r02.Error));
 
                         // Return Data
@@ -627,7 +627,7 @@ namespace Tatum.Net
                 else if (assetOptions.BlockchainType == BlockchainType.BinanceChain)
                 {
                     // Send
-                    var r01 = this.Binance_Send(recepientAddress, "BNB", amount.ToString(ci), fromPrivateKey: wallet.PrivateKey);
+                    var r01 = Binance.Send(recepientAddress, "BNB", amount.ToString(ci), fromPrivateKey: wallet.PrivateKey);
                     if (!r01.Success || r01.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r01.Error));
 
                     // Return Data
@@ -638,7 +638,7 @@ namespace Tatum.Net
                     // Broadcast
                     if (triggerBroadcasting)
                     {
-                        var r02 = this.Binance_Broadcast(r01.Data.TransactionId);
+                        var r02 = Binance.Broadcast(r01.Data.TransactionId);
                         if (!r02.Success || r02.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r02.Error));
 
                         // Return Data
@@ -652,7 +652,7 @@ namespace Tatum.Net
                 else if (assetOptions.BlockchainType == BlockchainType.NEO)
                 {
                     // Send
-                    var r01 = this.Neo_Send(recepientAddress, amount, 0.0m, fromPrivateKey: wallet.PrivateKey);
+                    var r01 = NEO.Send(recepientAddress, amount, 0.0m, fromPrivateKey: wallet.PrivateKey);
                     if (!r01.Success || r01.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r01.Error));
 
                     // Return Data
@@ -663,7 +663,7 @@ namespace Tatum.Net
                     // Broadcast
                     if (triggerBroadcasting)
                     {
-                        var r02 = this.Neo_Broadcast(r01.Data.TransactionId);
+                        var r02 = NEO.Broadcast(r01.Data.TransactionId);
                         if (!r02.Success || r02.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r02.Error));
 
                         // Return Data
@@ -681,7 +681,7 @@ namespace Tatum.Net
                 else if (assetOptions.BlockchainType == BlockchainType.TRON)
                 {
                     // Send
-                    var r01 = this.Tron_Send(wallet.PrivateKey, recepientAddress, amount);
+                    var r01 = Tron.Send(wallet.PrivateKey, recepientAddress, amount);
                     if (!r01.Success || r01.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r01.Error));
 
                     // Return Data
@@ -692,7 +692,7 @@ namespace Tatum.Net
                     // Broadcast
                     if (triggerBroadcasting)
                     {
-                        var r02 = this.Tron_Broadcast(r01.Data.TransactionId);
+                        var r02 = Tron.Broadcast(r01.Data.TransactionId);
                         if (!r02.Success || r02.Data.Failed) return new WalletResponse<WalletWithdrawResponse>(new WalletError(r02.Error));
 
                         // Return Data
