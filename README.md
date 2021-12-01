@@ -154,40 +154,42 @@ var api = new TatumClient("XXXXXXXX-API-KEY-XXXXXXXX", cli_options);
 ```C#
 var led_01 = api.Ledger.Account.Create(BlockchainType.BitcoinCash);
 var led_02 = api.Ledger.Account.GetAccounts();
-var led_03 = api.Ledger.Account.CreateBatch(new List<LedgerAccountOptions> { });
-var led_04 = api.Ledger.Account.GetByCustomerId("-----customer-id-----");
-var led_05 = api.Ledger.Account.GetById("-----account-id-----");
-var led_06 = api.Ledger.Account.Update("-----account-id-----", "-----account-code-----", "-----account-number-----");
-var led_07 = api.Ledger.Account.GetBalance("-----account-id-----");
+var led_03 = api.Ledger.Account.CreateMultipleAccounts(new List<LedgerAccountOptions> { });
+var led_04 = api.Ledger.Account.GetAllAccountsByCustomerId("-----customer-id-----");
+var led_05 = api.Ledger.Account.GetAccountById("-----account-id-----");
+var led_06 = api.Ledger.Account.UpdateAccount("-----account-id-----", "-----account-code-----", "-----account-number-----");
+var led_07 = api.Ledger.Account.GetAccountBalance("-----account-id-----");
 var led_08 = api.Ledger.Account.BlockAmount("-----account-id-----", 1000, "DEBIT_CARD_OP", "Description");
 var led_09 = api.Ledger.Account.UnlockAmountAndPerformTransaction("-----blockage-id-----", "-----recipient-account-id-----", 1000.0m, false, false, "-----tx-code-----", "-----payment-id-----", "-----recipient-notes-----", "-----sender-notes-----", 1.0m);
 var led_10 = api.Ledger.Account.UnblockAmount("-----blockage-id-----");
 var led_11 = api.Ledger.Account.GetBlockedAmounts("-----account-id-----");
-var led_12 = api.Ledger.Account.UnblockAllBlockedAmounts("-----account-id-----");
-var led_13 = api.Ledger.Account.Activate("-----account-id-----");
-var led_14 = api.Ledger.Account.Deactivate("-----account-id-----");
-var led_15 = api.Ledger.Account.Freeze("-----account-id-----");
-var led_16 = api.Ledger.Account.Unfreeze("-----account-id-----");
+var led_12 = api.Ledger.Account.GetBlockedAmountById("-----amount-id-----");
+var led_13 = api.Ledger.Account.UnblockAllBlockedAmounts("-----account-id-----");
+var led_14 = api.Ledger.Account.ActivateAccount("-----account-id-----");
+var led_15 = api.Ledger.Account.DeactivateAccount("-----account-id-----");
+var led_16 = api.Ledger.Account.FreezeAccount("-----account-id-----");
+var led_17 = api.Ledger.Account.UnfreezeAccount("-----account-id-----");
 ```
 
 **Ledger / Transaction Endpoints**
 ```C#
 var led_21 = api.Ledger.Transaction.SendPayment("-----sender-account-id-----", "-----recipient-account-id-----", 10.0m);
-var led_22 = api.Ledger.Transaction.GetTransactionsByAccount("-----account-id-----");
-var led_23 = api.Ledger.Transaction.GetTransactionsByCustomer("-----customer-id-----");
-var led_24 = api.Ledger.Transaction.GetTransactionsByLedger();
-var led_25 = api.Ledger.Transaction.GetTransactionsByReference("-----reference-----");
+var led_22 = api.Ledger.Transaction.SendPaymentsInBatch("-----sender-account-id-----", new List<LedgerTransactionRequest>());
+var led_23 = api.Ledger.Transaction.GetTransactionsByAccount("-----account-id-----");
+var led_24 = api.Ledger.Transaction.GetTransactionsByCustomer("-----customer-id-----");
+var led_25 = api.Ledger.Transaction.GetTransactionsByLedger();
+var led_26 = api.Ledger.Transaction.GetTransactionsByReference("-----reference-----");
 ```
 
 **Ledger / Customer Endpoints**
 ```C#
-var led_31 = api.Ledger.Customer.ListAll();
-var led_32 = api.Ledger.Customer.Get("-----customer-id-----");
-var led_33 = api.Ledger.Customer.Update("-----customer-internal-id-----", "-----customer-external-id-----");
-var led_34 = api.Ledger.Customer.Activate("-----customer-id-----");
-var led_35 = api.Ledger.Customer.Deactivate("-----customer-id-----");
-var led_36 = api.Ledger.Customer.Enable("-----customer-id-----");
-var led_37 = api.Ledger.Customer.Disable("-----customer-id-----");
+var led_31 = api.Ledger.Customer.GetAllCustomers();
+var led_32 = api.Ledger.Customer.GetCustomer("-----customer-id-----");
+var led_33 = api.Ledger.Customer.UpdateCustomer("-----customer-internal-id-----", "-----customer-external-id-----");
+var led_34 = api.Ledger.Customer.ActivateCustomer("-----customer-id-----");
+var led_35 = api.Ledger.Customer.DeactivateCustomer("-----customer-id-----");
+var led_36 = api.Ledger.Customer.EnableCustomer("-----customer-id-----");
+var led_37 = api.Ledger.Customer.DisableCustomer("-----customer-id-----");
 ```
 
 **Ledger / Virtual Currency Endpoints**
@@ -203,8 +205,10 @@ var led_45 = api.Ledger.VirtualCurrency.Destroy("-----account-id-----", 1000000,
 ```C#
 var led_51 = api.Ledger.Subscription.Create(LedgerSubscriptionType.ACCOUNT_INCOMING_BLOCKCHAIN_TRANSACTION, account_id: "-----account-id-----", url: "https://www.google.com");
 var led_52 = api.Ledger.Subscription.List();
-var led_53 = api.Ledger.Subscription.Cancel("-----subscription-id-----");
-var led_54 = api.Ledger.Subscription.GetReport("-----subscription-id-----");
+var led_53 = api.Ledger.Subscription.EnableHmac("-----hmac-secret-----");
+var led_54 = api.Ledger.Subscription.DisableHmac();
+var led_55 = api.Ledger.Subscription.Cancel("-----subscription-id-----");
+var led_56 = api.Ledger.Subscription.GetReport("-----subscription-id-----");
 ```
 
 **Ledger / Order Book Endpoints**

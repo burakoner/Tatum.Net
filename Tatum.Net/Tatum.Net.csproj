@@ -9,9 +9,9 @@
     <PackageId>Tatum.Net</PackageId>
     <Authors>Burak Öner</Authors>
     <Version>3.0.0</Version>
-    <FileVersion>3.0.0.0</FileVersion>
+    <FileVersion>3.0.0</FileVersion>
     <PackageVersion>3.0.0</PackageVersion>
-    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <AssemblyVersion>3.0.0</AssemblyVersion>
     <Description>Tatum.Net is a .Net wrapper for the Tatum API. It includes supports all endpoints</Description>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageTags>Tatum Tatum.Net C# .Net CryptoCurrency Wallet Blockchain Node API Wrapper</PackageTags>

@@ -6,18 +6,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using Tatum.Net.Enums;
 using Tatum.Net.Helpers;
-using Tatum.Net.Interfaces;
 using Tatum.Net.RestObjects;
 
 namespace Tatum.Net.Clients
 {
-    public class VeChainClient : ITatumBlockchainVeChainClient
+    public class VeChainClient
     {
         public TatumClient Tatum { get; protected set; }
 
-        #region API Endpoints
-
-        #region Blockchain - VeChain
         protected const string Endpoints_CurrentBlock = "vet/block/current";
         protected const string Endpoints_GetBlockByHash = "vet/block/{0}";
         protected const string Endpoints_GetBalance = "vet/account/balance/{0}";
@@ -27,17 +23,12 @@ namespace Tatum.Net.Clients
         protected const string Endpoints_Transaction = "vet/transaction";
         protected const string Endpoints_Gas = "vet/transaction/gas";
         protected const string Endpoints_Broadcast = "vet/broadcast";
-        #endregion
-
-        #endregion
 
         public VeChainClient(TatumClient tatumClient)
         {
             Tatum = tatumClient;
         }
 
-
-        #region Blockchain / VeChain
         /// <summary>
         /// <b>Title:</b> Generate VeChain wallet<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -460,8 +451,5 @@ namespace Tatum.Net.Clients
 
             return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
         }
-        #endregion
-
-
     }
 }

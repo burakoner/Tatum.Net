@@ -4,18 +4,14 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Tatum.Net.Helpers;
-using Tatum.Net.Interfaces;
 using Tatum.Net.RestObjects;
 
 namespace Tatum.Net.Clients
 {
-    public class NeoClient : ITatumBlockchainNeoClient
+    public class NeoClient
     {
         public TatumClient Tatum { get; protected set; }
 
-        #region API Endpoints
-
-        #region Blockchain - NEO
         protected const string Endpoints_GenerateAccount = "neo/wallet";
         protected const string Endpoints_CurrentBlock = "neo/block/current";
         protected const string Endpoints_GetBlock = "neo/block/{0}";
@@ -29,17 +25,12 @@ namespace Tatum.Net.Clients
         protected const string Endpoints_ClaimGAS = "neo/claim";
         protected const string Endpoints_Invoke = "neo/invoke";
         protected const string Endpoints_Broadcast = "neo/broadcast";
-        #endregion
-
-        #endregion
 
         public NeoClient(TatumClient tatumClient)
         {
             Tatum = tatumClient;
         }
 
-
-        #region Blockchain / NEO
         /// <summary>
         /// <b>Title:</b> Generate NEO account<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -435,8 +426,5 @@ namespace Tatum.Net.Clients
 
             return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
         }
-        #endregion
-
-
     }
 }

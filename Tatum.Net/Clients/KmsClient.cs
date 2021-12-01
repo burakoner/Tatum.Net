@@ -6,31 +6,24 @@ using System.Threading;
 using System.Threading.Tasks;
 using Tatum.Net.Converters;
 using Tatum.Net.Enums;
-using Tatum.Net.Interfaces;
 using Tatum.Net.RestObjects;
 
 namespace Tatum.Net.Clients
 {
-    public class KmsClient : ITatumSecurityKMSClient
+    public class KmsClient
     {
         public TatumClient Tatum { get; protected set; }
 
-        #region API Endpoints
-
-        #region Security Key Management System
         protected const string Endpoints_GetPendingTransactions = "kms/pending/{0}";
         protected const string Endpoints_CompletePendingTransaction = "kms/{0}/{1}";
-        protected const string Endpoints_Transaction = "kms/{0}";
-        #endregion
-
-        #endregion
+        protected const string Endpoints_GetTransaction = "kms/{0}";
+        protected const string Endpoints_DeleteTransaction = "kms/{0}";
 
         public KmsClient(TatumClient tatumClient)
         {
             Tatum = tatumClient;
         }
 
-        #region Security / Key Management System
         /// <summary>
         /// <b>Title:</b> Get pending transactions to sign<br />
         /// <b>Credits:</b> 1 credits per API call.<br />
@@ -110,7 +103,7 @@ namespace Tatum.Net.Clients
         public virtual async Task<WebCallResult<KMSPendingTransaction>> GetTransactionAsync(string id, CancellationToken ct = default)
         {
             var credits = 1;
-            var url = Tatum.GetUrl(string.Format(Endpoints_Transaction, id));
+            var url = Tatum.GetUrl(string.Format(Endpoints_GetTransaction, id));
             return await Tatum.SendTatumRequest<KMSPendingTransaction>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
         }
 
@@ -143,13 +136,11 @@ namespace Tatum.Net.Clients
             };
 
             var credits = 2;
-            var url = Tatum.GetUrl(string.Format(Endpoints_Transaction, id));
+            var url = Tatum.GetUrl(string.Format(Endpoints_DeleteTransaction, id));
             var result = await Tatum.SendTatumRequest<string>(url, HttpMethod.Delete, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
             if (!result.Success) return WebCallResult<bool>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
 
             return new WebCallResult<bool>(result.ResponseStatusCode, result.ResponseHeaders, true, null);
         }
-        #endregion
-
     }
 }

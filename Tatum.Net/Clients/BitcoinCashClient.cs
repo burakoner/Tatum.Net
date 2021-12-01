@@ -5,17 +5,14 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Tatum.Net.Enums;
-using Tatum.Net.Interfaces;
 using Tatum.Net.RestObjects;
 
 namespace Tatum.Net.Clients
 {
-    public class BitcoinCashClient : ITatumBlockchainBitcoinCashClient
+    public class BitcoinCashClient
     {
         public TatumClient Tatum { get; protected set; }
 
-        #region API Endpoints
-        #region Blockchain - BitcoinCash
         protected const string Endpoints_BlockchainInformation = "bcash/info";
         protected const string Endpoints_GetBlockHash = "bcash/block/hash/{0}";
         protected const string Endpoints_GetBlockByHash = "bcash/block/{0}";
@@ -23,18 +20,12 @@ namespace Tatum.Net.Clients
         protected const string Endpoints_GetTransactionsByAddress = "bcash/transaction/address/{0}";
         protected const string Endpoints_Transaction = "bcash/transaction";
         protected const string Endpoints_Broadcast = "bcash/broadcast";
-        #endregion
-
-        #endregion
 
         public BitcoinCashClient(TatumClient tatumClient)
         {
             Tatum = tatumClient;
         }
 
-
-
-        #region Blockchain / Bitcoin Cash
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin Cash wallet<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -422,7 +413,5 @@ namespace Tatum.Net.Clients
 
             return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
         }
-        #endregion
-
     }
 }

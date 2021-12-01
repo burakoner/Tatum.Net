@@ -4,18 +4,14 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Tatum.Net.Interfaces;
 using Tatum.Net.RestObjects;
 
 namespace Tatum.Net.Clients
 {
-    public class RippleClient : ITatumBlockchainRippleClient
+    public class RippleClient
     {
         public TatumClient Tatum { get; protected set; }
-
-        #region API Endpoints
-
-        #region Blockchain - Ripple
+        
         protected const string Endpoints_GenerateAccount = "xrp/account";
         protected const string Endpoints_BlockchainInformation = "xrp/info";
         protected const string Endpoints_BlockchainFee = "xrp/fee";
@@ -28,17 +24,12 @@ namespace Tatum.Net.Clients
         protected const string Endpoints_Trust = "xrp/trust";
         protected const string Endpoints_AccountSettings = "xrp/account/settings";
         protected const string Endpoints_Broadcast = "xrp/broadcast";
-        #endregion
-
-        #endregion
 
         public RippleClient(TatumClient tatumClient)
         {
             Tatum = tatumClient;
         }
 
-
-        #region Blockchain / Ripple
         /// <summary>
         /// <b>Title:</b> Generate XRP account<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -503,9 +494,5 @@ namespace Tatum.Net.Clients
 
             return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
         }
-
-        #endregion
-
-
     }
 }

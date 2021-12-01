@@ -7,38 +7,30 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Tatum.Net.Enums;
-using Tatum.Net.Interfaces;
 using Tatum.Net.RestObjects;
 
 namespace Tatum.Net.Clients
 {
-    public class LitecoinClient : ITatumBlockchainLitecoinClient
+    public class LitecoinClient
     {
         public TatumClient Tatum { get; protected set; }
 
-        #region API Endpoints
-
-        #region Blockchain - Litecoin
         protected const string Endpoints_BlockchainInformation = "litecoin/info";
         protected const string Endpoints_GetBlockHash = "litecoin/block/hash/{0}";
         protected const string Endpoints_GetBlockByHash = "litecoin/block/{0}";
         protected const string Endpoints_GetTransactionByHash = "litecoin/transaction/{0}";
+        protected const string Endpoints_GetMempoolTransactions = "litecoin/mempool";
         protected const string Endpoints_GetTransactionsByAddress = "litecoin/transaction/address/{0}";
         protected const string Endpoints_GetBalance = "litecoin/address/balance/{0}";
         protected const string Endpoints_GetTransactionUTXO = "litecoin/utxo/{0}/{1}";
         protected const string Endpoints_Transaction = "litecoin/transaction";
         protected const string Endpoints_Broadcast = "litecoin/broadcast";
-        #endregion
-
-        #endregion
 
         public LitecoinClient(TatumClient tatumClient)
         {
             Tatum = tatumClient;
         }
 
-
-        #region Blockchain / Litecoin
         /// <summary>
         /// <b>Title:</b> Generate Litecoin wallet<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -216,6 +208,31 @@ namespace Tatum.Net.Clients
             var credits = 5;
             var url = Tatum.GetUrl(string.Format(Endpoints_GetTransactionByHash, hash));
             return await Tatum.SendTatumRequest<LitecoinTransaction>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// <b>Title:</b> Get mempool transactions<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Gets Litecoin transaction IDs in the mempool.
+        /// </summary>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public virtual WebCallResult<IEnumerable<string>> GetMempoolTransactions(CancellationToken ct = default)
+            => GetMempoolTransactionsAsync(ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Get mempool transactions<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Gets Litecoin transaction IDs in the mempool.
+        /// </summary>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public virtual async Task<WebCallResult<IEnumerable<string>>> GetMempoolTransactionsAsync(CancellationToken ct = default)
+        {
+            var credits = 1;
+            var url = Tatum.GetUrl(Endpoints_GetMempoolTransactions);
+            return await Tatum.SendTatumRequest<IEnumerable<string>>(url, HttpMethod.Get, ct, checkResult: false, signed: true, parameters: null, credits: credits).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -480,9 +497,5 @@ namespace Tatum.Net.Clients
 
             return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
         }
-
-        #endregion
-
-
     }
 }

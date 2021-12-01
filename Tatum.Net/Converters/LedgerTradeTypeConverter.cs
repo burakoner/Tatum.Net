@@ -13,6 +13,8 @@ namespace Tatum.Net.Converters
         {
             new KeyValuePair<LedgerTradeType, string>(LedgerTradeType.Buy, "BUY"),
             new KeyValuePair<LedgerTradeType, string>(LedgerTradeType.Sell, "SELL"),
+            new KeyValuePair<LedgerTradeType, string>(LedgerTradeType.FutureBuy, "FUTURE_BUY"),
+            new KeyValuePair<LedgerTradeType, string>(LedgerTradeType.FutureSell, "FUTURE_SELL"),
         };
     }
 }

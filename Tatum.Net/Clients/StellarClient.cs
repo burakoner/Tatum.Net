@@ -5,18 +5,14 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Tatum.Net.Helpers;
-using Tatum.Net.Interfaces;
 using Tatum.Net.RestObjects;
 
 namespace Tatum.Net.Clients
 {
-    public class StellarClient : ITatumBlockchainStellarClient
+    public class StellarClient
     {
         public TatumClient Tatum { get; protected set; }
 
-        #region API Endpoints
-
-        #region Blockchain - Stellar
         protected const string Endpoints_GenerateAccount = "xlm/account";
         protected const string Endpoints_BlockchainInformation = "xlm/info";
         protected const string Endpoints_BlockchainFee = "xlm/fee";
@@ -28,16 +24,12 @@ namespace Tatum.Net.Clients
         protected const string Endpoints_Send = "xlm/transaction";
         protected const string Endpoints_Trust = "xlm/trust";
         protected const string Endpoints_Broadcast = "xlm/broadcast";
-        #endregion
-        #endregion
 
         public StellarClient(TatumClient tatumClient)
         {
             Tatum = tatumClient;
         }
 
-
-        #region Blockchain / Stellar
         /// <summary>
         /// <b>Title:</b> Generate XLM account<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -421,8 +413,5 @@ namespace Tatum.Net.Clients
 
             return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
         }
-        #endregion
-
-
     }
 }

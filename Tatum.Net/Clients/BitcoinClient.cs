@@ -7,39 +7,30 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Tatum.Net.Enums;
-using Tatum.Net.Interfaces;
 using Tatum.Net.RestObjects;
 
 namespace Tatum.Net.Clients
 {
-    public class BitcoinClient : ITatumBlockchainBitcoinClient
+    public class BitcoinClient
     {
         public TatumClient Tatum { get; protected set; }
 
-        #region API Endpoints
-
-        #region Blockchain - Bitcoin
         protected const string Endpoints_BlockchainInformation = "bitcoin/info";
         protected const string Endpoints_GetBlockHash = "bitcoin/block/hash/{0}";
         protected const string Endpoints_GetBlockByHash = "bitcoin/block/{0}";
         protected const string Endpoints_GetTransactionByHash = "bitcoin/transaction/{0}";
+        protected const string Endpoints_GetMempoolTransactions = "bitcoin/mempool";
         protected const string Endpoints_GetTransactionsByAddress = "bitcoin/transaction/address/{0}";
         protected const string Endpoints_GetBalance = "bitcoin/address/balance/{0}";
         protected const string Endpoints_GetTransactionUTXO = "bitcoin/utxo/{0}/{1}";
         protected const string Endpoints_Transaction = "bitcoin/transaction";
         protected const string Endpoints_Broadcast = "bitcoin/broadcast";
-        #endregion
-
-        #endregion
 
         public BitcoinClient(TatumClient tatumClient)
         {
             Tatum = tatumClient;
         }
 
-
-
-        #region Blockchain / Bitcoin
         /// <summary>
         /// <b>Title:</b> Generate Bitcoin wallet<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -276,6 +267,31 @@ namespace Tatum.Net.Clients
         }
 
         /// <summary>
+        /// <b>Title:</b> Get mempool transactions<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Gets Bitcoin transaction IDs in the mempool.
+        /// </summary>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public virtual WebCallResult<IEnumerable<string>> GetMempoolTransactions(CancellationToken ct = default) 
+            => GetMempoolTransactionsAsync(ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Get mempool transactions<br />
+        /// <b>Credits:</b> 1 credit per API call.<br />
+        /// <b>Description:</b>
+        /// Gets Bitcoin transaction IDs in the mempool.
+        /// </summary>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public virtual async Task<WebCallResult<IEnumerable<string>>> GetMempoolTransactionsAsync(CancellationToken ct = default)
+        {
+            var credits = 1;
+            var url = Tatum.GetUrl(Endpoints_GetMempoolTransactions);
+            return await Tatum.SendTatumRequest<IEnumerable<string>>(url, HttpMethod.Get, ct, checkResult: false, signed: true, parameters: null, credits: credits).ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// <b>Title:</b> Get Transactions by address<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
         /// <b>Description:</b>
@@ -479,8 +495,5 @@ namespace Tatum.Net.Clients
 
             return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
         }
-
-        #endregion
-
     }
 }

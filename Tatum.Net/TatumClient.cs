@@ -13,12 +13,11 @@ using Tatum.Net.Clients;
 using Tatum.Net.CoreObjects;
 using Tatum.Net.Enums;
 using Tatum.Net.Helpers;
-using Tatum.Net.Interfaces;
 using Tatum.Net.RestObjects;
 
 namespace Tatum.Net
 {
-    public class TatumClient : RestClient, IRestClient, ITatumClient
+    public class TatumClient : RestClient, IRestClient
     {
         #region Core Fields
         protected static TatumClientOptions defaultOptions = new TatumClientOptions();
@@ -26,24 +25,44 @@ namespace Tatum.Net
         #endregion
 
         #region Clients
-        public BinanceClient Binance { get; protected set; }
-        public BitcoinCashClient BitcoinCash { get; protected set; }
-        public BitcoinClient Bitcoin { get; protected set; }
-        public EthereumClient Ethereum { get; protected set; }
+        public AdaClient ADA { get; protected set; }
+        public AlgorandClient ALGO { get; protected set; }
+        public BinanceClient BNB { get; protected set; }
+        public BinanceSmartChainClient BSC { get; protected set; }
+        public BitcoinCashClient BCH { get; protected set; }
+        public BitcoinClient BTC { get; protected set; }
+        public CeloClient CELO { get; protected set; }
+        public DogecoinClient DOGE { get; protected set; }
+        public ElrondClient EGLD { get; protected set; }
+        public EthereumClient ETH { get; protected set; }
+        public ERC20Client ERC20 { get; protected set; }
+        public ERC721Client ERC721 { get; protected set; }
+        public FabricClient FAB { get; protected set; }
+        public FlowClient FLOW { get; protected set; }
+        public IpfsClient IPFS { get; protected set; }
         public KmsClient KMS { get; protected set; }
         public LedgerClient Ledger { get; protected set; }
         public LibraClient Libra { get; protected set; }
-        public LitecoinClient Litecoin { get; protected set; }
+        public LitecoinClient LTC { get; protected set; }
+        public MarketplaceClient Marketplace { get; protected set; }
+        public PolygonClient MATIC { get; protected set; }
+        public MultiTokenClient MultiToken { get; protected set; }
         public NeoClient NEO { get; protected set; }
+        public NftClient NFT { get; protected set; }
         public OffChainClient OffChain { get; protected set; }
+        public HarmonyClient ONE { get; protected set; }
+        public QtumClient QTUM { get; protected set; }
+        public QuorumClient Quorum { get; protected set; }
         public RecordsClient Records { get; protected set; }
-        public RippleClient Ripple { get; protected set; }
-        public ScryptaClient Scrypta { get; protected set; }
+        public RippleClient XRP { get; protected set; }
+        public ScryptaClient LYRA { get; protected set; }
         public SecurityClient Security { get; protected set; }
         public ServiceClient Service { get; protected set; }
-        public StellarClient Stellar { get; protected set; }
         public TronClient TRON { get; protected set; }
-        public VeChainClient VeChain { get; protected set; }
+        public UtilsClient Utils { get; protected set; }
+        public VeChainClient VET { get; protected set; }
+        public XinFinClient XDC { get; protected set; }
+        public StellarClient XLM { get; protected set; }
         #endregion
 
         #region API Endpoints
@@ -89,24 +108,44 @@ namespace Tatum.Net
         {
             requestBodyFormat = RequestBodyFormat.Json;
 
-            Binance = new BinanceClient(this);
-            BitcoinCash = new BitcoinCashClient(this);
-            Bitcoin = new BitcoinClient(this);
-            Ethereum = new EthereumClient(this, authProvider);
+            ADA = new AdaClient(this);
+            ALGO = new AlgorandClient(this, authProvider);
+            BNB = new BinanceClient(this);
+            BSC = new  BinanceSmartChainClient(this, authProvider);
+            BCH = new BitcoinCashClient(this);
+            BTC = new BitcoinClient(this);
+            CELO = new CeloClient(this, authProvider);
+            DOGE = new DogecoinClient(this);
+            EGLD = new  ElrondClient(this, authProvider);
+            ETH = new EthereumClient(this, authProvider);
+            ERC20 = new ERC20Client(this);
+            ERC721 = new ERC721Client(this);
+            FAB = new FabricClient(this);
+            FLOW = new FlowClient(this);
+            IPFS = new IpfsClient(this);
             KMS = new KmsClient(this);
             Ledger = new LedgerClient(this);
             Libra = new LibraClient(this);
-            Litecoin = new LitecoinClient(this);
+            LTC = new LitecoinClient(this);
+            Marketplace = new MarketplaceClient(this);
+            MATIC = new PolygonClient(this, authProvider);
+            MultiToken = new  MultiTokenClient(this);
             NEO = new NeoClient(this);
+            NFT = new NftClient(this);
             OffChain = new OffChainClient(this);
+            ONE = new HarmonyClient(this);
+            QTUM = new  QtumClient(this);
+            Quorum = new QuorumClient(this);
             Records = new RecordsClient(this);
-            Ripple = new RippleClient(this);
-            Scrypta = new ScryptaClient(this);
+            XRP = new RippleClient(this);
+            LYRA = new ScryptaClient(this);
             Security = new SecurityClient(this);
             Service = new ServiceClient(this);
-            Stellar = new StellarClient(this);
             TRON = new TronClient(this);
-            VeChain = new VeChainClient(this);
+            Utils = new UtilsClient(this);
+            VET = new VeChainClient(this);
+            XDC = new XinFinClient(this, authProvider);
+            XLM = new StellarClient(this);
         }
 
         /// <summary>

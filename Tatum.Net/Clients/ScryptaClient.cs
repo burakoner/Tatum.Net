@@ -7,18 +7,14 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Tatum.Net.Enums;
-using Tatum.Net.Interfaces;
 using Tatum.Net.RestObjects;
 
 namespace Tatum.Net.Clients
 {
-    public class ScryptaClient : ITatumBlockchainScryptaClient
+    public class ScryptaClient
     {
         public TatumClient Tatum { get; protected set; }
 
-        #region API Endpoints
-
-        #region Blockchain - Scrypta
         protected const string Endpoints_BlockchainInformation = "scrypta/info";
         protected const string Endpoints_GetBlockHash = "scrypta/block/hash/{0}";
         protected const string Endpoints_GetBlockByHash = "scrypta/block/{0}";
@@ -28,17 +24,12 @@ namespace Tatum.Net.Clients
         protected const string Endpoints_GetTransactionUTXO = "scrypta/utxo/{0}/{1}";
         protected const string Endpoints_Transaction = "scrypta/transaction";
         protected const string Endpoints_Broadcast = "scrypta/broadcast";
-        #endregion
-
-        #endregion
 
         public ScryptaClient(TatumClient tatumClient)
         {
             Tatum = tatumClient;
         }
 
-
-        #region Blockchain / Scrypta
         /// <summary>
         /// <b>Title:</b> Generate Scrypta wallet<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -454,8 +445,6 @@ namespace Tatum.Net.Clients
 
             return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
         }
-        #endregion
-
 
     }
 }

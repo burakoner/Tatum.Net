@@ -2,29 +2,21 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Tatum.Net.Interfaces;
 using Tatum.Net.RestObjects;
 
 namespace Tatum.Net.Clients
 {
-    public class SecurityClient : ITatumSecurityAddressClient
+    public class SecurityClient
     {
         public TatumClient Tatum { get; protected set; }
 
-        #region API Endpoints
-
-        #region Security Address
         protected const string Endpoints_CheckMalicousAddress = "security/address/{0}";
-        #endregion
-
-        #endregion
 
         public SecurityClient(TatumClient tatumClient)
         {
             Tatum = tatumClient;
         }
 
-        #region Security / Address
         /// <summary>
         /// <b>Title:</b> Check malicous address<br />
         /// <b>Credits:</b> 1 credits per API call.<br />
@@ -50,8 +42,5 @@ namespace Tatum.Net.Clients
             var url = Tatum.GetUrl(string.Format(Endpoints_CheckMalicousAddress, address));
             return await Tatum.SendTatumRequest<SecurityStatus>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
         }
-        #endregion
-
-
     }
 }

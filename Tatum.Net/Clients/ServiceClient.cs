@@ -3,32 +3,23 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Tatum.Net.Interfaces;
 using Tatum.Net.RestObjects;
 
 namespace Tatum.Net.Clients
 {
-    public class ServiceClient : ITatumServiceClient
+    public class ServiceClient
     {
         public TatumClient Tatum { get; protected set; }
 
-        #region API Endpoints
-
-        #region Tatum Service
         protected const string Endpoints_Consumption = "tatum/usage";
         protected const string Endpoints_ExchangeRates = "tatum/rate/{0}";
         protected const string Endpoints_Version = "tatum/version";
-        #endregion
-
-        #endregion
 
         public ServiceClient(TatumClient tatumClient)
         {
             Tatum = tatumClient;
         }
 
-
-        #region Tatum / Service
         /// <summary>
         /// <b>Title:</b> List credit consumption for last month<br />
         /// <b>Credits:</b> 1 credit per API call.<br />
@@ -110,7 +101,8 @@ namespace Tatum.Net.Clients
             var url = Tatum.GetUrl(string.Format(Endpoints_Version));
             return await Tatum.SendTatumRequest<ServiceVersion>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
         }
-        #endregion
 
+        // TODO: Freeze API Key
+        // TODO: Unfreeze API Key
     }
 }

@@ -1,21 +1,18 @@
 ﻿using CryptoExchange.Net.Objects;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Tatum.Net.Interfaces;
 using Tatum.Net.RestObjects;
 
 namespace Tatum.Net.Clients
 {
-    public class TronClient : ITatumBlockchainTronClient
+    public class TronClient
     {
         public TatumClient Tatum { get; protected set; }
 
-        #region API Endpoints
-
-        #region Blockchain - TRON
         protected const string Endpoints_GenerateAccount = "tron/account";
         protected const string Endpoints_CurrentBlock = "tron/info";
         protected const string Endpoints_GetBlock = "tron/block/{0}";
@@ -30,18 +27,12 @@ namespace Tatum.Net.Clients
         protected const string Endpoints_TRC10Send = "tron/trc10/transaction";
         protected const string Endpoints_TRC20CreateToken = "tron/trc20/deploy";
         protected const string Endpoints_TRC20Send = "tron/trc20/transaction";
-        #endregion
-
-        #endregion
 
         public TronClient(TatumClient tatumClient)
         {
             Tatum = tatumClient;
         }
 
-
-
-        #region Blockchain / TRON
         /// <summary>
         /// <b>Title:</b> Generate Tron wallet<br />
         /// <b>Credits:</b> 5 credit per API call.<br />
@@ -50,6 +41,7 @@ namespace Tatum.Net.Clients
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
+        [Obsolete("This endpoint is deprecated by Tatum")]
         public virtual WebCallResult<TronWallet> GenerateAccount(CancellationToken ct = default) => GenerateAccountAsync(ct).Result;
         /// <summary>
         /// <b>Title:</b> Generate Tron wallet<br />
@@ -59,12 +51,17 @@ namespace Tatum.Net.Clients
         /// </summary>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
+        [Obsolete("This endpoint is deprecated by Tatum")]
         public virtual async Task<WebCallResult<TronWallet>> GenerateAccountAsync(CancellationToken ct = default)
         {
             var credits = 5;
             var url = Tatum.GetUrl(string.Format(Endpoints_GenerateAccount));
             return await Tatum.SendTatumRequest<TronWallet>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
         }
+
+        // TODO: Generate Tron wallet
+        // TODO: Generate Tron deposit address from Extended public key
+        // TODO: Generate Tron private key
 
         /// <summary>
         /// <b>Title:</b> XXXXXXXXXXXX<br />
@@ -140,6 +137,9 @@ namespace Tatum.Net.Clients
             return await Tatum.SendTatumRequest<TronAccountTransactions>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
         }
 
+        // TODO: Get Tron Account TRC20 transactions
+        // TODO: Get Tron Account by address
+
         /// <summary>
         /// <b>Title:</b> Get Tron transaction by hash<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -208,39 +208,6 @@ namespace Tatum.Net.Clients
         }
 
         /// <summary>
-        /// <b>Title:</b> Broadcast Tron transaction<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Broadcast Tron transaction. This method is used internally from Tatum Middleware or Tatum client libraries. It is possible to create custom signing mechanism and use this method only for broadcasting data to the blockchian.
-        /// </summary>
-        /// <param name="txData">Raw signed transaction to be published to network.</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public virtual WebCallResult<BlockchainResponse> Broadcast(string txData, CancellationToken ct = default) => BroadcastAsync(txData, ct).Result;
-        /// <summary>
-        /// <b>Title:</b> Broadcast Tron transaction<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
-        /// <b>Description:</b>
-        /// Broadcast Tron transaction. This method is used internally from Tatum Middleware or Tatum client libraries. It is possible to create custom signing mechanism and use this method only for broadcasting data to the blockchian.
-        /// </summary>
-        /// <param name="txData">Raw signed transaction to be published to network.</param>
-        /// <param name="ct">Cancellation Token</param>
-        /// <returns></returns>
-        public virtual async Task<WebCallResult<BlockchainResponse>> BroadcastAsync(string txData, CancellationToken ct = default)
-        {
-            var parameters = new Dictionary<string, object> {
-                { "txData", txData },
-            };
-
-            var credits = 5;
-            var url = Tatum.GetUrl(string.Format(Endpoints_Broadcast));
-            var result = await Tatum.SendTatumRequest<BlockchainResponse>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
-            if (!result.Success || result.Data.Failed) return WebCallResult<BlockchainResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
-
-            return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
-        }
-
-        /// <summary>
         /// <b>Title:</b> Freeze Tron balance<br />
         /// <b>Credits:</b> 10 credits per API call.<br />
         /// <b>Description:</b>
@@ -288,30 +255,49 @@ namespace Tatum.Net.Clients
         }
 
         /// <summary>
-        /// <b>Title:</b> Get Tron TRC10 token detail<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Title:</b> Send Tron TRC10 transaction<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
         /// <b>Description:</b>
-        /// Get Tron TRC10 token details.
+        /// Send Tron TRC10 transaction from address to address.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds. In this method, it is possible to enter privateKey. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, it is possible to use the Tatum client library for supported languages or Tatum Middleware with a custom key management system.
         /// </summary>
-        /// <param name="id">TRC10 token ID</param>
+        /// <param name="fromPrivateKey">Private key of the address, from which the TRX will be sent.</param>
+        /// <param name="to">Recipient address of TRON account in Base58 format.</param>
+        /// <param name="tokenId">ID of the token to transfer.</param>
+        /// <param name="amount">Amount to be sent in TRX.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public virtual WebCallResult<TronTRC10Token> TRC10GetTokenDetails(long id, CancellationToken ct = default) => TRC10GetTokenDetailsAsync(id, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> TRC10Send(string fromPrivateKey, string to, long tokenId, decimal amount, CancellationToken ct = default) => TRC10SendAsync(fromPrivateKey, to, tokenId, amount, ct).Result;
         /// <summary>
-        /// <b>Title:</b> Get Tron TRC10 token detail<br />
-        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Title:</b> Send Tron TRC10 transaction<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
         /// <b>Description:</b>
-        /// Get Tron TRC10 token details.
+        /// Send Tron TRC10 transaction from address to address.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds. In this method, it is possible to enter privateKey. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, it is possible to use the Tatum client library for supported languages or Tatum Middleware with a custom key management system.
         /// </summary>
-        /// <param name="id">TRC10 token ID</param>
+        /// <param name="fromPrivateKey">Private key of the address, from which the TRX will be sent.</param>
+        /// <param name="to">Recipient address of TRON account in Base58 format.</param>
+        /// <param name="tokenId">ID of the token to transfer.</param>
+        /// <param name="amount">Amount to be sent in TRX.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public virtual async Task<WebCallResult<TronTRC10Token>> TRC10GetTokenDetailsAsync(long id, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> TRC10SendAsync(string fromPrivateKey, string to, long tokenId, decimal amount, CancellationToken ct = default)
         {
-            var credits = 5;
-            var url = Tatum.GetUrl(string.Format(Endpoints_TRC10GetToken, id));
-            return await Tatum.SendTatumRequest<TronTRC10Token>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+            var parameters = new Dictionary<string, object> {
+                { "fromPrivateKey", fromPrivateKey },
+                { "to", to },
+                { "tokenId", tokenId.ToString(CultureInfo.InvariantCulture) },
+                { "amount", amount.ToString(CultureInfo.InvariantCulture) },
+            };
+
+            var credits = 10;
+            var url_ = Tatum.GetUrl(string.Format(Endpoints_TRC10Send));
+            var result = await Tatum.SendTatumRequest<BlockchainResponse>(url_, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            if (!result.Success || result.Data.Failed) return WebCallResult<BlockchainResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
+
+            return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
         }
+
 
         /// <summary>
         /// <b>Title:</b> Create Tron TRC10 token<br />
@@ -370,43 +356,73 @@ namespace Tatum.Net.Clients
         }
 
         /// <summary>
-        /// <b>Title:</b> Send Tron TRC10 transaction<br />
-        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Title:</b> Get Tron TRC10 token detail<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
         /// <b>Description:</b>
-        /// Send Tron TRC10 transaction from address to address.
-        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds. In this method, it is possible to enter privateKey. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, it is possible to use the Tatum client library for supported languages or Tatum Middleware with a custom key management system.
+        /// Get Tron TRC10 token details.
         /// </summary>
-        /// <param name="fromPrivateKey">Private key of the address, from which the TRX will be sent.</param>
-        /// <param name="to">Recipient address of TRON account in Base58 format.</param>
-        /// <param name="tokenId">ID of the token to transfer.</param>
-        /// <param name="amount">Amount to be sent in TRX.</param>
+        /// <param name="id">TRC10 token ID</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public virtual WebCallResult<BlockchainResponse> TRC10Send(string fromPrivateKey, string to, long tokenId, decimal amount, CancellationToken ct = default) => TRC10SendAsync(fromPrivateKey, to, tokenId, amount, ct).Result;
+        public virtual WebCallResult<TronTRC10Token> TRC10GetTokenDetails(long id, CancellationToken ct = default) => TRC10GetTokenDetailsAsync(id, ct).Result;
         /// <summary>
-        /// <b>Title:</b> Send Tron TRC10 transaction<br />
+        /// <b>Title:</b> Get Tron TRC10 token detail<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Get Tron TRC10 token details.
+        /// </summary>
+        /// <param name="id">TRC10 token ID</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public virtual async Task<WebCallResult<TronTRC10Token>> TRC10GetTokenDetailsAsync(long id, CancellationToken ct = default)
+        {
+            var credits = 5;
+            var url = Tatum.GetUrl(string.Format(Endpoints_TRC10GetToken, id));
+            return await Tatum.SendTatumRequest<TronTRC10Token>(url, HttpMethod.Get, ct, checkResult: false, signed: true, credits: credits).ConfigureAwait(false);
+        }
+
+
+        /// <summary>
+        /// <b>Title:</b> Send Tron TRC20 transaction<br />
         /// <b>Credits:</b> 10 credits per API call.<br />
         /// <b>Description:</b>
-        /// Send Tron TRC10 transaction from address to address.
+        /// Send Tron TRC20 transaction from address to address.
         /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds. In this method, it is possible to enter privateKey. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, it is possible to use the Tatum client library for supported languages or Tatum Middleware with a custom key management system.
         /// </summary>
         /// <param name="fromPrivateKey">Private key of the address, from which the TRX will be sent.</param>
         /// <param name="to">Recipient address of TRON account in Base58 format.</param>
-        /// <param name="tokenId">ID of the token to transfer.</param>
-        /// <param name="amount">Amount to be sent in TRX.</param>
+        /// <param name="tokenAddress">Address of the TRC20 token to transfer.</param>
+        /// <param name="amount">Fee in TRX to be paid.</param>
+        /// <param name="feeLimit">Amount to be sent in TRX.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public virtual async Task<WebCallResult<BlockchainResponse>> TRC10SendAsync(string fromPrivateKey, string to, long tokenId, decimal amount, CancellationToken ct = default)
+        public virtual WebCallResult<BlockchainResponse> TRC20Send(string fromPrivateKey, string to, string tokenAddress, decimal amount, decimal feeLimit, CancellationToken ct = default) => TRC20SendAsync(fromPrivateKey, to, tokenAddress, amount, feeLimit, ct).Result;
+        /// <summary>
+        /// <b>Title:</b> Send Tron TRC20 transaction<br />
+        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Description:</b>
+        /// Send Tron TRC20 transaction from address to address.
+        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds. In this method, it is possible to enter privateKey. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, it is possible to use the Tatum client library for supported languages or Tatum Middleware with a custom key management system.
+        /// </summary>
+        /// <param name="fromPrivateKey">Private key of the address, from which the TRX will be sent.</param>
+        /// <param name="to">Recipient address of TRON account in Base58 format.</param>
+        /// <param name="tokenAddress">Address of the TRC20 token to transfer.</param>
+        /// <param name="amount">Fee in TRX to be paid.</param>
+        /// <param name="feeLimit">Amount to be sent in TRX.</param>
+        /// <param name="ct">Cancellation Token</param>
+        /// <returns></returns>
+        public virtual async Task<WebCallResult<BlockchainResponse>> TRC20SendAsync(string fromPrivateKey, string to, string tokenAddress, decimal amount, decimal feeLimit, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
                 { "fromPrivateKey", fromPrivateKey },
                 { "to", to },
-                { "tokenId", tokenId.ToString(CultureInfo.InvariantCulture) },
+                { "tokenAddress", tokenAddress },
+                { "feeLimit", feeLimit },
                 { "amount", amount.ToString(CultureInfo.InvariantCulture) },
             };
 
             var credits = 10;
-            var url_ = Tatum.GetUrl(string.Format(Endpoints_TRC10Send));
+            var url_ = Tatum.GetUrl(string.Format(Endpoints_TRC20Send));
             var result = await Tatum.SendTatumRequest<BlockchainResponse>(url_, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
             if (!result.Success || result.Data.Failed) return WebCallResult<BlockchainResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
 
@@ -464,52 +480,36 @@ namespace Tatum.Net.Clients
         }
 
         /// <summary>
-        /// <b>Title:</b> Send Tron TRC20 transaction<br />
-        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Title:</b> Broadcast Tron transaction<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
         /// <b>Description:</b>
-        /// Send Tron TRC20 transaction from address to address.
-        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds. In this method, it is possible to enter privateKey. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, it is possible to use the Tatum client library for supported languages or Tatum Middleware with a custom key management system.
+        /// Broadcast Tron transaction. This method is used internally from Tatum Middleware or Tatum client libraries. It is possible to create custom signing mechanism and use this method only for broadcasting data to the blockchian.
         /// </summary>
-        /// <param name="fromPrivateKey">Private key of the address, from which the TRX will be sent.</param>
-        /// <param name="to">Recipient address of TRON account in Base58 format.</param>
-        /// <param name="tokenAddress">Address of the TRC20 token to transfer.</param>
-        /// <param name="amount">Fee in TRX to be paid.</param>
-        /// <param name="feeLimit">Amount to be sent in TRX.</param>
+        /// <param name="txData">Raw signed transaction to be published to network.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public virtual WebCallResult<BlockchainResponse> TRC20Send(string fromPrivateKey, string to, string tokenAddress, decimal amount, decimal feeLimit, CancellationToken ct = default) => TRC20SendAsync(fromPrivateKey, to, tokenAddress, amount, feeLimit, ct).Result;
+        public virtual WebCallResult<BlockchainResponse> Broadcast(string txData, CancellationToken ct = default) => BroadcastAsync(txData, ct).Result;
         /// <summary>
-        /// <b>Title:</b> Send Tron TRC20 transaction<br />
-        /// <b>Credits:</b> 10 credits per API call.<br />
+        /// <b>Title:</b> Broadcast Tron transaction<br />
+        /// <b>Credits:</b> 5 credits per API call.<br />
         /// <b>Description:</b>
-        /// Send Tron TRC20 transaction from address to address.
-        /// This operation needs the private key of the blockchain address.Every time the funds are transferred, the transaction must be signed with the corresponding private key.No one should ever send it's own private keys to the internet because there is a strong possibility of stealing keys and loss of funds. In this method, it is possible to enter privateKey. PrivateKey should be used only for quick development on testnet versions of blockchain when there is no risk of losing funds. In production, it is possible to use the Tatum client library for supported languages or Tatum Middleware with a custom key management system.
+        /// Broadcast Tron transaction. This method is used internally from Tatum Middleware or Tatum client libraries. It is possible to create custom signing mechanism and use this method only for broadcasting data to the blockchian.
         /// </summary>
-        /// <param name="fromPrivateKey">Private key of the address, from which the TRX will be sent.</param>
-        /// <param name="to">Recipient address of TRON account in Base58 format.</param>
-        /// <param name="tokenAddress">Address of the TRC20 token to transfer.</param>
-        /// <param name="amount">Fee in TRX to be paid.</param>
-        /// <param name="feeLimit">Amount to be sent in TRX.</param>
+        /// <param name="txData">Raw signed transaction to be published to network.</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns></returns>
-        public virtual async Task<WebCallResult<BlockchainResponse>> TRC20SendAsync(string fromPrivateKey, string to, string tokenAddress, decimal amount, decimal feeLimit, CancellationToken ct = default)
+        public virtual async Task<WebCallResult<BlockchainResponse>> BroadcastAsync(string txData, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object> {
-                { "fromPrivateKey", fromPrivateKey },
-                { "to", to },
-                { "tokenAddress", tokenAddress },
-                { "feeLimit", feeLimit },
-                { "amount", amount.ToString(CultureInfo.InvariantCulture) },
+                { "txData", txData },
             };
 
-            var credits = 10;
-            var url_ = Tatum.GetUrl(string.Format(Endpoints_TRC20Send));
-            var result = await Tatum.SendTatumRequest<BlockchainResponse>(url_, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
+            var credits = 5;
+            var url = Tatum.GetUrl(string.Format(Endpoints_Broadcast));
+            var result = await Tatum.SendTatumRequest<BlockchainResponse>(url, HttpMethod.Post, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
             if (!result.Success || result.Data.Failed) return WebCallResult<BlockchainResponse>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
 
             return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
         }
-        #endregion
-
     }
 }

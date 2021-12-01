@@ -4,5 +4,7 @@
     {
         Buy,
         Sell,
+        FutureBuy,
+        FutureSell,
     }
 }

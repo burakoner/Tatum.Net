@@ -5,18 +5,14 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Tatum.Net.Helpers;
-using Tatum.Net.Interfaces;
 using Tatum.Net.RestObjects;
 
 namespace Tatum.Net.Clients
 {
-    public class BinanceClient : ITatumBlockchainBinanceClient
+    public class BinanceClient
     {
         public TatumClient Tatum { get; protected set; }
 
-        #region API Endpoints
-
-        #region Blockchain - Binance
         protected const string Endpoints_GenerateAccount = "bnb/account";
         protected const string Endpoints_CurrentBlock = "bnb/block/current";
         protected const string Endpoints_GetTransactionsInBlock = "bnb/block/{0}";
@@ -24,18 +20,12 @@ namespace Tatum.Net.Clients
         protected const string Endpoints_GetTransaction = "bnb/transaction/{0}";
         protected const string Endpoints_Send = "bnb/transaction";
         protected const string Endpoints_Broadcast = "bnb/broadcast";
-        #endregion
-
-        #endregion
 
         public BinanceClient(TatumClient tatumClient)
         {
             Tatum = tatumClient;
         }
 
-
-
-        #region Blockchain / Binance
         /// <summary>
         /// <b>Title:</b> Generate Binance wallet<br />
         /// <b>Credits:</b> 5 credits per API call.<br />
@@ -261,7 +251,5 @@ namespace Tatum.Net.Clients
 
             return new WebCallResult<BlockchainResponse>(result.ResponseStatusCode, result.ResponseHeaders, result.Data, null);
         }
-        #endregion
-
     }
 }

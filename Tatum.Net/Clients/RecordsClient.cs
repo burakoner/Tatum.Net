@@ -8,30 +8,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using Tatum.Net.Converters;
 using Tatum.Net.Enums;
-using Tatum.Net.Interfaces;
 using Tatum.Net.RestObjects;
 
 namespace Tatum.Net.Clients
 {
-    public class RecordsClient : ITatumBlockchainRecordsClient
+    public class RecordsClient
     {
         public TatumClient Tatum { get; protected set; }
 
-        #region API Endpoints
-
-        #region Blockchain - Records
         protected const string Endpoints_Log = "record";
-        #endregion
-
-        #endregion
 
         public RecordsClient(TatumClient tatumClient)
         {
             Tatum = tatumClient;
         }
 
-
-        #region Blockchain / Records
         /// <summary>
         /// <b>Title:</b> Store log record<br />
         /// <b>Credits:</b> 2 credits per API call. Additional credits are debited based on the size of the data, which are being stored and type of blockchain.<br />
@@ -112,8 +103,5 @@ namespace Tatum.Net.Clients
             var url = Tatum.GetUrl(string.Format(Endpoints_Log));
             return await Tatum.SendTatumRequest<TatumData>(url, HttpMethod.Get, ct, checkResult: false, signed: true, parameters: parameters, credits: credits).ConfigureAwait(false);
         }
-
-        #endregion
-
     }
 }
